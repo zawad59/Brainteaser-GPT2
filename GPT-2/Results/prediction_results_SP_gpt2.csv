@@ -1,0 +1,970 @@
+Question ID,Actual Question Text,Choices,Predicted Answer,Correct Answer,Predicted == Correct
+1,"Question: could man go outsid pour rain without protect hair head get wet
+Choices: 
+The man was lucky enough to avoid all the rain., He is bald., The man is an athlete that can avoid rain in high speed., None of above.
+Answer: He is bald.
+
+","
+The man was lucky enough to avoid all the rain., He is bald., The man is an athlete that can avoid rain in high speed., None of above.",The man is an athlete that can avoid rain in high speed.,He is bald.,no
+2,"Question: could guy go outdoor torrenti rain without get singl hair head wet
+Choices: He is bald., 
+The man was lucky enough to avoid all the rain., The man is an athlete that can avoid rain in high speed., None of above.
+Answer: He is bald.
+
+","He is bald., 
+The man was lucky enough to avoid all the rain., The man is an athlete that can avoid rain in high speed., None of above.",The man is an athlete that can avoid rain in high speed.,He is bald.,no
+3,"Question: enter exam session answer sooner everybodi els room
+Choices: You have to be a teacher., You have to prepate for the whole year., You have to ask teacher for the asnwer., None of above.
+Answer: You have to be a teacher.
+
+","You have to be a teacher., You have to prepate for the whole year., You have to ask teacher for the asnwer., None of above.",You have to be a teacher.,You have to be a teacher.,yes
+4,"Question: monkey squirrel bird race top coconut tree get banana first
+Choices: The squirrel., The monkey., The bird., None of above.
+Answer: None of above.
+
+","The squirrel., The monkey., The bird., None of above.",The monkey.,None of above.,no
+5,"Question: grab banana first monkey squirrel bird race top coconut tree
+Choices: The bird., The squirrel., The monkey., None of above.
+Answer: None of above.
+
+","The bird., The squirrel., The monkey., None of above.",None of above.,None of above.,yes
+6,"Question: rooster bull expect first child sinc competit want precipit process one gave birth first
+Choices: The rooster., The bull., 
+Both, they happen to finish at the same time., None of above.
+Answer: None of above.
+
+","The rooster., The bull., 
+Both, they happen to finish at the same time., None of above.",None of above.,None of above.,yes
+7,"Question: group ten ostrich field four take fli mani left field
+Choices: Six., Four., Ten., None of above.
+Answer: None of above.
+
+","Six., Four., Ten., None of above.",Six.,None of above.,no
+8,"Question: ten chicken gather field mani remain field four take fli
+Choices: Six., Four., Ten., None of above.
+Answer: None of above.
+
+","Six., Four., Ten., None of above.",Six.,None of above.,no
+9,"Question: two bull cow produc two gallon milk everi day much milk day
+Choices: Eight., Four., Sixteen., None of above.
+Answer: None of above.
+
+","Eight., Four., Sixteen., None of above.",Eight.,None of above.,no
+10,"Question: two peopl play chess happen
+Choices: They were playing against other opponents., The both lose, in fact, which is also both won., The referee is new and doesn't know the chess rules., None of above.
+Answer: They were playing against other opponents.
+
+","They were playing against other opponents., The both lose, in fact, which is also both won., The referee is new and doesn't know the chess rules., None of above.",They were playing against other opponents.,They were playing against other opponents.,yes
+11,"Question: person play chess caus happen
+Choices: They were playing against other opponents., The both lose, in fact, which is also both won., The referee is new and doesn't know the chess rules., None of above.
+Answer: They were playing against other opponents.
+
+","They were playing against other opponents., The both lose, in fact, which is also both won., The referee is new and doesn't know the chess rules., None of above.",They were playing against other opponents.,They were playing against other opponents.,yes
+12,"Question: two chef make food point pour salt pepper food howev food spici afteral custom eat possibl
+Choices: The salt and pepper are  expired., Two chefs were making two different foods and they didn't add the spices twice to the same food., All customers were polite and didn't tell them in public., None of above.
+Answer: Two chefs were making two different foods and they didn't add the spices twice to the same food.
+
+","The salt and pepper are  expired., Two chefs were making two different foods and they didn't add the spices twice to the same food., All customers were polite and didn't tell them in public., None of above.",Two chefs were making two different foods and they didn't add the spices twice to the same food.,Two chefs were making two different foods and they didn't add the spices twice to the same food.,yes
+13,"Question: hiker arriv near lake see sign written swim allow duck jump water 
+Choices: Because ducks can't read., Because ducks won't polluted water., Because ducks are tiny to be detected., None of above.
+Answer: Because ducks can't read.
+
+","Because ducks can't read., Because ducks won't polluted water., Because ducks are tiny to be detected., None of above.",Because ducks can't read.,Because ducks can't read.,yes
+14,"Question: hiker land near lake see sign say swim allow yet duck dive water anyhow 
+Choices: Because ducks are tiny to be detected., Because ducks can't read., Because ducks won't polluted water., None of above.
+Answer: Because ducks can't read.
+
+","Because ducks are tiny to be detected., Because ducks can't read., Because ducks won't polluted water., None of above.",Because ducks can't read.,Because ducks can't read.,yes
+15,"Question: cat walk pass secur guard guard told enter area sinc restrict howev cat pass secur guard without sens
+Choices: The cat thought it won't bring danger, Since cats can't understand humans' language, The cat thought it was hard to detect itself., None of above.
+Answer: Since cats can't understand humans' language
+
+","The cat thought it won't bring danger, Since cats can't understand humans' language, The cat thought it was hard to detect itself., None of above.",Since cats can't understand humans' language,Since cats can't understand humans' language,yes
+16,"Question: duck go pond five got lost thirteen stay home nine pond rest
+Choices: Home., The way to the pond., Pond., None of above.
+Answer: None of above.
+
+","Home., The way to the pond., Pond., None of above.",Pond.,None of above.,no
+17,"Question: duck go pond five got lost thirteen stay home nine pond rest
+Choices: The way to the pond., Home., Pond., None of above.
+Answer: None of above.
+
+","The way to the pond., Home., Pond., None of above.",Pond.,None of above.,no
+18,"Question: jame take test question answer question toward end time look onto peopl choic answer question way lucki rememb answer anoth question well surprisingli got test rest question got
+Choices: It is so difficult that he cheated with others., He didn't know the answer and just guessed them randomly., He owned a nice relation with the teacher and just asked his teacher., None of above.
+Answer: None of above.
+
+","It is so difficult that he cheated with others., He didn't know the answer and just guessed them randomly., He owned a nice relation with the teacher and just asked his teacher., None of above.",It is so difficult that he cheated with others.,None of above.,no
+19,"Question: ten fish tank two fish drown four fish swim fish die mani fish left tank
+Choices: Seven., Five., Twenty., None of above.
+Answer: None of above.
+
+","Seven., Five., Twenty., None of above.",Seven.,None of above.,no
+20,"Question: tank contain ten fish two fish drown four fish swim fish perish mani fish left tank
+Choices: Seven., Twenty., Five., None of above.
+Answer: None of above.
+
+","Seven., Twenty., Five., None of above.",Seven.,None of above.,no
+21,"Question: chopper ten pigeon insid threw die howev tall tree could surviv mani surviv
+Choices: Eight., Five., Three., None of above.
+Answer: None of above.
+
+","Eight., Five., Three., None of above.",None of above.,None of above.,yes
+22,"Question: woman went virginia get job promis mother would come back visit sometim middl winter mother shout april possibl
+Choices: The woman's name is April., Her mother stayed in the home for the whole winter., The weather in Virginia is pretty special., None of above.
+Answer: The woman's name is April.
+
+","The woman's name is April., Her mother stayed in the home for the whole winter., The weather in Virginia is pretty special., None of above.",The woman's name is April.,The woman's name is April.,yes
+23,"Question: woman travel virginia look work promis mother would return someday mother exclaim april dead winter make possibl
+Choices: Her mother stayed in the home for the whole winter., The weather in Virginia is pretty special., The woman's name is April., None of above.
+Answer: The woman's name is April.
+
+","Her mother stayed in the home for the whole winter., The weather in Virginia is pretty special., The woman's name is April., None of above.",The woman's name is April.,The woman's name is April.,yes
+24,"Question: man ask somebodi man point person ask question possibl
+Choices: The man pointed to some people at random., The name of the man who was asking the question was You, The man was angry for his impolite question., None of above.
+Answer: The name of the man who was asking the question was You
+
+","The man pointed to some people at random., The name of the man who was asking the question was You, The man was angry for his impolite question., None of above.",The name of the man who was asking the question was You,The name of the man who was asking the question was You,yes
+25,"Question: anim wing yet fli
+Choices: An elephant., A caterpillar., An eagle., None of above.
+Answer: A caterpillar.
+
+","An elephant., A caterpillar., An eagle., None of above.",An elephant.,A caterpillar.,no
+26,"Question: anim wing fli
+Choices: An elephant., An eagle., A caterpillar., None of above.
+Answer: A caterpillar.
+
+","An elephant., An eagle., A caterpillar., None of above.",An elephant.,A caterpillar.,no
+27,"Question: anim leg jump
+Choices: A fish., A tadpole., A rabbit., None of above.
+Answer: A tadpole.
+
+","A fish., A tadpole., A rabbit., None of above.",A tadpole.,A tadpole.,yes
+28,"Question: logic time kill small town decid get haircut town two barber shop logic glanc one shop saw extrem barber need shave cloth unkempt hair badli cut shop extrem neat barber freshli shave spotlessli dress hair neatli trim logic return first shop haircut
+Choices: The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy., Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut., The logician went to the first barber because he felt sympathy for him., None of above.
+Answer: Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.
+
+","The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy., Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut., The logician went to the first barber because he felt sympathy for him., None of above.",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,yes
+29,"Question: small town logic free time made decis get haircut two barber town shop ration glanc one store reveal incred expens cloth messi hair poorli cut barber need shave store barber recent hair cut immacul dress logic get haircut first place went
+Choices: The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy., Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut., The logician went to the first barber because he felt sympathy for him., None of above.
+Answer: Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.
+
+","The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy., Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut., The logician went to the first barber because he felt sympathy for him., None of above.",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,yes
+30,"Question: remot villag wise travel decid check local dental implant two dentist villag clinic glanc first clinic see dentist teeth badli plant salon poorli maintain second salon tidi dentist teeth well plant attir spotless smart travel choos dental implant first clinic
+Choices: Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants., The traveler chose the first dentist because he believed the untidy appearance suggested that the dentist was so busy., The traveler went to the first dentist because he felt sympathy for him., None of above.
+Answer: Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.
+
+","Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants., The traveler chose the first dentist because he believed the untidy appearance suggested that the dentist was so busy., The traveler went to the first dentist because he felt sympathy for him., None of above.",Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.,Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.,yes
+31,"Question: plane crash border canada america buri survivor
+Choices: America., Canada., In the middle of America and Canada., None of above.
+Answer: None of above.
+
+","America., Canada., In the middle of America and Canada., None of above.",None of above.,None of above.,yes
+32,"Question: jet crash near border canada america surviv go buri
+Choices: Canada., In the middle of America and Canada., America., None of above.
+Answer: None of above.
+
+","Canada., In the middle of America and Canada., America., None of above.",None of above.,None of above.,yes
+33,"Question: rooster one give egg per day mani egg week
+Choices: Five., Thirty-five., Seven., None of above.
+Answer: None of above.
+
+","Five., Thirty-five., Seven., None of above.",None of above.,None of above.,yes
+34,"Question: imagin room door window anyth get
+Choices: Stop imagining., Jump out of the roof., Break the Wall., None of above.
+Answer: Stop imagining.
+
+","Stop imagining., Jump out of the roof., Break the Wall., None of above.",Jump out of the roof.,Stop imagining.,no
+35,"Question: assum room door window anyth els escap
+Choices: Stop imagining., Jump out of the roof., Break the Wall., None of above.
+Answer: Stop imagining.
+
+","Stop imagining., Jump out of the roof., Break the Wall., None of above.",Jump out of the roof.,Stop imagining.,no
+36,"Question: dream jungl tiger approach best thing situat
+Choices: Fight with the tiger., Jump over it., Waking up., None of above.
+Answer: Waking up.
+
+","Fight with the tiger., Jump over it., Waking up., None of above.",Waking up.,Waking up.,yes
+37,"Question: buri stone ground grew produc fruit possibl
+Choices: The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone., The stone that was buried in the ground symbolizes an idea or a concept. By burying the idea and nurturing it with care and effort, it grew and blossomed into a fruitful outcome or achievement., You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself., None of above.
+Answer: The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.
+
+","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone., The stone that was buried in the ground symbolizes an idea or a concept. By burying the idea and nurturing it with care and effort, it grew and blossomed into a fruitful outcome or achievement., You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself., None of above.","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.",yes
+38,"Question: plant stone sprout leav fruit even possibl
+Choices: The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone., You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself., The stone that was buried in the ground symbolizes an idea or a concept. By burying the idea and nurturing it with care and effort, it grew and blossomed into a fruitful outcome or achievement., None of above.
+Answer: The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.
+
+","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone., You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself., The stone that was buried in the ground symbolizes an idea or a concept. By burying the idea and nurturing it with care and effort, it grew and blossomed into a fruitful outcome or achievement., None of above.","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.",yes
+39,"Question: two farmer got heat argument start fight farmer enrag threw hand stone farmer stone hit farmer exactli farmer receiv harm 
+Choices: The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone., The other farmer was wearing protective clothing or had some form of shield that prevented the stones from causing harm., The stones were small or lacked enough force to cause any significant injury., None of above.
+Answer: The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone.
+
+","The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone., The other farmer was wearing protective clothing or had some form of shield that prevented the stones from causing harm., The stones were small or lacked enough force to cause any significant injury., None of above.","The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone.","The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone.",yes
+40,"Question: mani birth day averag person
+Choices: People may celebrate their birthdays annually, so it depends on their life span., They technically only have one birth day in their lifetime., It can be zero as some people are too busy to celebrating their birthdays., None of above.
+Answer: They technically only have one birth day in their lifetime.
+
+","People may celebrate their birthdays annually, so it depends on their life span., They technically only have one birth day in their lifetime., It can be zero as some people are too busy to celebrating their birthdays., None of above.",They technically only have one birth day in their lifetime.,They technically only have one birth day in their lifetime.,yes
+41,"Question: mani birth day peopl averag
+Choices: People may celebrate their birthdays annually, so it depends on their life span., It can be zero as some people are too busy to celebrating their birthdays., They technically only have one birth day in their lifetime., None of above.
+Answer: They technically only have one birth day in their lifetime.
+
+","People may celebrate their birthdays annually, so it depends on their life span., It can be zero as some people are too busy to celebrating their birthdays., They technically only have one birth day in their lifetime., None of above.",They technically only have one birth day in their lifetime.,They technically only have one birth day in their lifetime.,yes
+42,"Question: elementari school collag mani first day school averag person lifetim
+Choices: Average poeple have 4: lementary school, middle school, high school, and college., They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child., Average people have ""first day of school"" in each semester, so it will be more than 10!, None of above.
+Answer: They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.
+
+","Average poeple have 4: lementary school, middle school, high school, and college., They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child., Average people have ""first day of school"" in each semester, so it will be more than 10!, None of above.",They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.,They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.,yes
+43,"Question: electr train go south mph wind blow northeast direct smoke blow
+Choices:  Wind is blowing northeast and is more powerful than the train's speed, it would overpower the train's forward motion. It would likely cause the smoke to blow in northeast., The train is traveling at a higher speed, which has a significant impact on the direction of the smoke. In this case, smoke is blowing to the opposite direction, north., There is no smoke. it's an electric train!, None of above.
+Answer: There is no smoke. it's an electric train!
+
+"," Wind is blowing northeast and is more powerful than the train's speed, it would overpower the train's forward motion. It would likely cause the smoke to blow in northeast., The train is traveling at a higher speed, which has a significant impact on the direction of the smoke. In this case, smoke is blowing to the opposite direction, north., There is no smoke. it's an electric train!, None of above.",None of above.,There is no smoke. it's an electric train!,no
+44,"Question: mph electr train travel south northeast wind smoke come
+Choices: There is no smoke. it's an electric train!,  Wind is blowing northeast and is more powerful than the train's speed, it would overpower the train's forward motion. It would likely cause the smoke to blow in northeast., The train is traveling at a higher speed, which has a significant impact on the direction of the smoke. In this case, smoke is blowing to the opposite direction, north., None of above.
+Answer: There is no smoke. it's an electric train!
+
+","There is no smoke. it's an electric train!,  Wind is blowing northeast and is more powerful than the train's speed, it would overpower the train's forward motion. It would likely cause the smoke to blow in northeast., The train is traveling at a higher speed, which has a significant impact on the direction of the smoke. In this case, smoke is blowing to the opposite direction, north., None of above.",There is no smoke. it's an electric train!,There is no smoke. it's an electric train!,yes
+45,"Question: submarin move west speed knot strong current move east trail bubbl come
+Choices: The current is moving east, the bubbles would be carried by the current towards the west., The submarine is moving west, the bubbles would be carried in the direction opposite to the current., There are no bubbles. Modern submarines are designed to move through water without leaving a trail of bubbles., None of above.
+Answer: There are no bubbles. Modern submarines are designed to move through water without leaving a trail of bubbles.
+
+","The current is moving east, the bubbles would be carried by the current towards the west., The submarine is moving west, the bubbles would be carried in the direction opposite to the current., There are no bubbles. Modern submarines are designed to move through water without leaving a trail of bubbles., None of above.",There are no bubbles. Modern submarines are designed to move through water without leaving a trail of bubbles.,There are no bubbles. Modern submarines are designed to move through water without leaving a trail of bubbles.,yes
+46,"Question: pink hous everyth pink door pink window pink top pink color stair
+Choices: There are no stairs in a single story house., It should be pink as the whole house is in pink., The stairs is uncolored as people always step on that., None of above.
+Answer: There are no stairs in a single story house.
+
+","There are no stairs in a single story house., It should be pink as the whole house is in pink., The stairs is uncolored as people always step on that., None of above.",There are no stairs in a single story house.,There are no stairs in a single story house.,yes
+47,"Question: entir home pink includ outsid window top door pink stair color
+Choices: The stairs is uncolored as people always step on that., It should be pink as the whole house is in pink., There are no stairs in a single story house., None of above.
+Answer: There are no stairs in a single story house.
+
+","The stairs is uncolored as people always step on that., It should be pink as the whole house is in pink., There are no stairs in a single story house., None of above.",There are no stairs in a single story house.,There are no stairs in a single story house.,yes
+48,"Question: hous built red brick door window roof made red brick color basement
+Choices: There is no basement in a one-story house built on a single floor., It should be red as the whole house is in red., The basement is uncolored as the basement is only used for storing stuffs., None of above.
+Answer: There is no basement in a one-story house built on a single floor.
+
+","There is no basement in a one-story house built on a single floor., It should be red as the whole house is in red., The basement is uncolored as the basement is only used for storing stuffs., None of above.",There is no basement in a one-story house built on a single floor.,There is no basement in a one-story house built on a single floor.,yes
+49,"Question: ten pear hang high ten men come pass took pear left nine hang could
+Choices: EACH is the name of one of the men., Other men can't reach the pear., Other men didn't see the pear., None of above.
+Answer: EACH is the name of one of the men.
+
+","EACH is the name of one of the men., Other men can't reach the pear., Other men didn't see the pear., None of above.",EACH is the name of one of the men.,EACH is the name of one of the men.,yes
+50,"Question: ten pear hung high ten men pass past take fruit leav nine hang possibl
+Choices: Other men can't reach the pear., Other men didn't see the pear., EACH is the name of one of the men., None of above.
+Answer: EACH is the name of one of the men.
+
+","Other men can't reach the pear., Other men didn't see the pear., EACH is the name of one of the men., None of above.",Other men can't reach the pear.,EACH is the name of one of the men.,no
+51,"Question: twenti boy differ name classroom went blackboard wrote name board howev one name board possibl
+Choices: Other boys don't have names., All is the name of one of the boys., Other boys don't know how to write., None of above.
+Answer: All is the name of one of the boys.
+
+","Other boys don't have names., All is the name of one of the boys., Other boys don't know how to write., None of above.",None of above.,All is the name of one of the boys.,no
+52,"Question: take leav behind
+Choices: Love., Footsteps., Money., None of above.
+Answer: Footsteps.
+
+","Love., Footsteps., Money., None of above.",Footsteps.,Footsteps.,yes
+53,"Question: take abandon
+Choices: Love., Footsteps., Money., None of above.
+Answer: Footsteps.
+
+","Love., Footsteps., Money., None of above.",Footsteps.,Footsteps.,yes
+54,"Question: run fast get closer 
+Choices: Country road., Treadmill., High way., None of above.
+Answer: Treadmill.
+
+","Country road., Treadmill., High way., None of above.",High way.,Treadmill.,no
+55,"Question: small villag two farmer work field dilig farmer lazi farmer hardwork farmer son lazi farmer lazi farmer father hardwork farmer explain unusu relationship
+Choices: The lazy farmer is his mother., The lazy farmer is not a responsible father as he is lazy., The diligent farmer devoted himself to the farm and gradually forgot his father., None of above.
+Answer: The lazy farmer is his mother.
+
+","The lazy farmer is his mother., The lazy farmer is not a responsible father as he is lazy., The diligent farmer devoted himself to the farm and gradually forgot his father., None of above.",The lazy farmer is his mother.,The lazy farmer is his mother.,yes
+56,"Question: romeo juliet discov dead bedroom floor glass shard water floor found bookcas bed sole piec furnitur space neighbor railroad track hous locat rural area even doabl
+Choices: They were sleeping and scared by the sound of track., The rumble of the train moved the shelf which 
+crushed them., Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive., None of above.
+Answer: Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive.
+
+","They were sleeping and scared by the sound of track., The rumble of the train moved the shelf which 
+crushed them., Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive., None of above.","Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive.","Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive.",yes
+57,"Question: mani year life happen birthday one year younger tomorrow
+Choices: In ech leap year., In the first year of graduation., It happens every year., None of above.
+Answer: It happens every year.
+
+","In ech leap year., In the first year of graduation., It happens every year., None of above.",It happens every year.,It happens every year.,yes
+58,"Question: would serv team captain crucial assist captain depart sport organ
+Choices: The first officer., The captain., The second officer., None of above.
+Answer: The captain.
+
+","The first officer., The captain., The second officer., None of above.",The captain.,The captain.,yes
+59,"Question: one citi popul unlist phone number mani person unlist phone number pick name random citi phone directori
+Choices: One hundred people., Ninty-five people., Five people., None of above.
+Answer: None of above.
+
+","One hundred people., Ninty-five people., Five people., None of above.",None of above.,None of above.,yes
+60,"Question: two entri duti outsid barrack one face road watch anyon approach north look road see anyon approach south suddenli one said smile know companion smile
+Choices: Although the guards were looking in opposite directions, they were not back to back. They were facing each other., One of the guards had an unusual vision so he can see what happend behind him., The smiling guard's action is such big that even the guard behind him can see it., None of above.
+Answer: Although the guards were looking in opposite directions, they were not back to back. They were facing each other.
+
+","Although the guards were looking in opposite directions, they were not back to back. They were facing each other., One of the guards had an unusual vision so he can see what happend behind him., The smiling guard's action is such big that even the guard behind him can see it., None of above.","Although the guards were looking in opposite directions, they were not back to back. They were facing each other.","Although the guards were looking in opposite directions, they were not back to back. They were facing each other.",yes
+61,"Question: man wager dog abil jump higher hous neighbor took wager think imposs lost fail win bet
+Choices: A house can not jump., That dog species were famous for their jumping ability., The height of the tiny house is lower than the dog., None of above.
+Answer: A house can not jump.
+
+","A house can not jump., That dog species were famous for their jumping ability., The height of the tiny house is lower than the dog., None of above.",A house can not jump.,A house can not jump.,yes
+62,"Question: mani time divid
+Choices: Infinite time., Once., Two times., None of above.
+Answer: Once.
+
+","Infinite time., Once., Two times., None of above.",Two times.,Once.,no
+63,"Question: citi mani crimin polic catch fit prison number approxim popul citi name avail start catch rest crimin poilc start check list crimin prison namebook name go search rest wander citi mani find
+Choices: Twenty people., Eighty people., Two hundred people., None of above.
+Answer: None of above.
+
+","Twenty people., Eighty people., Two hundred people., None of above.",None of above.,None of above.,yes
+64,"Question: christma new year day fall year
+Choices: In the period of BC., It happens every year., In the first year of each century., None of above.
+Answer: It happens every year.
+
+","In the period of BC., It happens every year., In the first year of each century., None of above.",It happens every year.,It happens every year.,yes
+65,"Question: conscienti farmer formerli provid food rooster day throughout year singl egg produc even imagin
+Choices: His neighbor always stolen eggs away from him., Because roosters don't lay eggs., Roosters will eat their own eggs once they were laid., None of above.
+Answer: Because roosters don't lay eggs.
+
+","His neighbor always stolen eggs away from him., Because roosters don't lay eggs., Roosters will eat their own eggs once they were laid., None of above.",Because roosters don't lay eggs.,Because roosters don't lay eggs.,yes
+66,"Question: mark playground somebodi notic great player play announc gather lot peopl mani great player basketbal volleybal footbal even swimmer mark directli went footbal took photo know person peopl got excit first place
+Choices: Since the playground was a football playground and the other players could've not been playing in the playground at the time of the announcement, Since Mark was a crazy fan of football, only a football player can be considered as great player in his mind., Since Mark stood closest to the football players, he only focused on football players and didn't notice others., None of above.
+Answer: Since the playground was a football playground and the other players could've not been playing in the playground at the time of the announcement
+
+","Since the playground was a football playground and the other players could've not been playing in the playground at the time of the announcement, Since Mark was a crazy fan of football, only a football player can be considered as great player in his mind., Since Mark stood closest to the football players, he only focused on football players and didn't notice others., None of above.",Since the playground was a football playground and the other players could've not been playing in the playground at the time of the announcement,Since the playground was a football playground and the other players could've not been playing in the playground at the time of the announcement,yes
+67,"Question: five men church start rain outsid four ran still got wet one still stay complet dri stay dri
+Choices: The man is an athlete that can avoid rain in high speed., 
+The man was lucky enough to avoid all the rain., He was in a coffin the other men were at his funeral.
+, None of above.
+Answer: He was in a coffin the other men were at his funeral.
+
+
+","The man is an athlete that can avoid rain in high speed., 
+The man was lucky enough to avoid all the rain., He was in a coffin the other men were at his funeral.
+, None of above.",None of above.,"He was in a coffin the other men were at his funeral.
+",no
+68,"Question: sunday afternoon woman spot bear distanc rather afraid ran toward excit afraid
+Choices: She was at the zoo.
+, She become brave in sudden., She tried to scare the bear., None of above.
+Answer: She was at the zoo.
+
+
+","She was at the zoo.
+, She become brave in sudden., She tried to scare the bear., None of above.","She was at the zoo.
+","She was at the zoo.
+",yes
+69,"Question: man bet friend jump distanc one hous anoth one bet 
+Choices: He is a jumping athlete., Two houses were wall-to-wall next to each other, One house is much higher than another, providing him enough time to fly in the air., None of above.
+Answer: Two houses were wall-to-wall next to each other
+
+","He is a jumping athlete., Two houses were wall-to-wall next to each other, One house is much higher than another, providing him enough time to fly in the air., None of above.",Two houses were wall-to-wall next to each other,Two houses were wall-to-wall next to each other,yes
+70,"Question: attorney brother testifi account attorney testifi brother one lie
+Choices: The attorney was not loved by family and hadmoved away when he was young., The accountant was his sister.
+, The attorney is angry about his brother not being a attorney and cut ties with him., None of above.
+Answer: The accountant was his sister.
+
+
+","The attorney was not loved by family and hadmoved away when he was young., The accountant was his sister.
+, The attorney is angry about his brother not being a attorney and cut ties with him., None of above.","The accountant was his sister.
+","The accountant was his sister.
+",yes
+71,"Question: attorney brother account testifi howev attorney claim brother one lie
+Choices: The accountant was his sister.
+, The attorney is angry about his brother not being a attorney and cut ties with him., The attorney was not loved by family and had moved away when he was young., None of above.
+Answer: The accountant was his sister.
+
+
+","The accountant was his sister.
+, The attorney is angry about his brother not being a attorney and cut ties with him., The attorney was not loved by family and had moved away when he was young., None of above.","The accountant was his sister.
+","The accountant was his sister.
+",yes
+72,"Question: shop done two mother two daughter divid equal amongst even conceiv
+Choices: One mother give his $7 to his son., Two daughters share the $7., They are one daughters, one mother and one grandmother., None of above.
+Answer: They are one daughters, one mother and one grandmother.
+
+","One mother give his $7 to his son., Two daughters share the $7., They are one daughters, one mother and one grandmother., None of above.","They are one daughters, one mother and one grandmother.","They are one daughters, one mother and one grandmother.",yes
+73,"Question: man children half boy possibl
+Choices: A man raises his children in both boy way and girl way., One child is regarded as both boy and girl same time., They are all boys., None of above.
+Answer: They are all boys.
+
+","A man raises his children in both boy way and girl way., One child is regarded as both boy and girl same time., They are all boys., None of above.",They are all boys.,They are all boys.,yes
+74,"Question: go doctor sick give three medicin take everi half hour long drug keep go
+Choices: One and a half hours., Two hours., An hour., None of above.
+Answer: An hour.
+
+","One and a half hours., Two hours., An hour., None of above.",An hour.,An hour.,yes
+75,"Question: guy bet neighbor buck dog could jump higher hous think possibl neighbor took bet lost lose bet
+Choices: A house can not jump., The height of the tiny house is lower than the dog., That dog species were famous for their jumping ability., None of above.
+Answer: A house can not jump.
+
+","A house can not jump., The height of the tiny house is lower than the dog., That dog species were famous for their jumping ability., None of above.",A house can not jump.,A house can not jump.,yes
+76,"Question: group student plan go trek afternoon one forget bring rubber boot possibl feet still dri lengthi stroll around park
+Choices: The ground is not wet., The one is walking on his hands., By walking on stilts, the one elevates his feet above the wet ground., None of above.
+Answer: The ground is not wet.
+
+","The ground is not wet., The one is walking on his hands., By walking on stilts, the one elevates his feet above the wet ground., None of above.","By walking on stilts, the one elevates his feet above the wet ground.",The ground is not wet.,no
+77,"Question: farmer want go investig problem chicken coop soon arriv saw rooster perch atop barn barn top resembl triangl howev rooster unexpectedli laid egg roll side
+Choices: It is possible the egg would roll down the middle of the triangle-shaped top of the barn., It didn't because rosters don't lay eggs.,  There is a hole in the roof. Furthermore, the egg dropped into the hole., None of above.
+Answer: It didn't because rosters don't lay eggs.
+
+","It is possible the egg would roll down the middle of the triangle-shaped top of the barn., It didn't because rosters don't lay eggs.,  There is a hole in the roof. Furthermore, the egg dropped into the hole., None of above.",It didn't because rosters don't lay eggs.,It didn't because rosters don't lay eggs.,yes
+78,"Question: jame surround sever hungri bear bear approach took look left 
+Choices: James was at the zoo.
+, It is too cold outside., James is not healthy., None of above.
+Answer: James was at the zoo.
+
+
+","James was at the zoo.
+, It is too cold outside., James is not healthy., None of above.","James was at the zoo.
+","James was at the zoo.
+",yes
+79,"Question: go doctor ill prescrib three pill tell take everi half hour long pill last
+Choices: One and a half hours., An hour., Two hours., None of above.
+Answer: An hour.
+
+","One and a half hours., An hour., Two hours., None of above.",An hour.,An hour.,yes
+80,"Question: mani time deduct
+Choices: Once., Infinite time., Twice., None of above.
+Answer: Once.
+
+","Once., Infinite time., Twice., None of above.",Twice.,Once.,no
+81,"Question: teacher ask two girl look exactli like follow question famili b parent born day answer truth ye question yet told truth indic twin 
+Choices: They were triplets.
+, Their parent raised them differently due to the lack of money., One of the gril was not loved by their family., None of above.
+Answer: They were triplets.
+
+
+","They were triplets.
+, Their parent raised them differently due to the lack of money., One of the gril was not loved by their family., None of above.","They were triplets.
+","They were triplets.
+",yes
+82,"Question: romeo juliet found dead floor bedroom discov piec glass water floor furnitur room shelf bed hous remot locat away everyth except nearbi railroad track caus death romeo juliet
+Choices: They were sleeping and scared by the sound of track., The rumble of the train moved the shelf which crushed them., Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive., None of above.
+Answer: Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive.
+
+","They were sleeping and scared by the sound of track., The rumble of the train moved the shelf which crushed them., Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive., None of above.","Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive.","Romeo and Juliet are fish. The rumble of the train knocked the tank off the shelf, it broke and Romeo and Juliet did not survive.",yes
+83,"Question: vise coach sport team unabl attend game suppos lead team
+Choices: The coach., The captain., The team's management, None of above.
+Answer: The coach.
+
+","The coach., The captain., The team's management, None of above.",The coach.,The coach.,yes
+84,"Question: cop walk past restaur heard someon scream john gun ran insid saw doctor lawyer mail man dead bodi floor promptli walk mail man arrest wit shoot appar evid prove shot person one told killer policeman instantli know mail man
+Choices: The dead man was the relative of both doctor and lawyer., The policeman thought a doctor or a lawyer wouldn't have the name John., The mail man was the only male. The doctor and lawyer were females., None of above.
+Answer: The mail man was the only male. The doctor and lawyer were females.
+
+","The dead man was the relative of both doctor and lawyer., The policeman thought a doctor or a lawyer wouldn't have the name John., The mail man was the only male. The doctor and lawyer were females., None of above.",The mail man was the only male. The doctor and lawyer were females.,The mail man was the only male. The doctor and lawyer were females.,yes
+85,"Question: old peopl consum food young peopl
+Choices: Older adults may have specific dietary requirements to address age-related issues, Older people require increased nutrient intake to support overall health and well-being., Because older people live longer., None of above.
+Answer: Because older people live longer.
+
+","Older adults may have specific dietary requirements to address age-related issues, Older people require increased nutrient intake to support overall health and well-being., Because older people live longer., None of above.",Older people require increased nutrient intake to support overall health and well-being.,Because older people live longer.,no
+86,"Question: sudden wave knock jack water swim beach die five minut later possibl
+Choices: Jack needs to to go to the hospital but no one is welling to help., Jack is so scared of the water., Jack is a fish in the ocean., None of above.
+Answer: Jack is a fish in the ocean.
+
+","Jack needs to to go to the hospital but no one is welling to help., Jack is so scared of the water., Jack is a fish in the ocean., None of above.",Jack is a fish in the ocean.,Jack is a fish in the ocean.,yes
+87,"Question: larg dog slim dog sit porch small dog fat dog kid fat dog thin dog father could pleas explain
+Choices: The fat dog was the father when it is thin., The fat dog is not a responsible father as he eats all the food., The fat dog is the mother., None of above.
+Answer: The fat dog is the mother.
+
+","The fat dog was the father when it is thin., The fat dog is not a responsible father as he eats all the food., The fat dog is the mother., None of above.",The fat dog is the mother.,The fat dog is the mother.,yes
+88,"Question: farmer problem chicken coop want go check got notic rooster top barn barn shape top suddenli rooster laid egg side roll
+Choices: It is possible the egg would roll down the middle of the triangle-shaped top of the barn.,  There is a hole in the roof. Furthermore, the egg dropped into the hole., It didn't because rosters don't lay eggs., None of above.
+Answer: It didn't because rosters don't lay eggs.
+
+","It is possible the egg would roll down the middle of the triangle-shaped top of the barn.,  There is a hole in the roof. Furthermore, the egg dropped into the hole., It didn't because rosters don't lay eggs., None of above.",It didn't because rosters don't lay eggs.,It didn't because rosters don't lay eggs.,yes
+89,"Question: five peopl footbal match sudden shower start four rush take cover still got soak one move stay complet dri get wet
+Choices: The man is an excellent football player that can avoid rain in high speed., 
+The man was lucky enough to avoid all the rain., He was a photograph the other people were there to honor a former player., None of above.
+Answer: He was a photograph the other people were there to honor a former player.
+
+","The man is an excellent football player that can avoid rain in high speed., 
+The man was lucky enough to avoid all the rain., He was a photograph the other people were there to honor a former player., None of above.",He was a photograph the other people were there to honor a former player.,He was a photograph the other people were there to honor a former player.,yes
+90,"Question: two mother two daughter go shop split equal possibl
+Choices: One mother give his $7 to his son., Two daughters share the $7., They are one daughters, one mother and one grandmother., None of above.
+Answer: They are one daughters, one mother and one grandmother.
+
+","One mother give his $7 to his son., Two daughters share the $7., They are one daughters, one mother and one grandmother., None of above.",None of above.,"They are one daughters, one mother and one grandmother.",no
+91,"Question: certain citi person town unlist phone number select name random citi phone directori mani peopl select unlist phone number
+Choices: One hundred people., Five people., Ninty-five people., None of above.
+Answer: None of above.
+
+","One hundred people., Five people., Ninty-five people., None of above.",None of above.,None of above.,yes
+92,"Question: five guy church began rain outsid four fled got wet one remain dri kept entir dri drink
+Choices: He was in a coffin the other men were at his funeral.
+, 
+The man was lucky enough to avoid all the rain., The man is an athlete that can avoid rain in high speed., None of above.
+Answer: He was in a coffin the other men were at his funeral.
+
+
+","He was in a coffin the other men were at his funeral.
+, 
+The man was lucky enough to avoid all the rain., The man is an athlete that can avoid rain in high speed., None of above.",None of above.,"He was in a coffin the other men were at his funeral.
+",no
+93,"Question: shop done jack tom parent divid equal amongst possibl
+Choices: Jack and Tom are the parents themselves., Each kid's parents pooled $10 for division., Jack and Tom are brothers who share the same parents., None of above.
+Answer: Jack and Tom are brothers who share the same parents.
+
+","Jack and Tom are the parents themselves., Each kid's parents pooled $10 for division., Jack and Tom are brothers who share the same parents., None of above.",Jack and Tom are brothers who share the same parents.,Jack and Tom are brothers who share the same parents.,yes
+94,"Question: white sheep consum food black sheep
+Choices: Because there are less black sheep in the world than white., Black sheep do not need food. , Black absorbs more heat from sunlight, black sheep may eat less to avoid overheating or to regulate their body temperature., None of above.
+Answer: Because there are less black sheep in the world than white.
+
+","Because there are less black sheep in the world than white., Black sheep do not need food. , Black absorbs more heat from sunlight, black sheep may eat less to avoid overheating or to regulate their body temperature., None of above.",Because there are less black sheep in the world than white.,Because there are less black sheep in the world than white.,yes
+95,"Question: woman spot bear distanc sunday afternoon ran excit toward oppos afraid feel fear
+Choices: She tried to scare the bear., She was at the zoo.
+, She become brave in sudden., None of above.
+Answer: She was at the zoo.
+
+
+","She tried to scare the bear., She was at the zoo.
+, She become brave in sudden., None of above.",She tried to scare the bear.,"She was at the zoo.
+",no
+96,"Question: tom john made wager john could correctli predict outcom upcom footbal game tom concur lose wager led tom lose wager
+Choices: John possesses an extraordinary ability to see into the future., John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0., Tom gave his money to show his kindness., None of above.
+Answer: John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0.
+
+","John possesses an extraordinary ability to see into the future., John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0., Tom gave his money to show his kindness., None of above.","John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0.","John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0.",yes
+97,"Question: tom john bet john correctli predict outcom forthcom basketbal game tom agre lose bet caus tom lose bet
+Choices: John said the score would be 0-0 and he was right. ""Before"" any basketball game starts, the score is always 0-0., John possesses an extraordinary ability to see into the future., Tom gave his money to show his kindness., None of above.
+Answer: John said the score would be 0-0 and he was right. ""Before"" any basketball game starts, the score is always 0-0.
+
+","John said the score would be 0-0 and he was right. ""Before"" any basketball game starts, the score is always 0-0., John possesses an extraordinary ability to see into the future., Tom gave his money to show his kindness., None of above.","John said the score would be 0-0 and he was right. ""Before"" any basketball game starts, the score is always 0-0.","John said the score would be 0-0 and he was right. ""Before"" any basketball game starts, the score is always 0-0.",yes
+98,"Question: essenti assist captain sport team resign would lead team
+Choices: The captain., The first officer., The second officer., None of above.
+Answer: The captain.
+
+","The captain., The first officer., The second officer., None of above.",The captain.,The captain.,yes
+99,"Question: mani time subtract
+Choices: Infinite time., Twice., Once., None of above.
+Answer: Once.
+
+","Infinite time., Twice., Once., None of above.",Infinite time.,Once.,no
+100,"Question: farmer sheep half white possibl
+Choices: One sheep is regarded as both white and other colors same time., A famer raises his sheep in both white way and another way., They are all white., None of above.
+Answer: They are all white.
+
+","One sheep is regarded as both white and other colors same time., A famer raises his sheep in both white way and another way., They are all white., None of above.",One sheep is regarded as both white and other colors same time.,They are all white.,no
+101,"Question: offic arrest jame said brother anymor howev jame also brother possibl
+Choices: The officer was not loved by family and had moved away when he was young., The officer is angry about his brother and cut ties with him., Officer was actually his sister so the whole story makes sense, None of above.
+Answer: Officer was actually his sister so the whole story makes sense
+
+","The officer was not loved by family and had moved away when he was young., The officer is angry about his brother and cut ties with him., Officer was actually his sister so the whole story makes sense, None of above.",Officer was actually his sister so the whole story makes sense,Officer was actually his sister so the whole story makes sense,yes
+102,"Question: man nine kid male make half even possibl
+Choices: One child is regarded as both boy and girl same time., A man raises his children in both boy way and girl way., They are all boys., None of above.
+Answer: They are all boys.
+
+","One child is regarded as both boy and girl same time., A man raises his children in both boy way and girl way., They are all boys., None of above.",One child is regarded as both boy and girl same time.,They are all boys.,no
+103,"Question: coach ask two boy look remark similar follow question live hous b mother father born date boy respond truth ye inquiri yet honest said twin could
+Choices: They were triplets.
+, Their parent raised them differently due to the lack of money., One of the boys was not loved by their family., None of above.
+Answer: They were triplets.
+
+
+","They were triplets.
+, Their parent raised them differently due to the lack of money., One of the boys was not loved by their family., None of above.","They were triplets.
+","They were triplets.
+",yes
+104,"Question: three men walk across green fuscou field two wear rubber boot yet feet third man remain dri 
+Choices: The ground is not wet., By walking on stilts, the third man elevates his feet above the wet ground., The third man is walking on his hands., None of above.
+Answer: The ground is not wet.
+
+","The ground is not wet., By walking on stilts, the third man elevates his feet above the wet ground., The third man is walking on his hands., None of above.","By walking on stilts, the third man elevates his feet above the wet ground.",The ground is not wet.,no
+105,"Question: john bet tom predict score footbal game start tom agre lose bet tom lose bet
+Choices: John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0., John possesses an extraordinary ability to see into the future., Tom gave his money to show his kindness., None of above.
+Answer: John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0.
+
+","John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0., John possesses an extraordinary ability to see into the future., Tom gave his money to show his kindness., None of above.","John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0.","John said the score would be 0-0 and he was right. ""Before"" any football game starts, the score is always 0-0.",yes
+106,"Question: cop go restaur heard someon yell john gun dash insid discov doctor lawyer priest dead corps floor quickli approach man arrest present shoot occur obviou evid indic shot guy one notifi killer cop recogn milan quickli
+Choices: The mail man was the only male. The doctor and lawyer were females, so the cop knew that ""John"" was the mail man., The policeman think a doctor or a lawyer won't have name John., The dead man was the relative of both doctor and lawyer., None of above.
+Answer: The mail man was the only male. The doctor and lawyer were females, so the cop knew that ""John"" was the mail man.
+
+","The mail man was the only male. The doctor and lawyer were females, so the cop knew that ""John"" was the mail man., The policeman think a doctor or a lawyer won't have name John., The dead man was the relative of both doctor and lawyer., None of above.","The mail man was the only male. The doctor and lawyer were females, so the cop knew that ""John"" was the mail man.","The mail man was the only male. The doctor and lawyer were females, so the cop knew that ""John"" was the mail man.",yes
+107,"Question: driver told make stop everi half hour engin cool five time long stop take
+Choices: Three hours., Two and a half hours., Two hours., None of above.
+Answer: Two hours.
+
+","Three hours., Two and a half hours., Two hours., None of above.",Two hours.,Two hours.,yes
+108,"Question: two fish tank swim opposit direct see everi coupl minut possibl
+Choices: Water in the tank can reflect each other in some degree., The fish tank was like a ring., Fish had an unusual vision so they can see what happend behind them., None of above.
+Answer: The fish tank was like a ring.
+
+","Water in the tank can reflect each other in some degree., The fish tank was like a ring., Fish had an unusual vision so they can see what happend behind them., None of above.",The fish tank was like a ring.,The fish tank was like a ring.,yes
+109,"Question: black sheep eat less white sheep
+Choices: Black sheep do not need food. , Black absorbs more heat from sunlight, black sheep may eat less to avoid overheating or to regulate their body temperature., Because there are less black sheep in the world than white., None of above.
+Answer: Because there are less black sheep in the world than white.
+
+","Black sheep do not need food. , Black absorbs more heat from sunlight, black sheep may eat less to avoid overheating or to regulate their body temperature., Because there are less black sheep in the world than white., None of above.","Black absorbs more heat from sunlight, black sheep may eat less to avoid overheating or to regulate their body temperature.",Because there are less black sheep in the world than white.,no
+110,"Question: teacher question two girl appear relat b parent look alik share birthday genuin repli ye inquiri honest said ident twin possibl
+Choices: They were triplets.
+, One of the gril was not loved by their family., Their parent raised them differently due to the lack of money., None of above.
+Answer: They were triplets.
+
+
+","They were triplets.
+, One of the gril was not loved by their family., Their parent raised them differently due to the lack of money., None of above.","They were triplets.
+","They were triplets.
+",yes
+111,"Question: cross lush muddi meadow three men third man feet still dri despit fact two wear rubber boot 
+Choices: The ground is not wet., By walking on stilts, the third man elevates his feet above the wet ground., The third man is walking on his hands., None of above.
+Answer: The ground is not wet.
+
+","The ground is not wet., By walking on stilts, the third man elevates his feet above the wet ground., The third man is walking on his hands., None of above.","By walking on stilts, the third man elevates his feet above the wet ground.",The ground is not wet.,no
+112,"Question: two dog sit porch fat dog thin dog littl dog son fat dog fat dog father thin dog explain
+Choices: The fat dog was the father when it is thin., The fat dog is the mother., The fat dog is not a responsible father as he eats all the food., None of above.
+Answer: The fat dog is the mother.
+
+","The fat dog was the father when it is thin., The fat dog is the mother., The fat dog is not a responsible father as he eats all the food., None of above.",The fat dog is the mother.,The fat dog is the mother.,yes
+113,"Question: two entri station outsid barrack one look road anyon arriv north check road see anyon approach south smile one ask find partner smile
+Choices: The smiling guard's action is such big that even the guard behind him can see it., Although the guards were looking in opposite directions, they were not back to back. They were facing each other., One of the guards had an unusual vision so he can see what happend behind him., None of above.
+Answer: Although the guards were looking in opposite directions, they were not back to back. They were facing each other.
+
+","The smiling guard's action is such big that even the guard behind him can see it., Although the guards were looking in opposite directions, they were not back to back. They were facing each other., One of the guards had an unusual vision so he can see what happend behind him., None of above.","Although the guards were looking in opposite directions, they were not back to back. They were facing each other.","Although the guards were looking in opposite directions, they were not back to back. They were facing each other.",yes
+114,"Question: year christma day new year day fall year
+Choices: In the first year of each century., It happens every year., In the period of BC., None of above.
+Answer: It happens every year.
+
+","In the first year of each century., It happens every year., In the period of BC., None of above.",It happens every year.,It happens every year.,yes
+115,"Question: put white shirt stone red wet becom red thing yelllowston happen
+Choices: White., Red., Yellow., None of above.
+Answer: None of above.
+
+","White., Red., Yellow., None of above.",White.,None of above.,no
+116,"Question: lion tie piec metal long reach human away
+Choices: The dog dug a 1m tunnel underground to reach the bone that was 7m away while still tied to the 6m long rope., The other end is not tied to anything., The rope stretches proportionally, providing the extra length needed for the horse to reach the hay seven meters away., None of above.
+Answer: The other end is not tied to anything.
+
+","The dog dug a 1m tunnel underground to reach the bone that was 7m away while still tied to the 6m long rope., The other end is not tied to anything., The rope stretches proportionally, providing the extra length needed for the horse to reach the hay seven meters away., None of above.",The dog dug a 1m tunnel underground to reach the bone that was 7m away while still tied to the 6m long rope.,The other end is not tied to anything.,no
+117,"Question: stroll room find bed lie two dog five cat giraff six cow goos bed three dove also flutter bed mani leg ground
+Choices: Thirty-six, as there are eighteen animals., Six. The bed's four legs, plus your two legs., Seventy-two, as there are eighteen animals., None of above.
+Answer: Six. The bed's four legs, plus your two legs.
+
+","Thirty-six, as there are eighteen animals., Six. The bed's four legs, plus your two legs., Seventy-two, as there are eighteen animals., None of above.","Six. The bed's four legs, plus your two legs.","Six. The bed's four legs, plus your two legs.",yes
+118,"Question: woman appear jump balconi apart build caught net fireman run reach fall noth els fall fireman still yard away nearli time damag woman wors cruis even doabl
+Choices: The woman is strong enough to not get hurt from falling., She fell back into her apartment, jumping from the balcony into the inside., The fireman is so well exercised that he reaches the woman 100 yards away in a second., None of above.
+Answer: She fell back into her apartment, jumping from the balcony into the inside.
+
+","The woman is strong enough to not get hurt from falling., She fell back into her apartment, jumping from the balcony into the inside., The fireman is so well exercised that he reaches the woman 100 yards away in a second., None of above.","She fell back into her apartment, jumping from the balcony into the inside.","She fell back into her apartment, jumping from the balcony into the inside.",yes
+119,"Question: shave three time day maintain beard
+Choices: A superstar., A barber., A woman., None of above.
+Answer: A barber.
+
+","A superstar., A barber., A woman., None of above.",A barber.,A barber.,yes
+120,"Question: drop raw egg onto concret floor crack
+Choices: You need to drop the egg gently., 
+You need to drop the egg hard., No problem, because concrete floors are very hard to crack
+, None of above.
+Answer: No problem, because concrete floors are very hard to crack
+
+
+","You need to drop the egg gently., 
+You need to drop the egg hard., No problem, because concrete floors are very hard to crack
+, None of above.","No problem, because concrete floors are very hard to crack
+","No problem, because concrete floors are very hard to crack
+",yes
+121,"Question: jessica tell friend stori ask guess truth lie man sit hous night light lamp candl sourc light yet sat hous read book happili friend say lie jessica correct say tell truth jessica stori
+Choices: Because it was daytime., The man is smart that she pretended to reading the book., The man is blind and is reading braille.
+, None of above.
+Answer: The man is blind and is reading braille.
+
+
+","Because it was daytime., The man is smart that she pretended to reading the book., The man is blind and is reading braille.
+, None of above.","The man is blind and is reading braille.
+","The man is blind and is reading braille.
+",yes
+122,"Question: island middl lake lake remot part countri never bridg connect island mainland everi day tractor wagon give hay ride around island puzzl tractor gotten onto island ask around find tractor transport island boat air built island explain tractor got
+Choices: The pieces of the tractor will fall within hail to the island., It was driven over in winter, when the lake was frozen., The pieces of tractor is floating over the lake, you collect them and combine them. , None of above.
+Answer: It was driven over in winter, when the lake was frozen.
+
+","The pieces of the tractor will fall within hail to the island., It was driven over in winter, when the lake was frozen., The pieces of tractor is floating over the lake, you collect them and combine them. , None of above.","It was driven over in winter, when the lake was frozen.","It was driven over in winter, when the lake was frozen.",yes
+123,"Question: salli three class math english languag art histori test everi class want fun test french receiv test back one teacher could understand work none salli teacher spoke french teacher abl understand test understand
+Choices: The history teacher, as he may have a good friend from France., English teacher, as she have experiences in using translator., The math teacher, because numbers are the same in French as they are in English., None of above.
+Answer: The math teacher, because numbers are the same in French as they are in English.
+
+","The history teacher, as he may have a good friend from France., English teacher, as she have experiences in using translator., The math teacher, because numbers are the same in French as they are in English., None of above.","The math teacher, because numbers are the same in French as they are in English.","The math teacher, because numbers are the same in French as they are in English.",yes
+124,"Question: friday man rode town pick berri hour later rode back sunday possibl
+Choices: His horse was called Sunday., The man was too exhausted that he forgot his way home., Next week is a national holiday., None of above.
+Answer: His horse was called Sunday.
+
+","His horse was called Sunday., The man was too exhausted that he forgot his way home., Next week is a national holiday., None of above.",His horse was called Sunday.,His horse was called Sunday.,yes
+125,"Question: toss fragil glass ball sturdi brick wall distanc without shatter
+Choices: No problem, because sturdy bricks are very hard to crack, You need to throw the glass ball hard., You need to throw the glass ball gently., None of above.
+Answer: No problem, because sturdy bricks are very hard to crack
+
+","No problem, because sturdy bricks are very hard to crack, You need to throw the glass ball hard., You need to throw the glass ball gently., None of above.","No problem, because sturdy bricks are very hard to crack","No problem, because sturdy bricks are very hard to crack",yes
+126,"Question: lisa william niec emili though emili william sister william marri possibl
+Choices: Lisa is Emily's daughter.
+, Emily is adopted., Emily and William share same father but not mother., None of above.
+Answer: Lisa is Emily's daughter.
+
+
+","Lisa is Emily's daughter.
+, Emily is adopted., Emily and William share same father but not mother., None of above.",Emily and William share same father but not mother.,"Lisa is Emily's daughter.
+",no
+127,"Question: hous three major room first stuf cash second stuf crucial document third stuf jewel one day room caught fire room cop initi put fire
+Choices: The one with with jewelry., The one with important papers., The one filled with money., None of above.
+Answer: None of above.
+
+","The one with with jewelry., The one with important papers., The one filled with money., None of above.",None of above.,None of above.,yes
+128,"Question: math english languag art histori salli three subject got exam took french want fun one teacher could understand work receiv result test teacher abl grasp test understand sinc none salli teacher could speak french
+Choices: The history teacher, as he may have a good friend from France., English teacher, as she have experiences in using translator., The math teacher, because numbers are the same in French as they are in English., None of above.
+Answer: The math teacher, because numbers are the same in French as they are in English.
+
+","The history teacher, as he may have a good friend from France., English teacher, as she have experiences in using translator., The math teacher, because numbers are the same in French as they are in English., None of above.","The math teacher, because numbers are the same in French as they are in English.","The math teacher, because numbers are the same in French as they are in English.",yes
+129,"Question: man jump build get hurt possibl
+Choices: He get medical attention., He jumped off the ground floor, not from the top of the building., The building is not so tall for the man., None of above.
+Answer: He jumped off the ground floor, not from the top of the building.
+
+","He get medical attention., He jumped off the ground floor, not from the top of the building., The building is not so tall for the man., None of above.","He jumped off the ground floor, not from the top of the building.","He jumped off the ground floor, not from the top of the building.",yes
+130,"Question: boy fell foot ladder get hurt possibl
+Choices: The ladder is not so tall for the boys., He get medical attention., He was only on the first step., None of above.
+Answer: He was only on the first step.
+
+","The ladder is not so tall for the boys., He get medical attention., He was only on the first step., None of above.",He was only on the first step.,He was only on the first step.,yes
+131,"Question: visit villag vietnam see lot small boat ground wonder alway use boat see water around possibl
+Choices: The tide makes the boats to float again and the issues get resolved at that time., People in village use the boat to store water because water is rare., People in village use the boat to store fruits because it is cheap., None of above.
+Answer: The tide makes the boats to float again and the issues get resolved at that time.
+
+","The tide makes the boats to float again and the issues get resolved at that time., People in village use the boat to store water because water is rare., People in village use the boat to store fruits because it is cheap., None of above.",The tide makes the boats to float again and the issues get resolved at that time.,The tide makes the boats to float again and the issues get resolved at that time.,yes
+132,"Question: author countless book never written singl word 
+Choices: A business man., A publisher., A writer., None of above.
+Answer: A publisher.
+
+","A business man., A publisher., A writer., None of above.",A publisher.,A publisher.,yes
+133,"Question: order friend determin follow stori true fals jessica tell man sit hous night light candl lamp light sourc present nonetheless gladli read book sit home jessica respond friend accus lie insist speak truth jessica account accur
+Choices: The man is smart that she pretended to reading the book., The man is blind and is reading braille.
+, Because it was daytime., None of above.
+Answer: The man is blind and is reading braille.
+
+
+","The man is smart that she pretended to reading the book., The man is blind and is reading braille.
+, Because it was daytime., None of above.","The man is blind and is reading braille.
+","The man is blind and is reading braille.
+",yes
+134,"Question: boat park marina tie nearbi station owner found boat coupl hour later middl ocean
+Choices: The station wasn't fixed in the marina, The dolphins untied the knots., The waves were powerful, which pushed the boat and the marina together., None of above.
+Answer: The station wasn't fixed in the marina
+
+","The station wasn't fixed in the marina, The dolphins untied the knots., The waves were powerful, which pushed the boat and the marina together., None of above.",The station wasn't fixed in the marina,The station wasn't fixed in the marina,yes
+135,"Question: throw raw egg hard rock wall break
+Choices: You need to drop the egg gently., No problem, because concrete floors are very hard to crack
+, 
+You need to drop the egg hard., None of above.
+Answer: No problem, because concrete floors are very hard to crack
+
+
+","You need to drop the egg gently., No problem, because concrete floors are very hard to crack
+, 
+You need to drop the egg hard., None of above.","No problem, because concrete floors are very hard to crack
+","No problem, because concrete floors are very hard to crack
+",yes
+136,"Question: water see boat fill peopl look away second look back time see singl person boat 
+Choices: All the people on the boat jump into the sea in a moment., The boat is soo big that all the people can hide themselves in a moment., All the people on the boat are in relationships.
+, None of above.
+Answer: All the people on the boat are in relationships.
+
+
+","All the people on the boat jump into the sea in a moment., The boat is soo big that all the people can hide themselves in a moment., All the people on the boat are in relationships.
+, None of above.","All the people on the boat are in relationships.
+","All the people on the boat are in relationships.
+",yes
+137,"Question: paint brown home white turn white light green spotlight switch red green happen throw white shirt red sea
+Choices: Green., White., Red., None of above.
+Answer: None of above.
+
+","Green., White., Red., None of above.",Green.,None of above.,no
+138,"Question: offic worker usual walk work daili two coffe shop rout first one half mile away hous second one mile away opposit direct alway stop first coffe shop morn alway visit second one even way back home 
+Choices: The coffee shops and his home are on a slope, which allows him to walk downhill easily both to work and back home., The second coffee shop is too far away., The first coffee shop is too far away., None of above.
+Answer: The coffee shops and his home are on a slope, which allows him to walk downhill easily both to work and back home.
+
+","The coffee shops and his home are on a slope, which allows him to walk downhill easily both to work and back home., The second coffee shop is too far away., The first coffee shop is too far away., None of above.","The coffee shops and his home are on a slope, which allows him to walk downhill easily both to work and back home.","The coffee shops and his home are on a slope, which allows him to walk downhill easily both to work and back home.",yes
+139,"Question: want reserv tabl restaur told tabl alreadi book howev pass see singl person eat restaur tell tabl fulli book
+Choices: All the people left the restaurant in a moment., The resturant was soo big that all the people can hide themselves in a moment., All the people in the restaurant are in relationships., None of above.
+Answer: All the people in the restaurant are in relationships.
+
+","All the people left the restaurant in a moment., The resturant was soo big that all the people can hide themselves in a moment., All the people in the restaurant are in relationships., None of above.",All the people in the restaurant are in relationships.,All the people in the restaurant are in relationships.,yes
+140,"Question: young man fell ladder unharm even possibl
+Choices: He get medical attention., He was only on the first step., The ladder is not so tall for the boys., None of above.
+Answer: He was only on the first step.
+
+","He get medical attention., He was only on the first step., The ladder is not so tall for the boys., None of above.",He was only on the first step.,He was only on the first step.,yes
+141,"Question: mari father five children nana none nine non fifth child name
+Choices: Nelson., Nick., Mary., None of above.
+Answer: Mary.
+
+","Nelson., Nick., Mary., None of above.",None of above.,Mary.,no
+142,"Question: three import room hous first one fill money second one fill import paper third one fill jewelri one day room burst fire room policemen put fire first
+Choices: The one with with jewelry., The one with important papers., The one filled with money., None of above.
+Answer: None of above.
+
+","The one with with jewelry., The one with important papers., The one filled with money., None of above.",None of above.,None of above.,yes
+143,"Question: marathon profession runner seven kilomet day ran two kilomet previou day mani kilomet runner run first day
+Choices: Five., Six., Seven., None of above.
+Answer: None of above.
+
+","Five., Six., Seven., None of above.",None of above.,None of above.,yes
+144,"Question: found island midst lake lake remot area countri bridg ever connect island mainland tractor wagon provid daili hay ride around island inquir tractor arriv onto island discov carri island boat plane also construct island tractor get
+Choices: The pieces of the tractor will fall within hail to the island., The pieces of tractor is floating over the lake, you collect them and combine them. , It was driven over in winter, when the lake was frozen., None of above.
+Answer: It was driven over in winter, when the lake was frozen.
+
+","The pieces of the tractor will fall within hail to the island., The pieces of tractor is floating over the lake, you collect them and combine them. , It was driven over in winter, when the lake was frozen., None of above.",None of above.,"It was driven over in winter, when the lake was frozen.",no
+145,"Question: competit profession fisherman caught fish caught three fish day day first day mani fish fisherman catch
+Choices: Two., One., Three., None of above.
+Answer: None of above.
+
+","Two., One., Three., None of above.",None of above.,None of above.,yes
+146,"Question: toni jack brother toni marri howev toni nephew jack nephew possibl
+Choices: Tony's nephew is Jack's son., Jack is adopted., Jack and Tony share same father but not mother., None of above.
+Answer: Tony's nephew is Jack's son.
+
+","Tony's nephew is Jack's son., Jack is adopted., Jack and Tony share same father but not mother., None of above.",Tony's nephew is Jack's son.,Tony's nephew is Jack's son.,yes
+147,"Question: ten bird sit fenc shoot one mani left
+Choices: Ten., One., Nine., None of above.
+Answer: None of above.
+
+","Ten., One., Nine., None of above.",Ten.,None of above.,no
+148,"Question: man goe restaur everyday pay possibl
+Choices: He works there in the restaurant., He is a superstar., He always finish the dish without any waste., None of above.
+Answer: He works there in the restaurant.
+
+","He works there in the restaurant., He is a superstar., He always finish the dish without any waste., None of above.",He works there in the restaurant.,He works there in the restaurant.,yes
+149,"Question: jone four daughter daughter one brother jone five children possibl
+Choices: Some daughters get married and have their own family., Some brothers were not loved by family and moved away., Each daughter shares the same brother., None of above.
+Answer: Each daughter shares the same brother.
+
+","Some daughters get married and have their own family., Some brothers were not loved by family and moved away., Each daughter shares the same brother., None of above.",Each daughter shares the same brother.,Each daughter shares the same brother.,yes
+150,"Question: enter room five organ head make import decis mani head room
+Choices: Ten., Five., One., None of above.
+Answer: None of above.
+
+","Ten., Five., One., None of above.",Ten.,None of above.,no
+151,"Question: man left town sunday spent entir night motel rode back next day sunday even possibl
+Choices: Next week is a national holiday., His horse was called Sunday., The hotel room was so expensive that the man came back directly., None of above.
+Answer: His horse was called Sunday.
+
+","Next week is a national holiday., His horse was called Sunday., The hotel room was so expensive that the man came back directly., None of above.",His horse was called Sunday.,His horse was called Sunday.,yes
+152,"Question: student lean forward ride scooter train station go colleg two stop far home first one mile away second two mile away opposit direct alway board first stop morn alway exit second stop afternoon 
+Choices: The first train station is too far away., The second train station is too far away., The stations and his home are on a hill, which allows him to ride down easily on his scooter., None of above.
+Answer: The stations and his home are on a hill, which allows him to ride down easily on his scooter.
+
+","The first train station is too far away., The second train station is too far away., The stations and his home are on a hill, which allows him to ride down easily on his scooter., None of above.","The stations and his home are on a hill, which allows him to ride down easily on his scooter.","The stations and his home are on a hill, which allows him to ride down easily on his scooter.",yes
+153,"Question: chess team five player player one coach six particip team possibl
+Choices: Each player shares the same coach., Some players are backups and not allowed to play., Some coach get a raise., None of above.
+Answer: Each player shares the same coach.
+
+","Each player shares the same coach., Some players are backups and not allowed to play., Some coach get a raise., None of above.",Each player shares the same coach.,Each player shares the same coach.,yes
+154,"Question: even though emili william sister william marri lisa william niec emili even doabl
+Choices: Emily is adopted., Emily and William share same father but not mother., Lisa is Emily's daughter., None of above.
+Answer: Lisa is Emily's daughter.
+
+","Emily is adopted., Emily and William share same father but not mother., Lisa is Emily's daughter., None of above.",Lisa is Emily's daughter.,Lisa is Emily's daughter.,yes
+155,"Question: student lean forward ride scooter train station go colleg two stop far home first one mile away second two mile away opposit direct alway board first stop morn alway exit second stop afternoon 
+Choices: The first train station is too far away., The stations and his home are on a hill, which allows him to ride down easily on his scooter., The second train station is too far away., None of above.
+Answer: The stations and his home are on a hill, which allows him to ride down easily on his scooter.
+
+","The first train station is too far away., The stations and his home are on a hill, which allows him to ride down easily on his scooter., The second train station is too far away., None of above.","The stations and his home are on a hill, which allows him to ride down easily on his scooter.","The stations and his home are on a hill, which allows him to ride down easily on his scooter.",yes
+156,"Question: burglari go firemen got scene first sinc sure fire go well four peopl come place two cover face firemen arrest
+Choices: The two covered their face., All of them., The two with no masks., None of above.
+Answer: None of above.
+
+","The two covered their face., All of them., The two with no masks., None of above.",None of above.,None of above.,yes
+157,"Question: dog tie piec rope long reach bone away
+Choices: The other end is not tied to anything., The rope stretches proportionally, providing the extra length needed for the horse to reach the hay seven meters away., The dog dug a 1m tunnel underground to reach the bone that was 7m away while still tied to the 6m long rope., None of above.
+Answer: The other end is not tied to anything.
+
+","The other end is not tied to anything., The rope stretches proportionally, providing the extra length needed for the horse to reach the hay seven meters away., The dog dug a 1m tunnel underground to reach the bone that was 7m away while still tied to the 6m long rope., None of above.","The rope stretches proportionally, providing the extra length needed for the horse to reach the hay seven meters away.",The other end is not tied to anything.,no
+158,"Question: night bedroom jessica alway read complet dark parent howev never stop often send cake reward hard work 
+Choices: Because it was daytime., Jessica is smart that she pretended to reading the book., Jessica is blind and she can braille., None of above.
+Answer: Jessica is blind and she can braille.
+
+","Because it was daytime., Jessica is smart that she pretended to reading the book., Jessica is blind and she can braille., None of above.",Jessica is blind and she can braille.,Jessica is blind and she can braille.,yes
+159,"Question: man rode town sunday stay whole night hotel rode back town next day sunday possibl
+Choices: Next week is a national holiday., The hotel room was so expensive that the man came back directly., His horse was called Sunday., None of above.
+Answer: His horse was called Sunday.
+
+","Next week is a national holiday., The hotel room was so expensive that the man came back directly., His horse was called Sunday., None of above.",His horse was called Sunday.,His horse was called Sunday.,yes
+160,"Question: ami shock see ador pet dog perch edg balconi shout pet come back sudden fright made pet immobil fell edg although ami apart floor famili dog unharm even doabl
+Choices: Amy is so well exercised that she can reach to the base in a second to catch the pet., The pet is strong enough to not get hurt from falling., The pet dog fell back into her apartment, jumping from the balcony into the inside. , None of above.
+Answer: The pet dog fell back into her apartment, jumping from the balcony into the inside. 
+
+","Amy is so well exercised that she can reach to the base in a second to catch the pet., The pet is strong enough to not get hurt from falling., The pet dog fell back into her apartment, jumping from the balcony into the inside. , None of above.","The pet dog fell back into her apartment, jumping from the balcony into the inside. ","The pet dog fell back into her apartment, jumping from the balcony into the inside. ",yes
+161,"Question: ten bird perch atop fenc fire one mani left
+Choices: Nine., Ten., One., None of above.
+Answer: None of above.
+
+","Nine., Ten., One., None of above.",Ten.,None of above.,no
+162,"Question: marri mani women never marri 
+Choices: A laywer., A preacher., A teacher., None of above.
+Answer: A preacher.
+
+","A laywer., A preacher., A teacher., None of above.",A preacher.,A preacher.,yes
+163,"Question: mari father father five children nana none nine non name name fifth child
+Choices: Nelson., Nick., Mary., None of above.
+Answer: Mary.
+
+","Nelson., Nick., Mary., None of above.",None of above.,Mary.,no
+164,"Question: ana school student alaska maria jame jonghyun name student
+Choices: Mark., Ana, Michael., None of above.
+Answer: Ana
+
+","Mark., Ana, Michael., None of above.",Mark.,Ana,no
+165,"Question: fireman run get net ladi look like might jump balconi apart build noth except fall fireman still yard away fall ca nearli get time woman hurt cruis possibl
+Choices: The woman is strong enough to not get hurt from falling., She fell back into her apartment, jumping from the balcony into the inside., The fireman is so well exercised that he reaches the woman 100 yards away in a second., None of above.
+Answer: She fell back into her apartment, jumping from the balcony into the inside.
+
+","The woman is strong enough to not get hurt from falling., She fell back into her apartment, jumping from the balcony into the inside., The fireman is so well exercised that he reaches the woman 100 yards away in a second., None of above.","She fell back into her apartment, jumping from the balcony into the inside.","She fell back into her apartment, jumping from the balcony into the inside.",yes
+166,"Question: shave three time day still grow beard
+Choices: A woman., A barber., A superstar., None of above.
+Answer: A barber.
+
+","A woman., A barber., A superstar., None of above.",A barber.,A barber.,yes
+167,"Question: tom teach chines school one day hand homework children print accident english despit learn english yet everi student complet assign flawlessli follow day 
+Choices: They used translation tools or sought assistance from external sources., Tom is a math teacher, numbers are the same in French as they are in English., The student are smart enough to rely on their prior konwledge to guess the homework answers., None of above.
+Answer: Tom is a math teacher, numbers are the same in French as they are in English.
+
+","They used translation tools or sought assistance from external sources., Tom is a math teacher, numbers are the same in French as they are in English., The student are smart enough to rely on their prior konwledge to guess the homework answers., None of above.","Tom is a math teacher, numbers are the same in French as they are in English.","Tom is a math teacher, numbers are the same in French as they are in English.",yes
+168,"Question: paint brown hous white becom white hous spotlight chang red green light green throw white shirt red sea becom
+Choices: Green., Red., White., None of above.
+Answer: None of above.
+
+","Green., Red., White., None of above.",Green.,None of above.,no
+169,"Question: sea notic boat full peopl take quick glanc away back singl person boat 
+Choices: All the people on the boat jump into the sea in a moment., The boat is soo big that all the people can hide themselves in a moment., All the people on the boat are in relationships.
+, None of above.
+Answer: All the people on the boat are in relationships.
+
+
+","All the people on the boat jump into the sea in a moment., The boat is soo big that all the people can hide themselves in a moment., All the people on the boat are in relationships.
+, None of above.","All the people on the boat are in relationships.
+","All the people on the boat are in relationships.
+",yes
+170,"Question: profession fisherman caught fish tournament day caught three fish day mani fish fisherman catch first day
+Choices: Two., One., Three., None of above.
+Answer: None of above.
+
+","Two., One., Three., None of above.",None of above.,None of above.,yes
+171,"Question: bob work project suddenli internet got disconnect search googl find anyth 
+Choices: He needed a membership to search in google., He searched the google in a wrong way., The internet was disconnected so he couldn't search on google, None of above.
+Answer: The internet was disconnected so he couldn't search on google
+
+","He needed a membership to search in google., He searched the google in a wrong way., The internet was disconnected so he couldn't search on google, None of above.",The internet was disconnected so he couldn't search on google,The internet was disconnected so he couldn't search on google,yes
+172,"Question: wed numer women never 
+Choices: A teacher., A preacher., A laywer., None of above.
+Answer: A preacher.
+
+","A teacher., A preacher., A laywer., None of above.",A teacher.,A preacher.,no
+173,"Question: walk room see bed lie bed two dog five cat giraff six cow goos also three dove fli bed mani leg floor
+Choices: Thirty-six, as there are eighteen animals., Six. The bed's four legs, plus your two legs., Seventy-two, as there are eighteen animals., None of above.
+Answer: Six. The bed's four legs, plus your two legs.
+
+","Thirty-six, as there are eighteen animals., Six. The bed's four legs, plus your two legs., Seventy-two, as there are eighteen animals., None of above.","Six. The bed's four legs, plus your two legs.","Six. The bed's four legs, plus your two legs.",yes
+174,"Question: four jone daughter exist one brother daughter jone howev five kid even doabl
+Choices: Some brothers were not loved by family and moved away., Some daughters get married and have their own family., Each daughter shares the same brother., None of above.
+Answer: Each daughter shares the same brother.
+
+","Some brothers were not loved by family and moved away., Some daughters get married and have their own family., Each daughter shares the same brother., None of above.",Each daughter shares the same brother.,Each daughter shares the same brother.,yes
