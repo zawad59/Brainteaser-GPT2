@@ -199,7 +199,7 @@ def evaluate_on_test(test_data):
     print(f"Final Test Accuracy: {accuracy:.4f}")
     return predictions, accuracy
 
-def save_predictions_to_csv(predictions, filename="Phi1_5_predictions_WP.csv"):
+def save_predictions_to_csv(predictions, filename="Results/Phi1_5_predictions_WP.csv"):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["Question ID", "Question", "Choices",
                                                   "Predicted Answer", "Correct Answer", "Correct"])
@@ -211,3 +211,4 @@ def save_predictions_to_csv(predictions, filename="Phi1_5_predictions_WP.csv"):
 predictions, accuracy = evaluate_on_test(processed_test_data)
 save_predictions_to_csv(predictions)
 print(f"Final Test Accuracy: {accuracy:.4f}")
+print("Predictions Saved to Results/Phi1_5_predictions_WP.csv")
