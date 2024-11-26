@@ -241,7 +241,7 @@ def evaluate_on_test(test_data):
 
 
 def save_predictions_to_csv(predictions, filename="Results/prediction_results_WP_gpt2.csv"):
-    Save the predictions to a CSV file.
+    #Save the predictions to a CSV file.
 
      # Ensure the 'Results' directory exists
     os.makedirs(os.path.dirname(filename), exist_ok=True)
