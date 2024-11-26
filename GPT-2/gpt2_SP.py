@@ -181,7 +181,7 @@ def evaluate_on_test(test_data):
     print(f"Test Accuracy: {accuracy:.4f}")
     return predictions, accuracy
 
-def save_predictions_to_csv(predictions, filename="prediction_results_SP_gpt2.csv"):
+def save_predictions_to_csv(predictions, filename="Results/prediction_results_SP_gpt2.csv"):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["Question ID", "Actual Question Text", "Choices",
                                                   "Predicted Answer", "Correct Answer", "Predicted == Correct"])
@@ -191,5 +191,5 @@ def save_predictions_to_csv(predictions, filename="prediction_results_SP_gpt2.cs
 
 # Evaluate and save results
 predictions, accuracy = evaluate_on_test(processed_test_data)
-print(f"Final Test Accuracy: {accuracy:.4f}")
 save_predictions_to_csv(predictions, filename="prediction_results_SP_gpt2.csv")
+print("Predictions Saved to Prediction_results_SP_gpt2.csv")
