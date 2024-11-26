@@ -8,6 +8,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize, word_tokenize
 import csv
 from datasets import Dataset as HFDataset
+import os
 
 # Download required NLTK data
 nltk.download('stopwords')
@@ -199,10 +200,19 @@ def evaluate_on_test(test_data):
     print(f"Final Test Accuracy: {accuracy:.4f}")
     return predictions, accuracy
 
-def save_predictions_to_csv(predictions, filename="Results/Phi1_5_predictions_WP.csv"):
+
+
+def save_predictions_to_csv(predictions, filename="Results/prediction_results_WP_gpt2.csv"):
+    """
+    Save the predictions to a CSV file.
+    """
+    # Ensure the 'Results' directory exists
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+
+    # Save the predictions to the CSV file
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=["Question ID", "Question", "Choices",
-                                                  "Predicted Answer", "Correct Answer", "Correct"])
+        writer = csv.DictWriter(file, fieldnames=["Question ID", "Actual Question Text", "Choices",
+                                                  "Predicted Answer", "Correct Answer", "Predicted == Correct"])
         writer.writeheader()
         writer.writerows(predictions)
     print(f"Predictions saved to {filename}")
