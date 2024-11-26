@@ -183,8 +183,14 @@ def evaluate_on_test(test_data):
     return predictions, accuracy
 
 def save_predictions_to_csv(predictions, filename="Results/prediction_results_SP_gpt2.csv"):
-     # Ensure the 'Results' directory exists
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    # Get the directory from the filename
+    directory = os.path.dirname(filename)
+    
+    # Ensure the directory exists
+    if directory:  # Only create the directory if it's specified
+        os.makedirs(directory, exist_ok=True)
+    
+    # Write to the CSV file
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["Question ID", "Actual Question Text", "Choices",
                                                   "Predicted Answer", "Correct Answer", "Predicted == Correct"])
