@@ -164,7 +164,7 @@ def generate_answer(question, choices):
     outputs = model.generate(
         inputs['input_ids'],
         attention_mask=inputs['attention_mask'],
-        max_length=100,  # Limit the response length
+        max_new_tokens=50,  # Limit the response length
         temperature=0.7,
         do_sample=True,
         num_return_sequences=1,
