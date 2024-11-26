@@ -254,5 +254,4 @@ def save_predictions_to_csv(predictions, filename="prediction_results_WP_gpt2.cs
 # Run evaluation and save results to CSV
 predictions = evaluate_on_test(processed_test_data)
 save_predictions_to_csv(predictions)
-print(f"Final Test Accuracy: {accuracy:.4f}")
-print("Evalations saved on GPT2_Predictions_SP.csv")
+print("Evalations saved on GPT2_Predictions_WP.csv")
