@@ -195,7 +195,8 @@ def save_predictions_to_csv(predictions, filename="Phi1_5_predictions_SP.csv"):
         writer.writerows(predictions)
 
 
-# Evaluate and save results
-predictions = evaluate_on_test(processed_test_data)
+# Run evaluation and save results
+predictions, accuracy = evaluate_on_test(processed_test_data)
 save_predictions_to_csv(predictions)
-print("Results saved to phi1_5_predictions.csv")
+print(f"Final Test Accuracy: {accuracy:.4f}")
+print("Evalations saved on Phi1_5_predictions_SP.csv")
