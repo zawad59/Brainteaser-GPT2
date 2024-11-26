@@ -1,0 +1,691 @@
+Question ID,Actual Question Text,Choices,Predicted Answer,Correct Answer,Predicted == Correct
+1,"Question: type bank hold money
+Choices: Snowbank., Investment bank., Central bank., None of above.
+Answer: Snowbank.
+
+","Snowbank., Investment bank., Central bank., None of above.",Snowbank.,Snowbank.,yes
+2,"Question: kind bank keep cash hand
+Choices: Snowbank., Investment bank., Central bank., None of above.
+Answer: Snowbank.
+
+","Snowbank., Investment bank., Central bank., None of above.",Snowbank.,Snowbank.,yes
+3,"Question: kind bank money hand
+Choices: Riverbank., Investment bank., Central bank., None of above.
+Answer: Riverbank.
+
+","Riverbank., Investment bank., Central bank., None of above.",Riverbank.,Riverbank.,yes
+4,"Question: type root ca eaten
+Choices: Carrot root., Cabbage root., Square root., None of above.
+Answer: Square root.
+
+","Carrot root., Cabbage root., Square root., None of above.",Square root.,Square root.,yes
+5,"Question: kind root consum
+Choices: Square root., Carrot root., Cabbage root., None of above.
+Answer: Square root.
+
+","Square root., Carrot root., Cabbage root., None of above.",Square root.,Square root.,yes
+6,"Question: sort root one eat
+Choices: Cube root., Cabbage root., Carrot root., None of above.
+Answer: Cube root.
+
+","Cube root., Cabbage root., Carrot root., None of above.",Cube root.,Cube root.,yes
+7,"Question: kind mous ca feed chees
+Choices: A computer mouse., A hungry mouse., An old mouse., None of above.
+Answer: A computer mouse.
+
+","A computer mouse., A hungry mouse., An old mouse., None of above.",A computer mouse.,A computer mouse.,yes
+8,"Question: type mous inelig chees feed
+Choices: A computer mouse., A hungry mouse., An old mouse., None of above.
+Answer: A computer mouse.
+
+","A computer mouse., A hungry mouse., An old mouse., None of above.",A computer mouse.,A computer mouse.,yes
+9,"Question: kind mous engin like
+Choices: A young mouse., A white mouse., A computer mouse., None of above.
+Answer: A computer mouse.
+
+","A young mouse., A white mouse., A computer mouse., None of above.",None of above.,A computer mouse.,no
+10,"Question: kind plant ca photosynthes
+Choices: An indoor plant., A house plant, A power plant., None of above.
+Answer: A power plant.
+
+","An indoor plant., A house plant, A power plant., None of above.",A power plant.,A power plant.,yes
+11,"Question: plant incap photosynthes
+Choices: A house plant, A power plant., An indoor plant., None of above.
+Answer: A power plant.
+
+","A house plant, A power plant., An indoor plant., None of above.",A power plant.,A power plant.,yes
+12,"Question: plant photosyntheszi produc energi
+Choices: A wetland plant., A nuclear plant., An aquatic plant., None of above.
+Answer: A nuclear plant.
+
+","A wetland plant., A nuclear plant., An aquatic plant., None of above.",A nuclear plant.,A nuclear plant.,yes
+13,"Question: kind wood never get chop
+Choices: Softwood., Hollywood., Hardwood., None of above.
+Answer: Hollywood.
+
+","Softwood., Hollywood., Hardwood., None of above.",Hollywood.,Hollywood.,yes
+14,"Question: sort wood never cut
+Choices: Hollywood., Hardwood., Softwood., None of above.
+Answer: Hollywood.
+
+","Hollywood., Hardwood., Softwood., None of above.",Hollywood.,Hollywood.,yes
+15,"Question: sort wood never cut
+Choices: Hardwood., Sherwood., Softwood., None of above.
+Answer: Sherwood.
+
+","Hardwood., Sherwood., Softwood., None of above.",Softwood.,Sherwood.,no
+16,"Question: type dish hold food
+Choices: A satellite dish., A fish dish., A side dish., None of above.
+Answer: A satellite dish.
+
+","A satellite dish., A fish dish., A side dish., None of above.",A satellite dish.,A satellite dish.,yes
+17,"Question: kind dish accommod food
+Choices: A satellite dish., A fish dish., A side dish., None of above.
+Answer: A satellite dish.
+
+","A satellite dish., A fish dish., A side dish., None of above.",A satellite dish.,A satellite dish.,yes
+18,"Question: sort dish incap hold food
+Choices: Side dish., Petri dish., Fish dish., None of above.
+Answer: Petri dish.
+
+","Side dish., Petri dish., Fish dish., None of above.",Petri dish.,Petri dish.,yes
+19,"Question: kind bottl ca hold liquid
+Choices: A bottle neck., A glass bottle., A water bottle., None of above.
+Answer: A bottle neck.
+
+","A bottle neck., A glass bottle., A water bottle., None of above.",A bottle neck.,A bottle neck.,yes
+20,"Question: sort bottl incap hold liquid
+Choices: A glass bottle., A water bottle., A bottle neck., None of above.
+Answer: A bottle neck.
+
+","A glass bottle., A water bottle., A bottle neck., None of above.",A bottle neck.,A bottle neck.,yes
+21,"Question: kind bottl smallest
+Choices: Soda bottle., Wine bottle., Baby bottle., None of above.
+Answer: Baby bottle.
+
+","Soda bottle., Wine bottle., Baby bottle., None of above.",Baby bottle.,Baby bottle.,yes
+22,"Question: kind note ca play
+Choices: A music note., A footnote., A high note., None of above.
+Answer: A footnote.
+
+","A music note., A footnote., A high note., None of above.",A footnote.,A footnote.,yes
+23,"Question: sort note imposs play
+Choices: A high note., A music note., A footnote., None of above.
+Answer: A footnote.
+
+","A high note., A music note., A footnote., None of above.",A footnote.,A footnote.,yes
+24,"Question: sort note valuabl
+Choices: A music note., A banknote., A high note., None of above.
+Answer: A banknote.
+
+","A music note., A banknote., A high note., None of above.",A banknote.,A banknote.,yes
+25,"Question: kind watch ca tell time
+Choices: A pocket watch., A wristwatch., A watchdog., None of above.
+Answer: A watchdog.
+
+","A pocket watch., A wristwatch., A watchdog., None of above.",A watchdog.,A watchdog.,yes
+26,"Question: sort watch unabl tell time
+Choices: A pocket watch., A wristwatch., A watchdog., None of above.
+Answer: A watchdog.
+
+","A pocket watch., A wristwatch., A watchdog., None of above.",None of above.,A watchdog.,no
+27,"Question: kind watch work night
+Choices: Stopwatch., Nightwatch., Wristwatch., None of above.
+Answer: Nightwatch.
+
+","Stopwatch., Nightwatch., Wristwatch., None of above.",Nightwatch.,Nightwatch.,yes
+28,"Question: type pump inflat anyth
+Choices: Bicycle pump., Pumpkin., Air pump., None of above.
+Answer: Pumpkin.
+
+","Bicycle pump., Pumpkin., Air pump., None of above.",Pumpkin.,Pumpkin.,yes
+29,"Question: kind pump incap inflat anyth
+Choices: Bicycle pump., Air pump., Pumpkin., None of above.
+Answer: Pumpkin.
+
+","Bicycle pump., Air pump., Pumpkin., None of above.",Pumpkin.,Pumpkin.,yes
+30,"Question: type pan help cook
+Choices: Saucepan., Frying pan., Company., None of above.
+Answer: Company.
+
+","Saucepan., Frying pan., Company., None of above.",Company.,Company.,yes
+31,"Question: type ink never leav stain
+Choices: Link., Blue ink., Red ink., None of above.
+Answer: Link.
+
+","Link., Blue ink., Red ink., None of above.",Link.,Link.,yes
+32,"Question: kind ink leav stain behind
+Choices: Link., Red ink., Blue ink., None of above.
+Answer: Link.
+
+","Link., Red ink., Blue ink., None of above.",Blue ink.,Link.,no
+33,"Question: type ball ca thrown kick
+Choices: Eyeball., Baseball., Football., None of above.
+Answer: Eyeball.
+
+","Eyeball., Baseball., Football., None of above.",Eyeball.,Eyeball.,yes
+34,"Question: type art hang galleri
+Choices: Contemporary art., Fine art., Tart., None of above.
+Answer: Tart.
+
+","Contemporary art., Fine art., Tart., None of above.",Tart.,Tart.,yes
+35,"Question: kind artwork display galleri
+Choices: Fine art., Contemporary art., Tart., None of above.
+Answer: Tart.
+
+","Fine art., Contemporary art., Tart., None of above.",Tart.,Tart.,yes
+36,"Question: kind man ca walk talk
+Choices: A business man., A snowman., A fireman., None of above.
+Answer: A snowman.
+
+","A business man., A snowman., A fireman., None of above.",A snowman.,A snowman.,yes
+37,"Question: kind bell make sound
+Choices: A doorbell., A cowbell., A dumbbell., None of above.
+Answer: A dumbbell.
+
+","A doorbell., A cowbell., A dumbbell., None of above.",A dumbbell.,A dumbbell.,yes
+38,"Question: sort bell ring
+Choices: A dumbbell., A doorbell., A cowbell., None of above.
+Answer: A dumbbell.
+
+","A dumbbell., A doorbell., A cowbell., None of above.",A dumbbell.,A dumbbell.,yes
+39,"Question: kind stone ca found quarri
+Choices: Cobblestone., Sandstone., Milestone., None of above.
+Answer: Milestone.
+
+","Cobblestone., Sandstone., Milestone., None of above.",Milestone.,Milestone.,yes
+40,"Question: type ice never melt
+Choices: Dice., Flaked ice., Glacier ice., None of above.
+Answer: Dice.
+
+","Dice., Flaked ice., Glacier ice., None of above.",Dice.,Dice.,yes
+41,"Question: kind ice melt
+Choices: Glacier ice., Dice., Flaked ice., None of above.
+Answer: Dice.
+
+","Glacier ice., Dice., Flaked ice., None of above.",Dice.,Dice.,yes
+42,"Question: kind ice contain water
+Choices: Flaked ice., Dry ice., Glacier ice., None of above.
+Answer: Dry ice.
+
+","Flaked ice., Dry ice., Glacier ice., None of above.",Flaked ice.,Dry ice.,no
+43,"Question: kind stock share
+Choices: Small-cap stock., Livestock., Growth stock., None of above.
+Answer: Livestock.
+
+","Small-cap stock., Livestock., Growth stock., None of above.",Livestock.,Livestock.,yes
+44,"Question: call toothless bear
+Choices: A brown bear., A polar bear., A gummy bear., None of above.
+Answer: A gummy bear.
+
+","A brown bear., A polar bear., A gummy bear., None of above.",A brown bear.,A gummy bear.,no
+45,"Question: comput technician keep key
+Choices: A mouse., A monitor., A keyboard., None of above.
+Answer: A keyboard.
+
+","A mouse., A monitor., A keyboard., None of above.",A keyboard.,A keyboard.,yes
+46,"Question: call bear teeth
+Choices: A brown bear., A gummy bear., A polar bear., None of above.
+Answer: A gummy bear.
+
+","A brown bear., A gummy bear., A polar bear., None of above.",A polar bear.,A gummy bear.,no
+47,"Question: result tini lobster math test
+Choices: Very-bad., Sea-plus., Very-Good., None of above.
+Answer: Sea-plus.
+
+","Very-bad., Sea-plus., Very-Good., None of above.",Sea-plus.,Sea-plus.,yes
+48,"Question: tree carri hand
+Choices: Palm., Oak., Pine., None of above.
+Answer: Palm.
+
+","Palm., Oak., Pine., None of above.",Palm.,Palm.,yes
+49,"Question: chain troubl connect
+Choices: Blockchain., Supply chain., Logic chain., None of above.
+Answer: Blockchain.
+
+","Blockchain., Supply chain., Logic chain., None of above.",Blockchain.,Blockchain.,yes
+50,"Question: kind shot hurt
+Choices: A fireshot., A screenshot., A gunshot., None of above.
+Answer: A screenshot.
+
+","A fireshot., A screenshot., A gunshot., None of above.",A fireshot.,A screenshot.,no
+51,"Question: kind bird alway make nois
+Choices: Humming bird., Hawk., Owl., None of above.
+Answer: Humming bird.
+
+","Humming bird., Hawk., Owl., None of above.",Owl.,Humming bird.,no
+52,"Question: type tabl chair
+Choices: A dining table., A coffee table., A water table., None of above.
+Answer: A water table.
+
+","A dining table., A coffee table., A water table., None of above.",A water table.,A water table.,yes
+53,"Question: type chase never involv run
+Choices: Escape chase., Paperchase., Risky chase., None of above.
+Answer: Paperchase.
+
+","Escape chase., Paperchase., Risky chase., None of above.",Paperchase.,Paperchase.,yes
+54,"Question: difficult key turn
+Choices: A new key., A gold key., A donkey., None of above.
+Answer: A donkey.
+
+","A new key., A gold key., A donkey., None of above.",A donkey.,A donkey.,yes
+55,"Question: cloth hous wear
+Choices: Address., Suit., Wedding dress., None of above.
+Answer: Address.
+
+","Address., Suit., Wedding dress., None of above.",Address.,Address.,yes
+56,"Question: speci gees engag
+Choices: Canada goose., Snow goose., Mongoose., None of above.
+Answer: Mongoose.
+
+","Canada goose., Snow goose., Mongoose., None of above.",None of above.,Mongoose.,no
+57,"Question: capit washington
+Choices: The letter N., The letter T., The letter W., None of above.
+Answer: The letter W.
+
+","The letter N., The letter T., The letter W., None of above.",The letter W.,The letter W.,yes
+58,"Question: make one disappear
+Choices: By saying ""zero,two,three"" to omit ""one""., Add a ""g"" and ""one"" Gone., Use ""single"" as an alternative word., None of above.
+Answer: Add a ""g"" and ""one"" Gone.
+
+","By saying ""zero,two,three"" to omit ""one""., Add a ""g"" and ""one"" Gone., Use ""single"" as an alternative word., None of above.","Add a ""g"" and ""one"" Gone.","Add a ""g"" and ""one"" Gone.",yes
+59,"Question: get rid one
+Choices: Add a ""g"" and ""one"" Gone., Use ""single"" as an alternative word., By saying ""zero,two,three"" to omit ""one""., None of above.
+Answer: Add a ""g"" and ""one"" Gone.
+
+","Add a ""g"" and ""one"" Gone., Use ""single"" as an alternative word., By saying ""zero,two,three"" to omit ""one""., None of above.","Add a ""g"" and ""one"" Gone.","Add a ""g"" and ""one"" Gone.",yes
+60,"Question: kind wave involv water
+Choices: Microwave., Seawave., Tidewave., None of above.
+Answer: Microwave.
+
+","Microwave., Seawave., Tidewave., None of above.",Microwave.,Microwave.,yes
+61,"Question: kind goos fight snake
+Choices: Snow goose., Canada goose., Mongoose., None of above.
+Answer: Mongoose.
+
+","Snow goose., Canada goose., Mongoose., None of above.",None of above.,Mongoose.,no
+62,"Question: kind chain edibl
+Choices: Food chain., Logic chain., Blockchain., None of above.
+Answer: Food chain.
+
+","Food chain., Logic chain., Blockchain., None of above.",Food chain.,Food chain.,yes
+63,"Question: anim keep best time
+Choices: A watchdog., An elephant., A whale., None of above.
+Answer: A watchdog.
+
+","A watchdog., An elephant., A whale., None of above.",A watchdog.,A watchdog.,yes
+64,"Question: anim best chronolog
+Choices: An elephant., A watchdog., A whale., None of above.
+Answer: A watchdog.
+
+","An elephant., A watchdog., A whale., None of above.",None of above.,A watchdog.,no
+65,"Question: stock make everyon happi matter situat
+Choices: Laughingstock., Penny stock., Value stock., None of above.
+Answer: Laughingstock.
+
+","Laughingstock., Penny stock., Value stock., None of above.",Penny stock.,Laughingstock.,no
+66,"Question: stock share kind
+Choices: Livestock., Growth stock., Small-cap stock., None of above.
+Answer: Livestock.
+
+","Livestock., Growth stock., Small-cap stock., None of above.",Small-cap stock.,Livestock.,no
+67,"Question: kind tree safe
+Choices: Pine., Hemlock., Oak., None of above.
+Answer: Hemlock.
+
+","Pine., Hemlock., Oak., None of above.",Hemlock.,Hemlock.,yes
+68,"Question: hardest key turn
+Choices: A new key., A donkey., A gold key., None of above.
+Answer: A donkey.
+
+","A new key., A donkey., A gold key., None of above.",A donkey.,A donkey.,yes
+69,"Question: capit london
+Choices: The letter L., The letter N., The letter D., None of above.
+Answer: The letter L.
+
+","The letter L., The letter N., The letter D., None of above.",The letter L.,The letter L.,yes
+70,"Question: washington capit
+Choices: The letter T., The letter W., The letter N., None of above.
+Answer: The letter W.
+
+","The letter T., The letter W., The letter N., None of above.",The letter W.,The letter W.,yes
+71,"Question: kind tree hold hand
+Choices: Oak., Pine., Palm., None of above.
+Answer: Palm.
+
+","Oak., Pine., Palm., None of above.",Palm.,Palm.,yes
+72,"Question: kind chase involv run time
+Choices: Risky chase., Escape chase., Paperchase., None of above.
+Answer: Paperchase.
+
+","Risky chase., Escape chase., Paperchase., None of above.",Paperchase.,Paperchase.,yes
+73,"Question: kind pet would hous like keep even make sound
+Choices: Cat., Carpet., Dog., None of above.
+Answer: Carpet.
+
+","Cat., Carpet., Dog., None of above.",Carpet.,Carpet.,yes
+74,"Question: king perform realli bad throw arrow give score hand king say
+Choices: Aim-highness, King-winner., Good-shooter., None of above.
+Answer: Aim-highness
+
+","Aim-highness, King-winner., Good-shooter., None of above.",Aim-highness,Aim-highness,yes
+75,"Question: best key satisfi meal
+Choices: A joykey., A turkey., A hockey., None of above.
+Answer: A turkey.
+
+","A joykey., A turkey., A hockey., None of above.",A hockey.,A turkey.,no
+76,"Question: rain cloud wear raincoat
+Choices: Thunderware., Suit., Skirt., None of above.
+Answer: Thunderware.
+
+","Thunderware., Suit., Skirt., None of above.",Thunderware.,Thunderware.,yes
+77,"Question: cake would care eat result lose finger
+Choices: A crab cake., A birthday cake., A spicy cake., None of above.
+Answer: A crab cake.
+
+","A crab cake., A birthday cake., A spicy cake., None of above.",A crab cake.,A crab cake.,yes
+78,"Question: sort tabl leg
+Choices: A dining table., A coffee table., A multiplication table., None of above.
+Answer: A multiplication table.
+
+","A dining table., A coffee table., A multiplication table., None of above.",A multiplication table.,A multiplication table.,yes
+79,"Question: dress hous wear
+Choices: Address., Suit., Wedding dress., None of above.
+Answer: Address.
+
+","Address., Suit., Wedding dress., None of above.",Suit.,Address.,no
+80,"Question: get rid
+Choices: By saying ""not none"" to refer ""all""., Add a ""f"" and ""all"" fall., Use ""whole"" as an alternative word., None of above.
+Answer: Add a ""f"" and ""all"" fall.
+
+","By saying ""not none"" to refer ""all""., Add a ""f"" and ""all"" fall., Use ""whole"" as an alternative word., None of above.","Add a ""f"" and ""all"" fall.","Add a ""f"" and ""all"" fall.",yes
+81,"Question: littl lobster get math test
+Choices: Sea-plus., Very-bad., Very-Good., None of above.
+Answer: Sea-plus.
+
+","Sea-plus., Very-bad., Very-Good., None of above.",Very-bad.,Sea-plus.,no
+82,"Question: kind shot aim space
+Choices: A moonshot., A gunshot., A fireshot., None of above.
+Answer: A moonshot.
+
+","A moonshot., A gunshot., A fireshot., None of above.",A moonshot.,A moonshot.,yes
+83,"Question: sort inject pain
+Choices: A fireshot., A screenshot., A gunshot., None of above.
+Answer: A screenshot.
+
+","A fireshot., A screenshot., A gunshot., None of above.",A screenshot.,A screenshot.,yes
+84,"Question: kind tabl leg
+Choices: A multiplication table., A coffee table., A dining table., None of above.
+Answer: A multiplication table.
+
+","A multiplication table., A coffee table., A dining table., None of above.",A multiplication table.,A multiplication table.,yes
+85,"Question: kind bird alway breath
+Choices: Sparrow., Hawk., Puffin., None of above.
+Answer: Puffin.
+
+","Sparrow., Hawk., Puffin., None of above.",Puffin.,Puffin.,yes
+86,"Question: rain cloud wear beneath raincoat
+Choices: Thunderware., Suit., Skirt., None of above.
+Answer: Thunderware.
+
+","Thunderware., Suit., Skirt., None of above.",Thunderware.,Thunderware.,yes
+87,"Question: chain exactli edibl
+Choices: Logic chain., Food chain., Gold chain., None of above.
+Answer: Food chain.
+
+","Logic chain., Food chain., Gold chain., None of above.",Food chain.,Food chain.,yes
+88,"Question: best key good dinner
+Choices: A joykey., A hockey., A turkey., None of above.
+Answer: A turkey.
+
+","A joykey., A hockey., A turkey., None of above.",A turkey.,A turkey.,yes
+89,"Question: type fish particip space research
+Choices: Starfish., Catfish., Yellow fish., None of above.
+Answer: Starfish.
+
+","Starfish., Catfish., Yellow fish., None of above.",Catfish.,Starfish.,no
+90,"Question: moon use lighten face
+Choices: Cloud., Moonbeam., Nightmare., None of above.
+Answer: Moonbeam.
+
+","Cloud., Moonbeam., Nightmare., None of above.",Moonbeam.,Moonbeam.,yes
+91,"Question: lack leg feet toe
+Choices: Cabbages., Tomatoes., Onions, None of above.
+Answer: Tomatoes.
+
+","Cabbages., Tomatoes., Onions, None of above.",Tomatoes.,Tomatoes.,yes
+92,"Question: ear ca hear thing
+Choices: Corn ears., Wild polar bear., Young child., None of above.
+Answer: Corn ears.
+
+","Corn ears., Wild polar bear., Young child., None of above.",Corn ears.,Corn ears.,yes
+93,"Question: toe feet leg
+Choices: Cabbages., Tomatoes., Onions, None of above.
+Answer: Tomatoes.
+
+","Cabbages., Tomatoes., Onions, None of above.",Tomatoes.,Tomatoes.,yes
+94,"Question: tabl leg stand
+Choices: Pool table., Tennis table., periodic table, None of above.
+Answer: periodic table
+
+","Pool table., Tennis table., periodic table, None of above.",periodic table,periodic table,yes
+95,"Question: begin argument
+Choices: The letter T., The letter A., The letter U., None of above.
+Answer: The letter A.
+
+","The letter T., The letter A., The letter U., None of above.",The letter U.,The letter A.,no
+96,"Question: kind market never grow size
+Choices: Hypermarket., A flea market., A super market., None of above.
+Answer: A flea market.
+
+","Hypermarket., A flea market., A super market., None of above.",A super market.,A flea market.,no
+97,"Question: letter alphabet oldest
+Choices:  ""A'', because it's always surrounded by 'BC.,  'Z', because it's the end of alphabet.,  'O', because it's the start of ""OLD""., None of above.
+Answer:  ""A'', because it's always surrounded by 'BC.
+
+"," ""A'', because it's always surrounded by 'BC.,  'Z', because it's the end of alphabet.,  'O', because it's the start of ""OLD""., None of above."," ""A'', because it's always surrounded by 'BC."," ""A'', because it's always surrounded by 'BC.",yes
+98,"Question: type phone never answer
+Choices: A smartphone., A xylophone., A cellphone., None of above.
+Answer: A xylophone.
+
+","A smartphone., A xylophone., A cellphone., None of above.",A xylophone.,A xylophone.,yes
+99,"Question: spell see three letter
+Choices: O P T, I C U., S O S, None of above.
+Answer: I C U.
+
+","O P T, I C U., S O S, None of above.",I C U.,I C U.,yes
+100,"Question: kind drive ensur remain stationari
+Choices: Driving with limited oil., A hard drive in a computer., Diving at a low speed., None of above.
+Answer: A hard drive in a computer.
+
+","Driving with limited oil., A hard drive in a computer., Diving at a low speed., None of above.",A hard drive in a computer.,A hard drive in a computer.,yes
+101,"Question: follow pen never use write
+Choices: Bullpen., Hard pencil., Crayon., None of above.
+Answer: Bullpen.
+
+","Bullpen., Hard pencil., Crayon., None of above.",Bullpen.,Bullpen.,yes
+102,"Question: two stick ground boy made five without break half possibl
+Choices: Take two matches and form the numeral ""II"" ., Shape the two sticks to form a 45 degree between themselves, then they become V which is 5 in Roman., Take two matches and form the numeral ""X"" ., None of above.
+Answer: Shape the two sticks to form a 45 degree between themselves, then they become V which is 5 in Roman.
+
+","Take two matches and form the numeral ""II"" ., Shape the two sticks to form a 45 degree between themselves, then they become V which is 5 in Roman., Take two matches and form the numeral ""X"" ., None of above.","Shape the two sticks to form a 45 degree between themselves, then they become V which is 5 in Roman.","Shape the two sticks to form a 45 degree between themselves, then they become V which is 5 in Roman.",yes
+103,"Question: three letter fighter thief away
+Choices: I C U., S O S, O P T, None of above.
+Answer: I C U.
+
+","I C U., S O S, O P T, None of above.",I C U.,I C U.,yes
+104,"Question: tabl leg stand
+Choices: Tennis table., periodic table, Pool table., None of above.
+Answer: periodic table
+
+","Tennis table., periodic table, Pool table., None of above.",periodic table,periodic table,yes
+105,"Question: farmer fix jean
+Choices: A peach jam., An eggplant., A cabbage patch., None of above.
+Answer: A cabbage patch.
+
+","A peach jam., An eggplant., A cabbage patch., None of above.",A cabbage patch.,A cabbage patch.,yes
+106,"Question: chair two leg stand
+Choices: Club chair., Committee chair, Armchair., None of above.
+Answer: Committee chair
+
+","Club chair., Committee chair, Armchair., None of above.",Committee chair,Committee chair,yes
+107,"Question: without use r sound say purchas rabbit
+Choices: Bought a bunny., Purchased A Rabbit., Uchased a abbit., None of above.
+Answer: Bought a bunny.
+
+","Bought a bunny., Purchased A Rabbit., Uchased a abbit., None of above.",Purchased A Rabbit.,Bought a bunny.,no
+108,"Question: eight first tomorrow come yesterday happen
+Choices: In a science fiction., In a dictionary., In a caculus book., None of above.
+Answer: In a dictionary.
+
+","In a science fiction., In a dictionary., In a caculus book., None of above.",In a caculus book.,In a dictionary.,no
+109,"Question: three letter fend thief
+Choices: I C U., O P T, S O S, None of above.
+Answer: I C U.
+
+","I C U., O P T, S O S, None of above.",O P T,I C U.,no
+110,"Question: comput technician fix pant
+Choices: With an internet web., With a software patch., With a mobile app., None of above.
+Answer: With a software patch.
+
+","With an internet web., With a software patch., With a mobile app., None of above.",With a software patch.,With a software patch.,yes
+111,"Question: begin road pari
+Choices: The letter P., The letter S., The letter R., None of above.
+Answer: The letter R.
+
+","The letter P., The letter S., The letter R., None of above.",The letter R.,The letter R.,yes
+112,"Question: letter alphabet coolest
+Choices:  'A', because it's the start of alphabet.,  'Z', because it's the end of alphabet.,  'B', because it's always surrounded by 'AC'., None of above.
+Answer:  'B', because it's always surrounded by 'AC'.
+
+"," 'A', because it's the start of alphabet.,  'Z', because it's the end of alphabet.,  'B', because it's always surrounded by 'AC'., None of above."," 'B', because it's always surrounded by 'AC'."," 'B', because it's always surrounded by 'AC'.",yes
+113,"Question: tomorrow yesterday eight first
+Choices: In a caculus book., In a dictionary., In a science fiction., None of above.
+Answer: In a dictionary.
+
+","In a caculus book., In a dictionary., In a science fiction., None of above.",In a caculus book.,In a dictionary.,no
+114,"Question: kind bird write
+Choices: Hawk., Sparrow., Penguin., None of above.
+Answer: Penguin.
+
+","Hawk., Sparrow., Penguin., None of above.",Penguin.,Penguin.,yes
+115,"Question: kind run mean walk
+Choices: Running out of gas., Running at a low speed., Running with an old person., None of above.
+Answer: Running out of gas.
+
+","Running out of gas., Running at a low speed., Running with an old person., None of above.",Running out of gas.,Running out of gas.,yes
+116,"Question: farmer jean fix
+Choices: A peach jam., A cabbage patch., An eggplant., None of above.
+Answer: A cabbage patch.
+
+","A peach jam., A cabbage patch., An eggplant., None of above.",A cabbage patch.,A cabbage patch.,yes
+117,"Question: follow pen never use write
+Choices: Pigpen., Crayon., Hard pencil., None of above.
+Answer: Pigpen.
+
+","Pigpen., Crayon., Hard pencil., None of above.",Hard pencil.,Pigpen.,no
+118,"Question: type run equat walk
+Choices: Running with an old person., Running at a low speed., Running out of gas., None of above.
+Answer: Running out of gas.
+
+","Running with an old person., Running at a low speed., Running out of gas., None of above.",Running out of gas.,Running out of gas.,yes
+119,"Question: run walk dawn rise eat grow
+Choices: In a caculus book., In a science fiction., In a dictionary., None of above.
+Answer: In a dictionary.
+
+","In a caculus book., In a science fiction., In a dictionary., None of above.",In a caculus book.,In a dictionary.,no
+120,"Question: exactli heart pari
+Choices: The letter P., The letter R., The letter S., None of above.
+Answer: The letter R.
+
+","The letter P., The letter R., The letter S., None of above.",The letter R.,The letter R.,yes
+121,"Question: kind phone never get respons
+Choices: A smartphone., A cellphone., A xylophone., None of above.
+Answer: A xylophone.
+
+","A smartphone., A cellphone., A xylophone., None of above.",A xylophone.,A xylophone.,yes
+122,"Question: kind bird author
+Choices: Penguin., Hawk., Sparrow., None of above.
+Answer: Penguin.
+
+","Penguin., Hawk., Sparrow., None of above.",Penguin.,Penguin.,yes
+123,"Question: pen never use write
+Choices: Pigpen., Hard pencil., Crayon., None of above.
+Answer: Pigpen.
+
+","Pigpen., Hard pencil., Crayon., None of above.",Pigpen.,Pigpen.,yes
+124,"Question: kind cap go head
+Choices: A baseball cap., A bottle cap., A cowboy hat., None of above.
+Answer: A bottle cap.
+
+","A baseball cap., A bottle cap., A cowboy hat., None of above.",A bottle cap.,A bottle cap.,yes
+125,"Question: say purchas rotweil without use r
+Choices: Uchased a otweile., Purchased A Rotweiler., Bought a dog., None of above.
+Answer: Bought a dog.
+
+","Uchased a otweile., Purchased A Rotweiler., Bought a dog., None of above.",Bought a dog.,Bought a dog.,yes
+126,"Question: sort cap worn head
+Choices: A jar cap., A cowboy hat., A baseball cap., None of above.
+Answer: A jar cap.
+
+","A jar cap., A cowboy hat., A baseball cap., None of above.",A jar cap.,A jar cap.,yes
+127,"Question: end rainbow
+Choices: The letter W., The letter R., The letter I., None of above.
+Answer: The letter W.
+
+","The letter W., The letter R., The letter I., None of above.",The letter I.,The letter W.,no
+128,"Question: type market never larg
+Choices: A flea market., Hypermarket., A super market., None of above.
+Answer: A flea market.
+
+","A flea market., Hypermarket., A super market., None of above.",Hypermarket.,A flea market.,no
+129,"Question: kind shell write
+Choices: Pen shell., Oyester., Calm., None of above.
+Answer: Pen shell.
+
+","Pen shell., Oyester., Calm., None of above.",Pen shell.,Pen shell.,yes
+130,"Question: tabl three match make three match four without ad anoth permit disrupt match accomplish
+Choices: Take three matches and form the numeral ""III"" ., Take two matches and form the numeral ""X"" ., Shape the 3 matches into a roman numeral four ""IV""., None of above.
+Answer: Shape the 3 matches into a roman numeral four ""IV"".
+
+","Take three matches and form the numeral ""III"" ., Take two matches and form the numeral ""X"" ., Shape the 3 matches into a roman numeral four ""IV""., None of above.","Shape the 3 matches into a roman numeral four ""IV"".","Shape the 3 matches into a roman numeral four ""IV"".",yes
+131,"Question: three match sit tabl without ad anoth make three match four allow break match done
+Choices: Take two matches and form the numeral ""X"" ., Shape the 3 matches into a roman numeral four ""IV""., Take three matches and form the numeral ""III"" ., None of above.
+Answer: Shape the 3 matches into a roman numeral four ""IV"".
+
+","Take two matches and form the numeral ""X"" ., Shape the 3 matches into a roman numeral four ""IV""., Take three matches and form the numeral ""III"" ., None of above.","Shape the 3 matches into a roman numeral four ""IV"".","Shape the 3 matches into a roman numeral four ""IV"".",yes
+132,"Question: type cap worn head
+Choices: A bottle cap., A cowboy hat., A baseball cap., None of above.
+Answer: A bottle cap.
+
+","A bottle cap., A cowboy hat., A baseball cap., None of above.",A bottle cap.,A bottle cap.,yes
+133,"Question: kind market danger
+Choices: Bear market., Supermarket., Hypermarket., None of above.
+Answer: Bear market.
+
+","Bear market., Supermarket., Hypermarket., None of above.",Bear market.,Bear market.,yes
+134,"Question: find end rainbow
+Choices: The letter R., The letter W., The letter I., None of above.
+Answer: The letter W.
+
+","The letter R., The letter W., The letter I., None of above.",The letter W.,The letter W.,yes
+135,"Question: without use r sound say purchas rotweil
+Choices: Bought a dog., Purchased A Rotweiler., Uchased a otweile., None of above.
+Answer: Bought a dog.
+
+","Bought a dog., Purchased A Rotweiler., Uchased a otweile., None of above.",Bought a dog.,Bought a dog.,yes
+136,"Question: kind phone color
+Choices: A cellphone., A smartphone., Chromophone., None of above.
+Answer: Chromophone.
+
+","A cellphone., A smartphone., Chromophone., None of above.",Chromophone.,Chromophone.,yes
+137,"Question: coolest letter alphabet
+Choices:  'Z', because it's the end of alphabet.,  'A', because it's the start of alphabet.,  'B', because it's always surrounded by 'AC'., None of above.
+Answer:  'B', because it's always surrounded by 'AC'.
+
+"," 'Z', because it's the end of alphabet.,  'A', because it's the start of alphabet.,  'B', because it's always surrounded by 'AC'., None of above."," 'B', because it's always surrounded by 'AC'."," 'B', because it's always surrounded by 'AC'.",yes
+138,"Question: middl pari
+Choices: The letter R., The letter S., The letter P., None of above.
+Answer: The letter R.
+
+","The letter R., The letter S., The letter P., None of above.",The letter R.,The letter R.,yes
