@@ -9,6 +9,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import PorterStemmer
 from datasets import Dataset as HFDataset
 import csv
+import os
 
 # Download required NLTK data
 nltk.download('stopwords')
@@ -182,6 +183,8 @@ def evaluate_on_test(test_data):
     return predictions, accuracy
 
 def save_predictions_to_csv(predictions, filename="Results/prediction_results_SP_gpt2.csv"):
+     # Ensure the 'Results' directory exists
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["Question ID", "Actual Question Text", "Choices",
                                                   "Predicted Answer", "Correct Answer", "Predicted == Correct"])
