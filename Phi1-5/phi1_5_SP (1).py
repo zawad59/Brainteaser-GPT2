@@ -187,7 +187,7 @@ def evaluate_on_test(test_data):
     return predictions
 
 
-def save_predictions_to_csv(predictions, filename="phi1_5_predictions.csv"):
+def save_predictions_to_csv(predictions, filename="Phi1_5_predictions_SP.csv"):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["Question ID", "Question", "Choices", "Predicted Answer",
                                                   "Correct Answer", "Predicted == Correct"])
