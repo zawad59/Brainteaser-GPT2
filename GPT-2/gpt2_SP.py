@@ -158,20 +158,21 @@ def evaluate_on_test(test_data):
     predictions = []
     correct_predictions = 0
     for idx, item in enumerate(test_data):
-        question = item['text']
-        choices = item['choices']
+        original_question = item['question']  # Get the original question text
+        choices = item['choice_list']
         true_label = item['label']
         correct_answer = choices[true_label]
 
-        generated_answer = generate_answer(question, choices)
-        refined_answer = refine_prediction_with_similarity(generated_answer, choices)
+        # Generate the predicted answer
+        predicted_answer = generate_answer(original_question, choices)
 
-        is_correct = "yes" if refined_answer == correct_answer else "no"
+        # Check if predicted answer is correct
+        is_correct = "yes" if predicted_answer == correct_answer else "no"
         predictions.append({
             "Question ID": idx + 1,
-            "Actual Question Text": question,
+            "Actual Question Text": original_question,  # Use original question text
             "Choices": ', '.join(choices),
-            "Predicted Answer": refined_answer,
+            "Predicted Answer": predicted_answer,
             "Correct Answer": correct_answer,
             "Predicted == Correct": is_correct
         })
