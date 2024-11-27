@@ -43,11 +43,12 @@ stop_words = set(stopwords.words('english'))
 def preprocess_gpt2_data(data):
     processed_data = []
     for item in data:
-        question = item['question']
+        original_question = item['question']  # Keep the original question
         choices = item['choice_list']
         correct_answer = choices[item['label']]
 
-        sentences = sent_tokenize(question)
+        # Preprocess the question text
+        sentences = sent_tokenize(original_question)
         cleaned_sentences = []
         for sentence in sentences:
             words = word_tokenize(sentence.lower())
@@ -61,8 +62,14 @@ def preprocess_gpt2_data(data):
             f"Choices: {', '.join(choices)}\n"
             f"Answer: {correct_answer}\n\n"
         )
-        processed_data.append({'text': training_text, 'choices': choices, 'label': item['label']})
+        processed_data.append({
+            'text': training_text,  # Preprocessed text
+            'original_question': original_question,  # Include original question
+            'choices': choices,
+            'label': item['label']
+        })
     return processed_data
+
 
 
 # Preprocess datasets
@@ -213,8 +220,8 @@ def evaluate_on_test(test_data):
     predictions = []
     correct_predictions = 0
     for idx, item in enumerate(test_data):
-        original_question = item['question']  # Get the original question text
-        choices = item['choice_list']
+        original_question = item['original_question']  # Use the original question text
+        choices = item['choices']
         true_label = item['label']
         correct_answer = choices[true_label]
 
@@ -237,6 +244,7 @@ def evaluate_on_test(test_data):
     accuracy = correct_predictions / len(test_data)
     print(f"Test Accuracy: {accuracy:.4f}")
     return predictions
+
 
 
 
