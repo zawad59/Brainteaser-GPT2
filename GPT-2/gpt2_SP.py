@@ -9,7 +9,6 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import PorterStemmer
 from datasets import Dataset as HFDataset
 import csv
-import os
 
 # Download required NLTK data
 nltk.download('stopwords')
@@ -29,6 +28,7 @@ model.config.pad_token_id = tokenizer.pad_token_id
 # Load SentenceTransformer for embeddings
 embedder = SentenceTransformer('all-MiniLM-L6-v2').to(device)
 
+
 # Load datasets
 train_data = np.load('../CombinedDatasets/SP_train 1.npy', allow_pickle=True)
 dev_data = np.load('../CombinedDatasets/SP_dev 1.npy', allow_pickle=True)
@@ -42,12 +42,11 @@ stop_words = set(stopwords.words('english'))
 def preprocess_gpt2_data(data):
     processed_data = []
     for item in data:
-        original_question = item['question']  # Keep the original question
+        question = item['question']
         choices = item['choice_list']
         correct_answer = choices[item['label']]
 
-        # Preprocess the question text
-        sentences = sent_tokenize(original_question)
+        sentences = sent_tokenize(question)
         cleaned_sentences = []
         for sentence in sentences:
             words = word_tokenize(sentence.lower())
@@ -61,18 +60,15 @@ def preprocess_gpt2_data(data):
             f"Choices: {', '.join(choices)}\n"
             f"Answer: {correct_answer}\n\n"
         )
-        processed_data.append({
-            'text': training_text,  # Preprocessed text
-            'original_question': original_question,  # Include original question
-            'choices': choices,
-            'label': item['label']
-        })
+        processed_data.append({'text': training_text, 'choices': choices, 'label': item['label']})
     return processed_data
 
-# Preprocess datasets
+
+# Re-run the preprocessing step
 processed_train_data = preprocess_gpt2_data(train_data)
 processed_dev_data = preprocess_gpt2_data(dev_data)
 processed_test_data = preprocess_gpt2_data(test_data)
+
 
 # Convert to Hugging Face Dataset
 train_dataset = HFDataset.from_list(processed_train_data)
@@ -143,32 +139,39 @@ model = AutoModelForCausalLM.from_pretrained("./gpt2_lora_best_model_SP").to(dev
 
 # Generate answers
 def generate_answer(question, choices):
-    inputs = tokenizer(question, return_tensors="pt", padding=True, truncation=True).to(device)
+    choices_text = "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
+    prompt = f"Question: {question}\nChoices:\n{choices_text}\nAnswer:"
+    inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to(device)
     outputs = model.generate(inputs['input_ids'], attention_mask=inputs['attention_mask'], max_new_tokens=50)
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return generated_text.split("Answer:")[-1].strip()
+
+def refine_prediction_with_similarity(generated_answer, choices):
+    choice_embeddings = embedder.encode(choices, convert_to_tensor=True)
+    generated_embedding = embedder.encode(generated_answer, convert_to_tensor=True)
+    cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
+    best_index = torch.argmax(cosine_similarities).item()
+    return choices[best_index]
 
 # Evaluate on the test set and calculate accuracy
 def evaluate_on_test(test_data):
     predictions = []
     correct_predictions = 0
     for idx, item in enumerate(test_data):
-        preprocessed_question = item['text']  # Use preprocessed question text for predictions
-        original_question = item['original_question']  # Use original question text for the CSV file
+        question = item['text']
         choices = item['choices']
         true_label = item['label']
         correct_answer = choices[true_label]
 
-        # Generate the predicted answer
-        predicted_answer = generate_answer(preprocessed_question, choices)
+        generated_answer = generate_answer(question, choices)
+        refined_answer = refine_prediction_with_similarity(generated_answer, choices)
 
-        # Check if predicted answer is correct
-        is_correct = "yes" if predicted_answer == correct_answer else "no"
+        is_correct = "yes" if refined_answer == correct_answer else "no"
         predictions.append({
             "Question ID": idx + 1,
-            "Actual Question Text": original_question,  # Keep the original question text in the CSV
+            "Actual Question Text": question,
             "Choices": ', '.join(choices),
-            "Predicted Answer": predicted_answer,
+            "Predicted Answer": refined_answer,
             "Correct Answer": correct_answer,
             "Predicted == Correct": is_correct
         })
@@ -179,11 +182,7 @@ def evaluate_on_test(test_data):
     print(f"Test Accuracy: {accuracy:.4f}")
     return predictions, accuracy
 
-# Save predictions to CSV
-def save_predictions_to_csv(predictions, filename="Results/prediction_results_SP_gpt2.csv"):
-    directory = os.path.dirname(filename)
-    if directory:
-        os.makedirs(directory, exist_ok=True)
+def save_predictions_to_csv(predictions, filename="prediction_results_SP_gpt2.csv"):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["Question ID", "Actual Question Text", "Choices",
                                                   "Predicted Answer", "Correct Answer", "Predicted == Correct"])
@@ -193,5 +192,5 @@ def save_predictions_to_csv(predictions, filename="Results/prediction_results_SP
 
 # Evaluate and save results
 predictions, accuracy = evaluate_on_test(processed_test_data)
-save_predictions_to_csv(predictions, filename="Results/prediction_results_SP_gpt2.csv")
-print("Predictions saved to Results/prediction_results_SP_gpt2.csv")
+print(f"Final Test Accuracy: {accuracy:.4f}")
+save_predictions_to_csv(predictions, filename="prediction_results_SP_gpt2.csv")
