@@ -69,13 +69,10 @@ def preprocess_gpt2_data(data):
         })
     return processed_data
 
-
-
-# Re-run the preprocessing step
+# Preprocess datasets
 processed_train_data = preprocess_gpt2_data(train_data)
 processed_dev_data = preprocess_gpt2_data(dev_data)
 processed_test_data = preprocess_gpt2_data(test_data)
-
 
 # Convert to Hugging Face Dataset
 train_dataset = HFDataset.from_list(processed_train_data)
@@ -146,38 +143,30 @@ model = AutoModelForCausalLM.from_pretrained("./gpt2_lora_best_model_SP").to(dev
 
 # Generate answers
 def generate_answer(question, choices):
-    choices_text = "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
-    prompt = f"Question: {question}\nChoices:\n{choices_text}\nAnswer:"
-    inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to(device)
+    inputs = tokenizer(question, return_tensors="pt", padding=True, truncation=True).to(device)
     outputs = model.generate(inputs['input_ids'], attention_mask=inputs['attention_mask'], max_new_tokens=50)
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return generated_text.split("Answer:")[-1].strip()
-
-def refine_prediction_with_similarity(generated_answer, choices):
-    choice_embeddings = embedder.encode(choices, convert_to_tensor=True)
-    generated_embedding = embedder.encode(generated_answer, convert_to_tensor=True)
-    cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
-    best_index = torch.argmax(cosine_similarities).item()
-    return choices[best_index]
 
 # Evaluate on the test set and calculate accuracy
 def evaluate_on_test(test_data):
     predictions = []
     correct_predictions = 0
     for idx, item in enumerate(test_data):
-        original_question = item['original_question']  # Use the original question text
+        preprocessed_question = item['text']  # Use preprocessed question text for predictions
+        original_question = item['original_question']  # Use original question text for the CSV file
         choices = item['choices']
         true_label = item['label']
         correct_answer = choices[true_label]
 
         # Generate the predicted answer
-        predicted_answer = generate_answer(original_question, choices)
+        predicted_answer = generate_answer(preprocessed_question, choices)
 
         # Check if predicted answer is correct
         is_correct = "yes" if predicted_answer == correct_answer else "no"
         predictions.append({
             "Question ID": idx + 1,
-            "Actual Question Text": original_question,  # Use original question text
+            "Actual Question Text": original_question,  # Keep the original question text in the CSV
             "Choices": ', '.join(choices),
             "Predicted Answer": predicted_answer,
             "Correct Answer": correct_answer,
@@ -190,15 +179,11 @@ def evaluate_on_test(test_data):
     print(f"Test Accuracy: {accuracy:.4f}")
     return predictions, accuracy
 
+# Save predictions to CSV
 def save_predictions_to_csv(predictions, filename="Results/prediction_results_SP_gpt2.csv"):
-    # Get the directory from the filename
     directory = os.path.dirname(filename)
-    
-    # Ensure the directory exists
-    if directory:  # Only create the directory if it's specified
+    if directory:
         os.makedirs(directory, exist_ok=True)
-    
-    # Write to the CSV file
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["Question ID", "Actual Question Text", "Choices",
                                                   "Predicted Answer", "Correct Answer", "Predicted == Correct"])
@@ -208,5 +193,5 @@ def save_predictions_to_csv(predictions, filename="Results/prediction_results_SP
 
 # Evaluate and save results
 predictions, accuracy = evaluate_on_test(processed_test_data)
-save_predictions_to_csv(predictions, filename="prediction_results_SP_gpt2.csv")
-print("Predictions Saved to Prediction_results_SP_gpt2.csv")
+save_predictions_to_csv(predictions, filename="Results/prediction_results_SP_gpt2.csv")
+print("Predictions saved to Results/prediction_results_SP_gpt2.csv")
