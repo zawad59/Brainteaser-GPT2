@@ -209,24 +209,23 @@ def refine_prediction_with_similarity(generated_answer, choices):
     return choices[best_index]
 
 
-# Function to evaluate on the test set
 def evaluate_on_test(test_data):
     predictions = []
     correct_predictions = 0
     for idx, item in enumerate(test_data):
-        question = item['text']
-        choices = item['choices']
+        original_question = item['question']  # Get the original question text
+        choices = item['choice_list']
         true_label = item['label']
         correct_answer = choices[true_label]
 
         # Generate the predicted answer
-        predicted_answer = generate_answer(question, choices)
+        predicted_answer = generate_answer(original_question, choices)
 
         # Check if predicted answer is correct
         is_correct = "yes" if predicted_answer == correct_answer else "no"
         predictions.append({
             "Question ID": idx + 1,
-            "Actual Question Text": question,
+            "Actual Question Text": original_question,  # Use original question text
             "Choices": ', '.join(choices),
             "Predicted Answer": predicted_answer,
             "Correct Answer": correct_answer,
@@ -238,6 +237,7 @@ def evaluate_on_test(test_data):
     accuracy = correct_predictions / len(test_data)
     print(f"Test Accuracy: {accuracy:.4f}")
     return predictions
+
 
 
 def save_predictions_to_csv(predictions, filename="Results/prediction_results_WP_gpt2.csv"):
