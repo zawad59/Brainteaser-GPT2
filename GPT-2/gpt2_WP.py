@@ -88,10 +88,10 @@ data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
 # LoRA fine-tuning configuration
 lora_config = LoraConfig(
-    r=16,
-    lora_alpha=32,
-    lora_dropout=0.1,
-    task_type="CAUSAL_LM"
+    r=4,  # Rank
+    lora_alpha=8,  # LoRA alpha
+    lora_dropout=0.1,  # Dropout for LoRA
+    task_type="CAUSAL_LM"  # Task type for language modeling
 )
 
 model = prepare_model_for_kbit_training(model)
@@ -110,13 +110,17 @@ class CustomTrainer(Trainer):
 # Training arguments
 training_args = TrainingArguments(
     output_dir="./gpt2_lora_finetuned_SP",
-    num_train_epochs=5,
-    per_device_train_batch_size=8,
-    evaluation_strategy="epoch",
-    save_strategy="epoch",
+    num_train_epochs=5,  # Number of epochs
+    per_device_train_batch_size=16,  # Training batch size
+    per_device_eval_batch_size=16,  # Evaluation batch size
+    evaluation_strategy="steps",  # Evaluate every few steps
+    eval_steps=10,  # Perform evaluation every 10 steps
+    logging_strategy="steps",  # Log at steps
+    logging_steps=10,  # Log every 10 steps
+    save_strategy="epoch",  # Save model at each epoch
     learning_rate=0.00001,
     weight_decay=0.01,
-    fp16=torch.cuda.is_available(),
+    fp16=torch.cuda.is_available(),  # Use FP16 if a GPU with mixed precision is available
     save_total_limit=1,
     load_best_model_at_end=True,
     report_to="none"
