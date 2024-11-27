@@ -110,19 +110,20 @@ class CustomTrainer(Trainer):
 # Training arguments
 training_args = TrainingArguments(
     output_dir="./gpt2_lora_finetuned_SP",
-    num_train_epochs=5,  # Number of epochs
-    per_device_train_batch_size=16,  # Training batch size
-    per_device_eval_batch_size=16,  # Evaluation batch size
-    evaluation_strategy="steps",  # Evaluate every few steps
-    eval_steps=10,  # Perform evaluation every 10 steps
-    logging_strategy="steps",  # Log at steps
-    logging_steps=10,  # Log every 10 steps
-    save_strategy="epoch",  # Save model at each epoch
+    num_train_epochs=5,
+    per_device_train_batch_size=16,
+    per_device_eval_batch_size=16,
+    evaluation_strategy="steps",  # Match with save_strategy
+    save_strategy="steps",  # Save at steps
+    eval_steps=10,  # Evaluate every 10 steps
+    save_steps=10,  # Save every 10 steps
+    logging_strategy="steps",
+    logging_steps=10,
     learning_rate=0.00001,
     weight_decay=0.01,
-    fp16=torch.cuda.is_available(),  # Use FP16 if a GPU with mixed precision is available
+    fp16=torch.cuda.is_available(),
     save_total_limit=1,
-    load_best_model_at_end=True,
+    load_best_model_at_end=True,  # Now valid because strategies match
     report_to="none"
 )
 
