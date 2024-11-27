@@ -110,12 +110,12 @@ class CustomTrainer(Trainer):
 # Training arguments
 training_args = TrainingArguments(
     output_dir="./gpt2_lora_finetuned_SP",
-    num_train_epochs=4,
+    num_train_epochs=5,
     per_device_train_batch_size=8,
     evaluation_strategy="epoch",
     save_strategy="epoch",
-    learning_rate=3e-5,
-    weight_decay=0.001,
+    learning_rate=3e-4,
+    weight_decay=0.005,
     fp16=torch.cuda.is_available(),
     save_total_limit=1,
     load_best_model_at_end=True,
@@ -181,7 +181,7 @@ def evaluate_on_test(test_data):
     print(f"Test Accuracy: {accuracy:.4f}")
     return predictions, accuracy
 
-def save_predictions_to_csv(predictions, filename="prediction_results_SP_gpt2.csv"):
+def save_predictions_to_csv(predictions, filename="prediction_results_WP_gpt2.csv"):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["Question ID", "Actual Question Text", "Choices",
                                                   "Predicted Answer", "Correct Answer", "Predicted == Correct"])
@@ -192,4 +192,4 @@ def save_predictions_to_csv(predictions, filename="prediction_results_SP_gpt2.cs
 # Evaluate and save results
 predictions, accuracy = evaluate_on_test(processed_test_data)
 print(f"Final Test Accuracy: {accuracy:.4f}")
-save_predictions_to_csv(predictions, filename="prediction_results_SP_gpt2.csv")
+save_predictions_to_csv(predictions, filename="prediction_results_WP_gpt2.csv")
