@@ -34,15 +34,24 @@ embedder = SentenceTransformer('all-MiniLM-L6-v2').to(device)
 tokenizer.pad_token = tokenizer.eos_token
 model.config.pad_token_id = tokenizer.pad_token_id
 
-# Prompt
 PROMPT = (
     "You're a model to select correct answers from the given questions and answer choices. "
-    "The answer choices might look similar to each other but it's your job to figure out the correct one given the training you got.\n\n
-    Here are some examples: 
-{'id': 'SP-0', 'question': 'Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible?', 'answer': 'Each daughter shares the same brother.', 'distractor1': 'Some daughters get married and have their own family.', 'distractor2': 'Some brothers were not loved by family and moved away.', 'distractor(unsure)': 'None of above.', 'label': 1, 'choice_list': ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n
-{'id': 'WP-131', 'question': 'What is a boxer’s favorite drink?', 'answer': 'Punch.', 'distractor1': 'Coke.', 'distractor2': 'Sprite.', 'distractor(unsure)': 'None of above.', 'label': 1, 'choice_list': ['Coke.', 'Punch.', 'Sprite.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n
-{'id': 'WP-119', 'question': 'What falls down but never breaks?', 'answer': 'Nightfall.', 'distractor1': 'Waterfall.', 'distractor2': 'Freefall.', 'distractor(unsure)': 'None of above.', 'label': 0, 'choice_list': ['Nightfall.', 'Waterfall.', 'Freefall.', 'None of above.'], 'choice_order': [0, 1, 2, 3]}\n
-{'id': 'SP-136', 'question': 'A horse was tied to a rope 5 meters long and the horses food was 15 meters away from the horse. How did the horse reach the food?', 'answer': "The rope wasn't tied to anything so he could reach the food.", 'distractor1': 'The walls of the saloon retract or collapse inwards, creating more space for the horse to reach the food.', 'distractor2': 'The rope stretches proportionally, providing the extra length needed for the horse to reach the hay fifteen meters away.', 'distractor(unsure)': 'None of above.', 'label': 1, 'choice_list': ['The walls of the saloon retract or collapse inwards, creating more space for the horse to reach the food.', "The rope wasn't tied to anything so he could reach the food.", 'The rope stretches proportionally, providing the extra length needed for the horse to reach the hay fifteen meters away.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n"
+    "The answer choices might look similar to each other but it's your job to figure out the correct one given the training you got.\n\n"
+    "Here are some examples:\n"
+    "{'id': 'SP-0', 'question': 'Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible?', "
+    "'answer': 'Each daughter shares the same brother.', 'distractor1': 'Some daughters get married and have their own family.', "
+    "'distractor2': 'Some brothers were not loved by family and moved away.', 'distractor(unsure)': 'None of above.', 'label': 1, "
+    "'choice_list': ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n"
+    "{'id': 'WP-131', 'question': 'What is a boxer’s favorite drink?', 'answer': 'Punch.', 'distractor1': 'Coke.', 'distractor2': 'Sprite.', "
+    "'distractor(unsure)': 'None of above.', 'label': 1, 'choice_list': ['Coke.', 'Punch.', 'Sprite.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n"
+    "{'id': 'WP-119', 'question': 'What falls down but never breaks?', 'answer': 'Nightfall.', 'distractor1': 'Waterfall.', 'distractor2': 'Freefall.', "
+    "'distractor(unsure)': 'None of above.', 'label': 0, 'choice_list': ['Nightfall.', 'Waterfall.', 'Freefall.', 'None of above.'], 'choice_order': [0, 1, 2, 3]}\n"
+    "{'id': 'SP-136', 'question': 'A horse was tied to a rope 5 meters long and the horses food was 15 meters away from the horse. How did the horse reach the food?', "
+    "'answer': \"The rope wasn't tied to anything so he could reach the food.\", 'distractor1': 'The walls of the saloon retract or collapse inwards, creating more space for the horse to reach the food.', "
+    "'distractor2': 'The rope stretches proportionally, providing the extra length needed for the horse to reach the hay fifteen meters away.', "
+    "'distractor(unsure)': 'None of above.', 'label': 1, 'choice_list': ['The walls of the saloon retract or collapse inwards, creating more space for the horse to reach the food.', "
+    "\"The rope wasn't tied to anything so he could reach the food.\", 'The rope stretches proportionally, providing the extra length needed for the horse to reach the hay fifteen meters away.', 'None of above.'], "
+    "'choice_order': [1, 0, 2, 3]}\n"
 )
 
 # Load datasets
