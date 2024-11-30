@@ -89,6 +89,7 @@ lora_config = LoraConfig(
 learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 results = []
+training_logs = []
 
 # Iterate through learning rate and weight decay combinations
 for lr in learning_rates:
@@ -113,8 +114,19 @@ for lr in learning_rates:
             save_total_limit=1,
             load_best_model_at_end=True,  # Ensures best model is loaded
             report_to="none"
-)
+        )
 
+        def log_callback(trainer_state, trainer_control, logs=None):
+            """Callback to capture training logs."""
+            if logs and "loss" in logs:
+                step = trainer_state.global_step
+                training_logs.append({
+                    "Learning Rate": lr,
+                    "Weight Decay": wd,
+                    "Step": step,
+                    "Training Loss": logs.get("loss", None),
+                    "Eval Loss": logs.get("eval_loss", None)
+                })
 
         trainer = Trainer(
             model=model,
@@ -122,7 +134,8 @@ for lr in learning_rates:
             train_dataset=train_dataset,
             eval_dataset=dev_dataset,
             data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
-            tokenizer=tokenizer
+            tokenizer=tokenizer,
+            callbacks=[log_callback]
         )
 
         # Train and evaluate
@@ -134,6 +147,13 @@ for lr in learning_rates:
         test_loss = eval_results["eval_loss"]
         results.append({"Learning Rate": lr, "Weight Decay": wd, "Accuracy": -test_loss})
 
+# Save training logs to CSV
+def save_training_logs_to_csv(logs, filename="gpt2_lora_training_logs.csv"):
+    with open(filename, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=["Learning Rate", "Weight Decay", "Step", "Training Loss", "Eval Loss"])
+        writer.writeheader()
+        writer.writerows(logs)
+
 # Save results to CSV
 def save_results_to_csv(results, filename="gpt2_lora_results.csv"):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
@@ -142,4 +162,5 @@ def save_results_to_csv(results, filename="gpt2_lora_results.csv"):
         writer.writerows(results)
 
 save_results_to_csv(results)
-print(f"Results saved to gpt2_lora_results.csv")
+save_training_logs_to_csv(training_logs)
+print(f"Results saved to gpt2_lora_results.csv and training logs saved to gpt2_lora_training_logs.csv")
