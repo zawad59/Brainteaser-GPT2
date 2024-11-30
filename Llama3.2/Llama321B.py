@@ -1,9 +1,9 @@
+import os
 import numpy as np
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, \
-    DataCollatorForLanguageModeling
+from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, DataCollatorForLanguageModeling
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, PeftModel
 from sentence_transformers import SentenceTransformer, util
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -11,9 +11,6 @@ from nltk.stem import PorterStemmer
 from datasets import Dataset as HFDataset
 import csv
 from transformers import TrainerCallback
-import os
-os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
-
 
 # Download required NLTK data
 nltk.download('stopwords')
@@ -24,21 +21,31 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 # Initialize models
-model_name = "meta-llama/Llama-3.2-3B-Instruct"
-tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
-tokenizer.pad_token_id = tokenizer.eos_token_id  # Ensure pad_token_id is set correctly
-
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
-
-# Enable model parallelism if multiple GPUs are available
-if torch.cuda.device_count() > 1:
-    print(f"Using {torch.cuda.device_count()} GPUs for model parallelism")
-    model.parallelize()
-else:
-    print("Model parallelism not applied. Only one GPU detected.")
+base_model_name = "meta-llama/Llama-3.2-3B-Instruct"
+tokenizer = AutoTokenizer.from_pretrained(base_model_name, use_fast=False)
+tokenizer.pad_token_id = tokenizer.eos_token_id
 embedder = SentenceTransformer('all-MiniLM-L6-v2').to(device)
-tokenizer.pad_token = tokenizer.eos_token
-model.config.pad_token_id = tokenizer.pad_token_id
+
+# Load datasets
+train_data = np.load('../CombinedDatasets/All_train 1.npy', allow_pickle=True)
+dev_data = np.load('../CombinedDatasets/All_dev 1.npy', allow_pickle=True)
+test_data = np.load('../CombinedDatasets/All_test 1.npy', allow_pickle=True)
+
+# Initialize NLTK tools
+stemmer = PorterStemmer()
+stop_words = set(stopwords.words('english'))
+
+class LogCallback(TrainerCallback):
+    def __init__(self):
+        self.logs = []
+
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        if logs and "loss" in logs:
+            self.logs.append({
+                "Step": state.global_step,
+                "Train Loss": logs.get("loss"),
+                "Validation Loss": logs.get("eval_loss"),
+            })
 
 PROMPT = (
     "You're a model to select correct answers from the given questions and answer choices. "
@@ -59,15 +66,6 @@ PROMPT = (
     "\"The rope wasn't tied to anything so he could reach the food.\", 'The rope stretches proportionally, providing the extra length needed for the horse to reach the hay fifteen meters away.', 'None of above.'], "
     "'choice_order': [1, 0, 2, 3]}\n"
 )
-
-# Load datasets
-train_data = np.load('../CombinedDatasets/All_train 1.npy', allow_pickle=True)
-dev_data = np.load('../CombinedDatasets/All_dev 1.npy', allow_pickle=True)
-test_data = np.load('../CombinedDatasets/All_test 1.npy', allow_pickle=True)
-
-# Initialize NLTK tools
-stemmer = PorterStemmer()
-stop_words = set(stopwords.words('english'))
 
 
 # Preprocess the data
@@ -119,27 +117,6 @@ train_dataset = create_hf_dataset(processed_train_data).map(tokenize_function, b
 dev_dataset = create_hf_dataset(processed_dev_data).map(tokenize_function, batched=True,
                                                         remove_columns=["text", "choices", "label"])
 
-class LogCallback(TrainerCallback):
-    def on_log(self, args, state, control, logs=None, **kwargs):
-        """Callback to capture training logs."""
-        if logs and "loss" in logs:
-            step = state.global_step
-            training_logs.append({
-                "Learning Rate": args.learning_rate,
-                "Weight Decay": args.weight_decay,
-                "Step": step,
-                "Training Loss": logs.get("loss", None),
-                "Eval Loss": logs.get("eval_loss", None)
-            })
-
-# Training parameters
-lora_config = LoraConfig(
-    r=4,
-    lora_alpha=8,
-    lora_dropout=0.1,
-    task_type="CAUSAL_LM"
-)
-
 
 # Function to calculate accuracy using embeddings
 def calculate_accuracy_with_embeddings(model, test_data):
@@ -162,17 +139,12 @@ def calculate_accuracy_with_embeddings(model, test_data):
             max_length=512
         ).to(device)
 
-        # Validate input shapes
-        assert inputs["input_ids"].shape == inputs["attention_mask"].shape, (
-            "Input IDs and attention mask shapes must match"
-        )
-
         # Generate predictions
         outputs = model.generate(
             inputs["input_ids"],
-            attention_mask=inputs["attention_mask"],  # Pass attention mask
+            attention_mask=inputs["attention_mask"],
             max_new_tokens=50,
-            pad_token_id=tokenizer.pad_token_id  # Explicitly set pad_token_id
+            pad_token_id=tokenizer.pad_token_id
         )
         generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
@@ -193,26 +165,31 @@ def calculate_accuracy_with_embeddings(model, test_data):
     return correct_predictions / total_predictions
 
 
+# Training parameters
+lora_config = LoraConfig(
+    r=4,
+    lora_alpha=8,
+    lora_dropout=0.1,
+    task_type="CAUSAL_LM"
+)
 
 # Fine-tuning configurations
 learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 results = []
-training_logs = []
 
 # Iterate through learning rate and weight decay combinations
-
 for lr in learning_rates:
     for wd in weight_decays:
-        model = prepare_model_for_kbit_training(model)
-        model = get_peft_model(model, lora_config)
+        # Prepare the base model
+        base_model = AutoModelForCausalLM.from_pretrained(base_model_name, torch_dtype=torch.float16).to(device)
+        model = get_peft_model(base_model, lora_config)
 
         training_args = TrainingArguments(
             output_dir=f"./llama_lora_finetuned_lr{lr}_wd{wd}",
             num_train_epochs=5,
-            per_device_train_batch_size=8,
-            per_device_eval_batch_size=8,
-            gradient_accumulation_steps=2,
+            per_device_train_batch_size=16,
+            per_device_eval_batch_size=16,
             eval_strategy="steps",
             save_strategy="steps",
             logging_strategy="steps",
@@ -221,48 +198,45 @@ for lr in learning_rates:
             eval_steps=10,
             learning_rate=lr,
             weight_decay=wd,
-            fp16=True,  # Enables mixed precision training
+            fp16=True,
             save_total_limit=1,
             load_best_model_at_end=True,
             report_to="none"
-)
+        )
 
 
         trainer = Trainer(
-            model=model,
-            args=training_args,
-            train_dataset=train_dataset,
-            eval_dataset=dev_dataset,
-            data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
-            callbacks=[LogCallback()]  # Use the class-based callback
+               model=model,
+               args=training_args,
+               train_dataset=train_dataset,
+               eval_dataset=dev_dataset,
+               data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
+               callbacks=[LogCallback()]
         )
-
-        torch.cuda.empty_cache()
 
         # Train the model
         trainer.train()
-
-        # Save the best-performing model
-        best_model_dir = f"./llama_lora_best_model_lr{lr}_wd{wd}"
-        trainer.save_model(best_model_dir)
-
-        # Reload the best-performing model
-        best_model = AutoModelForCausalLM.from_pretrained(best_model_dir, torch_dtype=torch.float16).to(device)
-
-        # Calculate accuracy on the test set using the reloaded best model
-        test_accuracy = calculate_accuracy_with_embeddings(best_model, processed_test_data)
-        results.append({"Learning Rate": lr, "Weight Decay": wd, "Accuracy": test_accuracy})
-
-
-
-# Save training logs to CSV
+		
+		# Save training logs
 def save_training_logs_to_csv(logs, filename="llama_lora_training_logs.csv"):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file,
-                                fieldnames=["Learning Rate", "Weight Decay", "Step", "Training Loss", "Eval Loss"])
+        writer = csv.DictWriter(file, fieldnames=["Step", "Train Loss", "Validation Loss"])
         writer.writeheader()
         writer.writerows(logs)
 
+# Save logs to a CSV file
+save_training_logs_to_csv(log_callback.logs, filename="llama_lora_training_logs.csv")
+
+        # Save the adapter
+        adapter_dir = f"./llama_lora_best_model_lr{lr}_wd{wd}"
+        model.save_pretrained(adapter_dir)
+
+        # Reload base model and adapter
+        model_with_adapter = PeftModel.from_pretrained(base_model, adapter_dir).to(device)
+
+        # Calculate accuracy
+        test_accuracy = calculate_accuracy_with_embeddings(model_with_adapter, processed_test_data)
+        results.append({"Learning Rate": lr, "Weight Decay": wd, "Accuracy": test_accuracy})
 
 # Save results to CSV
 def save_results_to_csv(results, filename="llama_lora_results.csv"):
@@ -273,5 +247,4 @@ def save_results_to_csv(results, filename="llama_lora_results.csv"):
 
 
 save_results_to_csv(results)
-save_training_logs_to_csv(training_logs)
-print(f"Results saved to llama_lora_results.csv and training logs saved to llama_lora_training_logs.csv")
+print(f"Results saved to llama_lora_results.csv")
