@@ -178,6 +178,14 @@ learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 results = []
 
+		
+# Save training logs
+def save_training_logs_to_csv(logs, filename="llama_lora_training_logs.csv"):
+    with open(filename, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=["Step", "Train Loss", "Validation Loss"])
+        writer.writeheader()
+        writer.writerows(logs)
+
 # Iterate through learning rate and weight decay combinations
 for lr in learning_rates:
     for wd in weight_decays:
@@ -216,16 +224,10 @@ for lr in learning_rates:
 
         # Train the model
         trainer.train()
-		
-		# Save training logs
-def save_training_logs_to_csv(logs, filename="llama_lora_training_logs.csv"):
-    with open(filename, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=["Step", "Train Loss", "Validation Loss"])
-        writer.writeheader()
-        writer.writerows(logs)
 
-# Save logs to a CSV file
-save_training_logs_to_csv(log_callback.logs, filename="llama_lora_training_logs.csv")
+
+        #Save logs to a CSV file
+        save_training_logs_to_csv(log_callback.logs, filename="llama_lora_training_logs.csv")
 
         # Save the adapter
         adapter_dir = f"./llama_lora_best_model_lr{lr}_wd{wd}"
