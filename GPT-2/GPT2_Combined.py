@@ -101,18 +101,20 @@ for lr in learning_rates:
             num_train_epochs=5,
             per_device_train_batch_size=16,
             per_device_eval_batch_size=16,
-            evaluation_strategy="steps",
+            evaluation_strategy="steps",  # Matches save_strategy
+            save_strategy="steps",        # Updated to match evaluation_strategy
             logging_strategy="steps",
             logging_steps=10,
-            save_strategy="epoch",
-            eval_steps=10,
+            save_steps=10,                # Saves every 10 steps
+            eval_steps=10,                # Evaluates every 10 steps
             learning_rate=lr,
             weight_decay=wd,
             fp16=torch.cuda.is_available(),
             save_total_limit=1,
-            load_best_model_at_end=True,
+            load_best_model_at_end=True,  # Ensures best model is loaded
             report_to="none"
-        )
+)
+
 
         trainer = Trainer(
             model=model,
