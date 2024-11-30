@@ -10,7 +10,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import PorterStemmer
 from datasets import Dataset as HFDataset
 import csv
-
+from transformers import TrainerCallback
 # Download required NLTK data
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -92,6 +92,19 @@ train_dataset = create_hf_dataset(processed_train_data).map(tokenize_function, b
 dev_dataset = create_hf_dataset(processed_dev_data).map(tokenize_function, batched=True,
                                                         remove_columns=["text", "choices", "label"])
 
+class LogCallback(TrainerCallback):
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        """Callback to capture training logs."""
+        if logs and "loss" in logs:
+            step = state.global_step
+            training_logs.append({
+                "Learning Rate": args.learning_rate,
+                "Weight Decay": args.weight_decay,
+                "Step": step,
+                "Training Loss": logs.get("loss", None),
+                "Eval Loss": logs.get("eval_loss", None)
+            })
+
 # Training parameters
 lora_config = LoraConfig(
     r=4,
@@ -143,6 +156,7 @@ results = []
 training_logs = []
 
 # Iterate through learning rate and weight decay combinations
+
 for lr in learning_rates:
     for wd in weight_decays:
         model = prepare_model_for_kbit_training(model)
@@ -153,7 +167,7 @@ for lr in learning_rates:
             num_train_epochs=5,
             per_device_train_batch_size=16,
             per_device_eval_batch_size=16,
-            evaluation_strategy="steps",
+            eval_strategy="steps",
             save_strategy="steps",
             logging_strategy="steps",
             logging_steps=10,
@@ -163,23 +177,9 @@ for lr in learning_rates:
             weight_decay=wd,
             fp16=torch.cuda.is_available(),
             save_total_limit=1,
-            load_best_model_at_end=True,
+            load_best_model_at_end=True,  # Ensures the best model is loaded at the end of training
             report_to="none"
         )
-
-
-        def log_callback(trainer_state, trainer_control, logs=None):
-            """Callback to capture training logs."""
-            if logs and "loss" in logs:
-                step = trainer_state.global_step
-                training_logs.append({
-                    "Learning Rate": lr,
-                    "Weight Decay": wd,
-                    "Step": step,
-                    "Training Loss": logs.get("loss", None),
-                    "Eval Loss": logs.get("eval_loss", None)
-                })
-
 
         trainer = Trainer(
             model=model,
@@ -187,17 +187,23 @@ for lr in learning_rates:
             train_dataset=train_dataset,
             eval_dataset=dev_dataset,
             data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
-            tokenizer=tokenizer,
-            callbacks=[log_callback]
+            callbacks=[LogCallback()]  # Use the class-based callback
         )
 
         # Train the model
         trainer.train()
-        trainer.save_model(f"./llama_lora_best_model_lr{lr}_wd{wd}")
 
-        # Calculate accuracy on the test set
-        test_accuracy = calculate_accuracy_with_embeddings(model, processed_test_data)
+        # Save the best-performing model
+        best_model_dir = f"./llama_lora_best_model_lr{lr}_wd{wd}"
+        trainer.save_model(best_model_dir)
+
+        # Reload the best-performing model
+        best_model = AutoModelForCausalLM.from_pretrained(best_model_dir, torch_dtype=torch.float16).to(device)
+
+        # Calculate accuracy on the test set using the reloaded best model
+        test_accuracy = calculate_accuracy_with_embeddings(best_model, processed_test_data)
         results.append({"Learning Rate": lr, "Weight Decay": wd, "Accuracy": test_accuracy})
+
 
 
 # Save training logs to CSV
