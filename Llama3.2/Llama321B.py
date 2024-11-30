@@ -1,7 +1,8 @@
 import os
 import numpy as np
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, DataCollatorForLanguageModeling
+from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, \
+    DataCollatorForLanguageModeling
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, PeftModel
 from sentence_transformers import SentenceTransformer, util
 import nltk
@@ -35,6 +36,7 @@ test_data = np.load('../CombinedDatasets/All_test 1.npy', allow_pickle=True)
 stemmer = PorterStemmer()
 stop_words = set(stopwords.words('english'))
 
+
 class LogCallback(TrainerCallback):
     def __init__(self):
         self.logs = []
@@ -46,6 +48,7 @@ class LogCallback(TrainerCallback):
                 "Train Loss": logs.get("loss"),
                 "Validation Loss": logs.get("eval_loss"),
             })
+
 
 PROMPT = (
     "You're a model to select correct answers from the given questions and answer choices. "
@@ -178,7 +181,7 @@ learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 results = []
 
-		
+
 # Save training logs
 def save_training_logs_to_csv(logs, filename="llama_lora_training_logs.csv"):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
@@ -186,7 +189,7 @@ def save_training_logs_to_csv(logs, filename="llama_lora_training_logs.csv"):
         writer.writeheader()
         writer.writerows(logs)
 
-# Iterate through learning rate and weight decay combinations
+
 for lr in learning_rates:
     for wd in weight_decays:
         # Prepare the base model
@@ -196,14 +199,15 @@ for lr in learning_rates:
         training_args = TrainingArguments(
             output_dir=f"./llama_lora_finetuned_lr{lr}_wd{wd}",
             num_train_epochs=5,
-            per_device_train_batch_size=16,
-            per_device_eval_batch_size=16,
+            per_device_train_batch_size=8,  # Reduced batch size
+            per_device_eval_batch_size=8,  # Reduced eval batch size
             eval_strategy="steps",
             save_strategy="steps",
             logging_strategy="steps",
             logging_steps=10,
             save_steps=10,
             eval_steps=10,
+            gradient_accumulation_steps=2,  # Simulate larger batches
             learning_rate=lr,
             weight_decay=wd,
             fp16=True,
@@ -212,22 +216,20 @@ for lr in learning_rates:
             report_to="none"
         )
 
-
         trainer = Trainer(
-               model=model,
-               args=training_args,
-               train_dataset=train_dataset,
-               eval_dataset=dev_dataset,
-               data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
-               callbacks=[LogCallback()]
+            model=model,
+            args=training_args,
+            train_dataset=train_dataset,
+            eval_dataset=dev_dataset,
+            data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
+            callbacks=[LogCallback()]
         )
 
         # Train the model
         trainer.train()
 
-
-        #Save logs to a CSV file
-        save_training_logs_to_csv(log_callback.logs, filename="llama_lora_training_logs.csv")
+        # Save training logs
+        save_training_logs_to_csv(trainer.state.log_history, filename="llama_lora_training_logs.csv")
 
         # Save the adapter
         adapter_dir = f"./llama_lora_best_model_lr{lr}_wd{wd}"
@@ -239,6 +241,12 @@ for lr in learning_rates:
         # Calculate accuracy
         test_accuracy = calculate_accuracy_with_embeddings(model_with_adapter, processed_test_data)
         results.append({"Learning Rate": lr, "Weight Decay": wd, "Accuracy": test_accuracy})
+
+        # Clear GPU memory
+        del model, model_with_adapter, trainer
+        torch.cuda.empty_cache()
+        gc.collect()
+
 
 # Save results to CSV
 def save_results_to_csv(results, filename="llama_lora_results.csv"):
