@@ -23,6 +23,13 @@ print(f"Using device: {device}")
 model_name = "meta-llama/Llama-3.2-3B-Instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
 model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
+
+# Enable model parallelism if multiple GPUs are available
+if torch.cuda.device_count() > 1:
+    print(f"Using {torch.cuda.device_count()} GPUs for model parallelism")
+    model.parallelize()
+else:
+    print("Model parallelism not applied. Only one GPU detected.")
 embedder = SentenceTransformer('all-MiniLM-L6-v2').to(device)
 tokenizer.pad_token = tokenizer.eos_token
 model.config.pad_token_id = tokenizer.pad_token_id
@@ -165,8 +172,9 @@ for lr in learning_rates:
         training_args = TrainingArguments(
             output_dir=f"./llama_lora_finetuned_lr{lr}_wd{wd}",
             num_train_epochs=5,
-            per_device_train_batch_size=16,
-            per_device_eval_batch_size=16,
+            per_device_train_batch_size=8,
+            per_device_eval_batch_size=8,
+            gradient_accumulation_steps=2,
             eval_strategy="steps",
             save_strategy="steps",
             logging_strategy="steps",
@@ -175,11 +183,12 @@ for lr in learning_rates:
             eval_steps=10,
             learning_rate=lr,
             weight_decay=wd,
-            fp16=torch.cuda.is_available(),
+            fp16=True,  # Enables mixed precision training
             save_total_limit=1,
-            load_best_model_at_end=True,  # Ensures the best model is loaded at the end of training
+            load_best_model_at_end=True,
             report_to="none"
-        )
+)
+
 
         trainer = Trainer(
             model=model,
@@ -189,6 +198,8 @@ for lr in learning_rates:
             data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
             callbacks=[LogCallback()]  # Use the class-based callback
         )
+
+        torch.cuda.empty_cache()
 
         # Train the model
         trainer.train()
