@@ -12,6 +12,8 @@ from nltk.stem import PorterStemmer
 from datasets import Dataset as HFDataset
 import csv
 from transformers import TrainerCallback
+import gc
+
 
 # Download required NLTK data
 nltk.download('stopwords')
