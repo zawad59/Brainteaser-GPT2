@@ -11,6 +11,10 @@ from nltk.stem import PorterStemmer
 from datasets import Dataset as HFDataset
 import csv
 from transformers import TrainerCallback
+import os
+os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+
+
 # Download required NLTK data
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -22,6 +26,8 @@ print(f"Using device: {device}")
 # Initialize models
 model_name = "meta-llama/Llama-3.2-3B-Instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+tokenizer.pad_token_id = tokenizer.eos_token_id  # Ensure pad_token_id is set correctly
+
 model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
 
 # Enable model parallelism if multiple GPUs are available
@@ -147,12 +153,30 @@ def calculate_accuracy_with_embeddings(model, test_data):
         correct_label = example['label']
         correct_answer = choices[correct_label]
 
-        # Generate model prediction
-        inputs = tokenizer(question, return_tensors="pt", padding=True, truncation=True).to(device)
-        outputs = model.generate(inputs["input_ids"], max_new_tokens=50)
+        # Tokenize input
+        inputs = tokenizer(
+            question,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=512
+        ).to(device)
+
+        # Validate input shapes
+        assert inputs["input_ids"].shape == inputs["attention_mask"].shape, (
+            "Input IDs and attention mask shapes must match"
+        )
+
+        # Generate predictions
+        outputs = model.generate(
+            inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],  # Pass attention mask
+            max_new_tokens=50,
+            pad_token_id=tokenizer.pad_token_id  # Explicitly set pad_token_id
+        )
         generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-        # Compute cosine similarity with embeddings
+        # Compare with choices using cosine similarity
         generated_embedding = embedder.encode(generated_text, convert_to_tensor=True)
         choice_embeddings = embedder.encode(choices, convert_to_tensor=True)
         cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)
@@ -165,9 +189,9 @@ def calculate_accuracy_with_embeddings(model, test_data):
         if predicted_answer == correct_answer:
             correct_predictions += 1
 
-    # Calculate accuracy
-    accuracy = correct_predictions / total_predictions
-    return accuracy
+    # Return accuracy
+    return correct_predictions / total_predictions
+
 
 
 # Fine-tuning configurations
