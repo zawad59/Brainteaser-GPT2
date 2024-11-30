@@ -178,11 +178,12 @@ lora_config = LoraConfig(
     task_type="CAUSAL_LM"
 )
 
-# Fine-tuning configurations
-learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
-weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
-results = []
+# Single learning rate and weight decay
+learning_rate = 0.0001
+weight_decay = 0.001
 
+# Results to store accuracy
+results = []
 
 # Save training logs
 def save_training_logs_to_csv(logs, filename="llama_lora_training_logs.csv"):
@@ -198,65 +199,60 @@ def save_training_logs_to_csv(logs, filename="llama_lora_training_logs.csv"):
         writer.writeheader()
         writer.writerows(logs)
 
+# Training for one set of hyperparameters
+base_model = AutoModelForCausalLM.from_pretrained(base_model_name, torch_dtype=torch.float16).to(device)
+model = get_peft_model(base_model, lora_config)
 
+training_args = TrainingArguments(
+    output_dir=f"./llama_lora_finetuned_lr{learning_rate}_wd{weight_decay}",
+    num_train_epochs=5,
+    per_device_train_batch_size=8,  # Reduced batch size
+    per_device_eval_batch_size=8,  # Reduced eval batch size
+    eval_strategy="steps",
+    save_strategy="steps",
+    logging_strategy="steps",
+    logging_steps=10,
+    save_steps=10,
+    eval_steps=10,
+    gradient_accumulation_steps=2,  # Simulate larger batches
+    learning_rate=learning_rate,
+    weight_decay=weight_decay,
+    fp16=True,
+    save_total_limit=1,
+    load_best_model_at_end=True,
+    report_to="none"
+)
 
-for lr in learning_rates:
-    for wd in weight_decays:
-        # Prepare the base model
-        base_model = AutoModelForCausalLM.from_pretrained(base_model_name, torch_dtype=torch.float16).to(device)
-        model = get_peft_model(base_model, lora_config)
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=dev_dataset,
+    data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
+    callbacks=[LogCallback()]
+)
 
-        training_args = TrainingArguments(
-            output_dir=f"./llama_lora_finetuned_lr{lr}_wd{wd}",
-            num_train_epochs=5,
-            per_device_train_batch_size=8,  # Reduced batch size
-            per_device_eval_batch_size=8,  # Reduced eval batch size
-            eval_strategy="steps",
-            save_strategy="steps",
-            logging_strategy="steps",
-            logging_steps=10,
-            save_steps=10,
-            eval_steps=10,
-            gradient_accumulation_steps=2,  # Simulate larger batches
-            learning_rate=lr,
-            weight_decay=wd,
-            fp16=True,
-            save_total_limit=1,
-            load_best_model_at_end=True,
-            report_to="none"
-        )
+# Train the model
+trainer.train()
 
-        trainer = Trainer(
-            model=model,
-            args=training_args,
-            train_dataset=train_dataset,
-            eval_dataset=dev_dataset,
-            data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
-            callbacks=[LogCallback()]
-        )
+# Save training logs
+save_training_logs_to_csv(trainer.state.log_history, filename="llama_lora_training_logs.csv")
 
-        # Train the model
-        trainer.train()
+# Save the adapter
+adapter_dir = f"./llama_lora_best_model_lr{learning_rate}_wd{weight_decay}"
+model.save_pretrained(adapter_dir)
 
-        # Save training logs
-        save_training_logs_to_csv(trainer.state.log_history, filename="llama_lora_training_logs.csv")
+# Reload base model and adapter
+model_with_adapter = PeftModel.from_pretrained(base_model, adapter_dir).to(device)
 
-        # Save the adapter
-        adapter_dir = f"./llama_lora_best_model_lr{lr}_wd{wd}"
-        model.save_pretrained(adapter_dir)
+# Calculate accuracy
+test_accuracy = calculate_accuracy_with_embeddings(model_with_adapter, processed_test_data)
+results.append({"Learning Rate": learning_rate, "Weight Decay": weight_decay, "Accuracy": test_accuracy})
 
-        # Reload base model and adapter
-        model_with_adapter = PeftModel.from_pretrained(base_model, adapter_dir).to(device)
-
-        # Calculate accuracy
-        test_accuracy = calculate_accuracy_with_embeddings(model_with_adapter, processed_test_data)
-        results.append({"Learning Rate": lr, "Weight Decay": wd, "Accuracy": test_accuracy})
-
-        # Clear GPU memory
-        del model, model_with_adapter, trainer
-        torch.cuda.empty_cache()
-        gc.collect()
-
+# Clear GPU memory
+del model, model_with_adapter, trainer
+torch.cuda.empty_cache()
+gc.collect()
 
 # Save results to CSV
 def save_results_to_csv(results, filename="llama_lora_results.csv"):
@@ -264,7 +260,6 @@ def save_results_to_csv(results, filename="llama_lora_results.csv"):
         writer = csv.DictWriter(file, fieldnames=["Learning Rate", "Weight Decay", "Accuracy"])
         writer.writeheader()
         writer.writerows(results)
-
 
 save_results_to_csv(results)
 print(f"Results saved to llama_lora_results.csv")
