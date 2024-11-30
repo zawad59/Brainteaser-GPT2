@@ -184,10 +184,18 @@ results = []
 
 # Save training logs
 def save_training_logs_to_csv(logs, filename="llama_lora_training_logs.csv"):
-    with open(filename, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=["Step", "Train Loss", "Validation Loss"])
+    # Dynamically determine all keys from the logs
+    fieldnames = set()
+    for log in logs:
+        fieldnames.update(log.keys())
+    fieldnames = list(fieldnames)
+
+    # Write logs to CSV
+    with open(filename, mode="w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(logs)
+
 
 
 for lr in learning_rates:
