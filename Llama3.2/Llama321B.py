@@ -178,81 +178,87 @@ lora_config = LoraConfig(
     task_type="CAUSAL_LM"
 )
 
-# Single learning rate and weight decay
-learning_rate = 0.0001
-weight_decay = 0.001
+# Fine-tuning configurations
+learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
+weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 
-# Results to store accuracy
-results = []
+## Save training logs
+def save_training_logs_to_csv(logs, lr, wd, filename="llama_lora_training_logs.csv"):
+    # Add Model_ID and filter required fields
+    model_id = f"Llama3.2_3Bparam_lr{lr}_wd_{wd}"
+    filtered_logs = [
+        {"Model_ID": model_id, "Loss": log.get("loss"), "Eval_Loss": log.get("eval_loss"), "Step": log.get("step")}
+        for log in logs
+        if "loss" in log or "eval_loss" in log  # Ensure we only save relevant rows
+    ]
 
-# Save training logs
-def save_training_logs_to_csv(logs, filename="llama_lora_training_logs.csv"):
-    # Dynamically determine all keys from the logs
-    fieldnames = set()
-    for log in logs:
-        fieldnames.update(log.keys())
-    fieldnames = list(fieldnames)
+    # Determine if the file exists to handle header inclusion
+    file_exists = os.path.exists(filename)
 
     # Write logs to CSV
-    with open(filename, mode="w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(logs)
+    with open(filename, mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=["Model_ID", "Loss", "Eval_Loss", "Step"])
+        if not file_exists:
+            writer.writeheader()  # Write header only once
+        writer.writerows(filtered_logs)
 
-# Training for one set of hyperparameters
-base_model = AutoModelForCausalLM.from_pretrained(base_model_name, torch_dtype=torch.float16).to(device)
-model = get_peft_model(base_model, lora_config)
+# Iterate through learning rate and weight decay combinations
+for lr in learning_rates:
+    for wd in weight_decays:
+        # Prepare the base model
+        base_model = AutoModelForCausalLM.from_pretrained(base_model_name, torch_dtype=torch.float16).to(device)
+        model = get_peft_model(base_model, lora_config)
 
-training_args = TrainingArguments(
-    output_dir=f"./llama_lora_finetuned_lr{learning_rate}_wd{weight_decay}",
-    num_train_epochs=5,
-    per_device_train_batch_size=8,  # Reduced batch size
-    per_device_eval_batch_size=8,  # Reduced eval batch size
-    eval_strategy="steps",
-    save_strategy="steps",
-    logging_strategy="steps",
-    logging_steps=10,
-    save_steps=10,
-    eval_steps=10,
-    gradient_accumulation_steps=2,  # Simulate larger batches
-    learning_rate=learning_rate,
-    weight_decay=weight_decay,
-    fp16=True,
-    save_total_limit=1,
-    load_best_model_at_end=True,
-    report_to="none"
-)
+        training_args = TrainingArguments(
+            output_dir=f"./llama_lora_finetuned_lr{lr}_wd{wd}",
+            num_train_epochs=5,
+            per_device_train_batch_size=8,  # Reduced batch size
+            per_device_eval_batch_size=8,  # Reduced eval batch size
+            eval_strategy="steps",
+            save_strategy="steps",
+            logging_strategy="steps",
+            logging_steps=10,
+            save_steps=10,
+            eval_steps=10,
+            gradient_accumulation_steps=2,  # Simulate larger batches
+            learning_rate=lr,
+            weight_decay=wd,
+            fp16=True,
+            save_total_limit=1,
+            load_best_model_at_end=True,
+            report_to="none"
+        )
 
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=dev_dataset,
-    data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
-    callbacks=[LogCallback()]
-)
+        trainer = Trainer(
+            model=model,
+            args=training_args,
+            train_dataset=train_dataset,
+            eval_dataset=dev_dataset,
+            data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
+            callbacks=[LogCallback()]
+        )
 
-# Train the model
-trainer.train()
+        # Train the model
+        trainer.train()
 
-# Save training logs
-save_training_logs_to_csv(trainer.state.log_history, filename="llama_lora_training_logs.csv")
+        # Save training logs with Model_ID
+        save_training_logs_to_csv(trainer.state.log_history, lr, wd, filename="llama_lora_training_logs.csv")
 
-# Save the adapter
-adapter_dir = f"./llama_lora_best_model_lr{learning_rate}_wd{weight_decay}"
-model.save_pretrained(adapter_dir)
+        # Save the adapter
+        adapter_dir = f"./llama_lora_best_model_lr{lr}_wd{wd}"
+        model.save_pretrained(adapter_dir)
 
-# Reload base model and adapter
-model_with_adapter = PeftModel.from_pretrained(base_model, adapter_dir).to(device)
+        # Reload base model and adapter
+        model_with_adapter = PeftModel.from_pretrained(base_model, adapter_dir).to(device)
 
-# Calculate accuracy
-test_accuracy = calculate_accuracy_with_embeddings(model_with_adapter, processed_test_data)
-results.append({"Learning Rate": learning_rate, "Weight Decay": weight_decay, "Accuracy": test_accuracy})
+        # Calculate accuracy
+        test_accuracy = calculate_accuracy_with_embeddings(model_with_adapter, processed_test_data)
+        results.append({"Learning Rate": lr, "Weight Decay": wd, "Accuracy": test_accuracy})
 
-# Clear GPU memory
-del model, model_with_adapter, trainer
-torch.cuda.empty_cache()
-gc.collect()
+        # Clear GPU memory
+        del model, model_with_adapter, trainer
+        torch.cuda.empty_cache()
+        gc.collect()
 
 # Save results to CSV
 def save_results_to_csv(results, filename="llama_lora_results.csv"):
@@ -261,5 +267,7 @@ def save_results_to_csv(results, filename="llama_lora_results.csv"):
         writer.writeheader()
         writer.writerows(results)
 
+
 save_results_to_csv(results)
 print(f"Results saved to llama_lora_results.csv")
+
