@@ -23,7 +23,10 @@ print(f"Using device: {device}")
 # Initialize tokenizer and load the base model
 base_model_name = "meta-llama/Llama-3.2-3B-Instruct"
 tokenizer = AutoTokenizer.from_pretrained(base_model_name, use_fast=False)
-tokenizer.pad_token_id = tokenizer.eos_token
+# Ensure pad token is set
+if tokenizer.pad_token_id is None:
+    tokenizer.pad_token_id = tokenizer.eos_token_id  # Use the ID of eos_token
+
 
 # Load datasets
 train_data = np.load('../CombinedDatasets/All_train 1.npy', allow_pickle=True)
