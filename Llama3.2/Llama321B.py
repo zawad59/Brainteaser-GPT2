@@ -155,7 +155,7 @@ for lr in learning_rates:
                 writer.writerow(log_row)
 
         # Save the fine-tuned model
-        model.save_model(f"./llama_lora_finetuned_lr{lr}_wd{wd}")
+        trainer.save_model(f"./llama_lora_finetuned_lr{lr}_wd{wd}")
 
         # Clear memory
         '''del trainer, model
