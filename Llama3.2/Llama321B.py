@@ -1,68 +1,40 @@
 import os
 import numpy as np
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, \
-    DataCollatorForLanguageModeling
+from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, DataCollatorForLanguageModeling
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from datasets import Dataset as HFDataset
 import csv
+import gc
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# Model and tokenizer initialization
-base_model_name = "meta-llama/Llama-3.2-3B-Instruct"
-tokenizer = AutoTokenizer.from_pretrained(base_model_name, use_fast=False)
-if tokenizer.pad_token_id is None:
-    tokenizer.pad_token_id = tokenizer.eos_token_id  # Ensure pad token is set
+# Initialize models
+model_name = "meta-llama/Llama-3.2-3B-Instruct"
+tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+tokenizer.pad_token = tokenizer.eos_token
+model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
+model.config.pad_token_id = tokenizer.pad_token_id
 
 # Load datasets
 train_data = np.load('../CombinedDatasets/All_train 1.npy', allow_pickle=True)
 dev_data = np.load('../CombinedDatasets/All_dev 1.npy', allow_pickle=True)
 
-# Dataset preprocessing
-def preprocess_sp_data(data):
-    processed_data = []
-    for item in data:
-        question = item['question']
-        choices = item['choice_list']
-        correct_answer = choices[item['label']]
-        training_text = (
-            f"Question: {question.lower()}\n"
-            f"Choices:\n" + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)]) + "\nAnswer:"
-        )
-        processed_data.append({'text': training_text, 'choices': choices, 'label': item['label']})
-    return processed_data
-
-# Process and save datasets
-if not os.path.exists("processed_train_dataset.pt") or not os.path.exists("processed_dev_dataset.pt"):
-    print("Processing datasets...")
-    processed_train_data = preprocess_sp_data(train_data)
-    processed_dev_data = preprocess_sp_data(dev_data)
-
-    train_dataset = HFDataset.from_list(processed_train_data)
-    dev_dataset = HFDataset.from_list(processed_dev_data)
-
+# Preprocess and tokenize datasets
+def preprocess_and_tokenize(data):
+    dataset = HFDataset.from_list(data)
     def tokenize_function(examples):
-        tokens = tokenizer(examples["text"], padding='max_length', truncation=True, max_length=512)
+        tokens = tokenizer(examples["question"], padding='max_length', truncation=True, max_length=512)
         tokens["labels"] = tokens["input_ids"].copy()
         return tokens
+    return dataset.map(tokenize_function, batched=True, remove_columns=["question", "choice_list", "label"])
 
-    tokenized_train_dataset = train_dataset.map(tokenize_function, batched=True, remove_columns=["text", "choices", "label"])
-    tokenized_dev_dataset = dev_dataset.map(tokenize_function, batched=True, remove_columns=["text", "choices", "label"])
+tokenized_train_dataset = preprocess_and_tokenize(train_data)
+tokenized_dev_dataset = preprocess_and_tokenize(dev_data)
 
-    torch.save(tokenized_train_dataset, "processed_train_dataset.pt")
-    torch.save(tokenized_dev_dataset, "processed_dev_dataset.pt")
-else:
-    print("Loading preprocessed datasets...")
-    tokenized_train_dataset = torch.load("processed_train_dataset.pt")
-    tokenized_dev_dataset = torch.load("processed_dev_dataset.pt")
-
-# Data collator
-data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
-
-# LoRA fine-tuning configuration
+# LoRA configuration
 lora_config = LoraConfig(
     r=4,
     lora_alpha=8,
@@ -70,42 +42,68 @@ lora_config = LoraConfig(
     task_type="CAUSAL_LM"
 )
 
-# Hyperparameters
+# Training configurations
 learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
+log_csv_file = "Results/llama3_2_training_logs.csv"
 
-# Log CSV file setup
-log_csv_file = "llama_training_logs.csv"
-os.makedirs("Results", exist_ok=True)
-with open(f"Results/{log_csv_file}", mode="w", newline="", encoding="utf-8") as file:
-    writer = csv.DictWriter(file, fieldnames=["Model_ID", "loss", "grad_norm", "learning_rate", "epoch", "step",
-                                              "eval_loss", "eval_runtime", "eval_samples_per_second", "eval_steps_per_second"])
-    writer.writeheader()
+# Initialize CSV file
+def initialize_csv_file(filename):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, mode="w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=[
+            "Model_ID", "loss", "grad_norm", "learning_rate", "epoch", "step", 
+            "eval_loss", "eval_runtime", "eval_samples_per_second", "eval_steps_per_second"
+        ])
+        writer.writeheader()
 
-# Train the model with hyperparameter combinations
+# Append logs to CSV
+def append_logs_to_csv(logs, filename, model_id):
+    with open(filename, mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=[
+            "Model_ID", "loss", "grad_norm", "learning_rate", "epoch", "step", 
+            "eval_loss", "eval_runtime", "eval_samples_per_second", "eval_steps_per_second"
+        ])
+        for log in logs:
+            log_row = {
+                "Model_ID": model_id,
+                "loss": log.get("loss"),
+                "grad_norm": log.get("grad_norm"),
+                "learning_rate": log.get("learning_rate"),
+                "epoch": log.get("epoch"),
+                "step": log.get("step"),
+                "eval_loss": log.get("eval_loss"),
+                "eval_runtime": log.get("eval_runtime"),
+                "eval_samples_per_second": log.get("eval_samples_per_second"),
+                "eval_steps_per_second": log.get("eval_steps_per_second"),
+            }
+            writer.writerow(log_row)
+
+# Initialize CSV file for logs
+initialize_csv_file(log_csv_file)
+
+# Fine-tune model with different hyperparameter combinations
 for lr in learning_rates:
     for wd in weight_decays:
         model_id = f"Llama3.2_3Bparam_lr{lr}_wd{wd}"
-        print(f"Training Model: {model_id}")
+        print(f"Training {model_id}...")
 
-        # Load base model and apply LoRA
-        base_model = AutoModelForCausalLM.from_pretrained(base_model_name, torch_dtype=torch.float16).to(device)
-        model = prepare_model_for_kbit_training(base_model)
+        # Prepare the model with LoRA
+        model = prepare_model_for_kbit_training(model)
         model = get_peft_model(model, lora_config)
 
-        # Training arguments
         training_args = TrainingArguments(
-            output_dir=f"./llama_lora_finetuned_lr{lr}_wd{wd}",
+            output_dir=f"./llama3_2_lora_finetuned_lr{lr}_wd{wd}",
             num_train_epochs=5,
-            per_device_train_batch_size=8,
-            per_device_eval_batch_size=8,
+            per_device_train_batch_size=4,
+            per_device_eval_batch_size=4,
+            gradient_accumulation_steps=4,
             eval_strategy="steps",
             save_strategy="steps",
             logging_strategy="steps",
             logging_steps=10,
             save_steps=10,
             eval_steps=10,
-            gradient_accumulation_steps=2,
             learning_rate=lr,
             weight_decay=wd,
             fp16=True,
@@ -114,41 +112,32 @@ for lr in learning_rates:
             report_to="none"
         )
 
-        # Define trainer
         trainer = Trainer(
             model=model,
             args=training_args,
             train_dataset=tokenized_train_dataset,
             eval_dataset=tokenized_dev_dataset,
-            data_collator=data_collator,
+            data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
             tokenizer=tokenizer
         )
 
-        # Train and log results
+        # Train the model
         trainer.train()
-        with open(f"Results/{log_csv_file}", mode="a", newline="", encoding="utf-8") as file:
-            writer = csv.DictWriter(file, fieldnames=["Model_ID", "loss", "grad_norm", "learning_rate", "epoch", "step",
-                                                      "eval_loss", "eval_runtime", "eval_samples_per_second", "eval_steps_per_second"])
-            for log in trainer.state.log_history:
-                log_row = {
-                    "Model_ID": model_id,
-                    "loss": log.get("loss", None),
-                    "grad_norm": log.get("grad_norm", None),
-                    "learning_rate": log.get("learning_rate", None),
-                    "epoch": log.get("epoch", None),
-                    "step": log.get("step", None),
-                    "eval_loss": log.get("eval_loss", None),
-                    "eval_runtime": log.get("eval_runtime", None),
-                    "eval_samples_per_second": log.get("eval_samples_per_second", None),
-                    "eval_steps_per_second": log.get("eval_steps_per_second", None),
-                }
-                writer.writerow(log_row)
 
-        # Save the fine-tuned model
-        model.save_pretrained(f"./llama_lora_finetuned_lr{lr}_wd{wd}")
+        # Append logs to CSV
+        append_logs_to_csv(trainer.state.log_history, log_csv_file, model_id)
+
+        # Save fine-tuned model
+        model.save_pretrained(f"./llama3_2_lora_best_model_lr{lr}_wd{wd}")
 
         # Clear memory
-        del trainer, model, base_model
+        del trainer, model
         torch.cuda.empty_cache()
+        gc.collect()
 
-print("Training completed. Logs saved.")
+        # Reload base model for next run
+        model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
+        model = prepare_model_for_kbit_training(model)
+        model = get_peft_model(model, lora_config)
+
+print(f"Training complete. Logs saved to {log_csv_file}")
