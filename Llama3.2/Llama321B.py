@@ -56,7 +56,7 @@ def preprocess_and_tokenize(data):
         for item in data
     ])
     return dataset.map(
-        lambda examples: tokenizer(examples["text"], padding="max_length", truncation=True, max_length=512),
+        lambda examples: tokenizer(examples["text"], padding="max_length", truncation=True, max_length=256),
         batched=True,
         remove_columns=["text", "label", "choice_list"]
     )
@@ -104,9 +104,9 @@ for lr in learning_rates:
         training_args = TrainingArguments(
             output_dir=f"./llama_lora_finetuned_lr{lr}_wd{wd}",
             num_train_epochs=5,
-            per_device_train_batch_size=4,
-            per_device_eval_batch_size=4,
-            gradient_accumulation_steps=4,
+            per_device_train_batch_size=16,
+            per_device_eval_batch_size=16,
+            #gradient_accumulation_steps=4,
             eval_strategy="steps",
             save_strategy="steps",
             logging_strategy="steps",
@@ -115,11 +115,11 @@ for lr in learning_rates:
             eval_steps=10,
             learning_rate=lr,
             weight_decay=wd,
-            fp16=True,
-            max_grad_norm=1.0,
-            save_total_limit=1,
-            load_best_model_at_end=True,
-            report_to="none"
+            #fp16=True,
+            #max_grad_norm=1.0,
+            #save_total_limit=1,
+            #load_best_model_at_end=True,
+            #report_to="none"
         )
 
         # Define custom Trainer
@@ -155,16 +155,16 @@ for lr in learning_rates:
                 writer.writerow(log_row)
 
         # Save the fine-tuned model
-        model.save_pretrained(f"./llama_lora_finetuned_lr{lr}_wd{wd}")
+        model.save_model(f"./llama_lora_finetuned_lr{lr}_wd{wd}")
 
         # Clear memory
-        del trainer, model
+        '''del trainer, model
         torch.cuda.empty_cache()
-        gc.collect()
+        gc.collect()'''
 
         # Reload model for the next iteration
-        model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
-        model = prepare_model_for_kbit_training(model)
-        model = get_peft_model(model, lora_config)
+        #model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
+        #model = prepare_model_for_kbit_training(model)
+        #model = get_peft_model(model, lora_config)
 
 print(f"Training logs saved to Results/{log_csv_file}")
