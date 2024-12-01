@@ -96,8 +96,8 @@ for lr in learning_rates:
         training_args = TrainingArguments(
             output_dir=f"./phi35_finetuned_lr{lr}_wd{wd}",
             num_train_epochs=5,
-            per_device_train_batch_size=8,  # Adjusted batch size for large model
-            per_device_eval_batch_size=8,
+            per_device_train_batch_size=16,  # Adjusted batch size for large model
+            per_device_eval_batch_size=16,
             eval_strategy="steps",
             save_strategy="steps",
             logging_strategy="steps",
@@ -142,15 +142,5 @@ for lr in learning_rates:
 
         # Save the fine-tuned model
         trainer.save_model(f"./phi35_finetuned_lr{lr}_wd{wd}")
-
-        # Clear memory
-        del trainer, model
-        torch.cuda.empty_cache()
-        gc.collect()
-
-        # Reload model for the next iteration
-        model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
-        model = prepare_model_for_kbit_training(model)
-        model = get_peft_model(model, lora_config)
 
 print(f"Training logs saved to Results/{log_csv_file}")
