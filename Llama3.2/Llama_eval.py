@@ -93,7 +93,7 @@ def evaluate_model(model, tokenizer, test_data):
     return correct_count / len(test_data)
 
 # Evaluate all combinations
-def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays, base_model_dir="./"):
+def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays, base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
     results = []
     for lr in learning_rates:
         for wd in weight_decays:
@@ -104,6 +104,7 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
                 model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
                 tokenizer.pad_token = tokenizer.eos_token
+                tokenizer.pad_token_id = tokenizer.eos_token_id  # Avoid warning during generation
                 
                 # Evaluate the model
                 accuracy = evaluate_model(model, tokenizer, processed_test_data)
