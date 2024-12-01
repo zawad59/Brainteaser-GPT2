@@ -67,7 +67,7 @@ data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 lora_config = LoraConfig(
     r=4,
     lora_alpha=8,
-    target_modules=["q_proj", "v_proj"],
+     target_modules=["qkv_proj", "o_proj"],
     lora_dropout=0.1,
     task_type="CAUSAL_LM"
 )
