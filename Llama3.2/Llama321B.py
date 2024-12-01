@@ -175,4 +175,4 @@ for lr in learning_rates:
         # Clear memory
         del trainer, model
         torch.cuda.empty_cache()
-        model = get_peft_model(base_model, lora_config)  # Reload the base model with LoRA
+        model = get_peft_model(base_model_name, lora_config)  # Reload the base model with LoRA
