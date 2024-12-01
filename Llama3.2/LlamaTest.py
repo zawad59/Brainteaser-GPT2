@@ -117,7 +117,7 @@ trainer = Trainer(
 # Train and save the best model
 trainer.train()
 trainer.save_model("./llama_best_model")
-model = AutoModelForCausalLM.from_pretrained("./llama_best_model_SP").to(device)
+model = AutoModelForCausalLM.from_pretrained("./llama_best_model").to(device)
 
 
 # Generate answers
