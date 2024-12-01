@@ -49,7 +49,7 @@ def preprocess_and_tokenize(data):
         data = data.tolist()
     dataset = HFDataset.from_list([
         {
-            "text": f"{PROMPT}Question: {item['question']}\nChoices: {', '.join(item['choice_list'])}\nAnswer:",
+            "text": f"{PROMPT}Question: {item['question']}\nChoices: {', '.join(item['choice_list'])}\nAnswer: ",
             "label": item["label"],
             "choice_list": item["choice_list"]
         }
@@ -116,6 +116,7 @@ for lr in learning_rates:
             learning_rate=lr,
             weight_decay=wd,
             fp16=True,
+            max_grad_norm=1.0,
             save_total_limit=1,
             load_best_model_at_end=True,
             report_to="none"
@@ -141,15 +142,15 @@ for lr in learning_rates:
             for log in trainer.state.log_history:
                 log_row = {
                     "Model_ID": model_id,
-                    "loss": log.get("loss"),
-                    "grad_norm": log.get("grad_norm"),
-                    "learning_rate": log.get("learning_rate"),
-                    "epoch": log.get("epoch"),
-                    "step": log.get("step"),
-                    "eval_loss": log.get("eval_loss"),
-                    "eval_runtime": log.get("eval_runtime"),
-                    "eval_samples_per_second": log.get("eval_samples_per_second"),
-                    "eval_steps_per_second": log.get("eval_steps_per_second"),
+                    "loss": log.get("loss", "N/A"),
+                    "grad_norm": log.get("grad_norm", "N/A"),
+                    "learning_rate": log.get("learning_rate", "N/A"),
+                    "epoch": log.get("epoch", "N/A"),
+                    "step": log.get("step", "N/A"),
+                    "eval_loss": log.get("eval_loss", "N/A"),
+                    "eval_runtime": log.get("eval_runtime", "N/A"),
+                    "eval_samples_per_second": log.get("eval_samples_per_second", "N/A"),
+                    "eval_steps_per_second": log.get("eval_steps_per_second", "N/A"),
                 }
                 writer.writerow(log_row)
 
