@@ -11,12 +11,10 @@ import gc
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# Initialize Phi35 Model
+# Initialize models
 model_name = "microsoft/Phi-3.5-mini-instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
 model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
-print(model)
-
 tokenizer.pad_token = tokenizer.eos_token
 model.config.pad_token_id = tokenizer.pad_token_id
 
@@ -29,8 +27,6 @@ PROMPT = (
     "'answer': 'Each daughter shares the same brother.', 'distractor1': 'Some daughters get married and have their own family.', "
     "'distractor2': 'Some brothers were not loved by family and moved away.', 'distractor(unsure)': 'None of above.', 'label': 1, "
     "'choice_list': ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n"
-    "{'id': 'WP-131', 'question': 'What is a boxer’s favorite drink?', 'answer': 'Punch.', 'distractor1': 'Coke.', 'distractor2': 'Sprite.', "
-    "'distractor(unsure)': 'None of above.', 'label': 1, 'choice_list': ['Coke.', 'Punch.', 'Sprite.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n"
 )
 
 # Load datasets
@@ -63,13 +59,12 @@ tokenized_dev_dataset = preprocess_and_tokenize(dev_data)
 # Data collator for language modeling
 data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
-# LoRA fine-tuning configuration
+# Adjusted LoRA configuration
 lora_config = LoraConfig(
-    r=4,
-    lora_alpha=8,
-     target_modules=["qkv_proj", "o_proj"],
-    lora_dropout=0.1,
-    task_type="CAUSAL_LM"
+    r=4,  # Rank
+    lora_alpha=8,  # Scaling factor
+    lora_dropout=0.1,  # Dropout probability
+    task_type="CAUSAL_LM"  # Task type for causal language modeling
 )
 
 # Prepare model for LoRA fine-tuning
@@ -80,26 +75,19 @@ model = get_peft_model(model, lora_config)
 learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 
-# CSV file to log training details
-log_csv_file = "phi35_training_logs.csv"
-os.makedirs("Results", exist_ok=True)
-
-# Initialize CSV file with headers
-with open(f"Results/{log_csv_file}", mode="w", newline="", encoding="utf-8") as file:
-    writer = csv.DictWriter(file, fieldnames=["Model_ID", "loss", "grad_norm", "learning_rate", "epoch", "step",
-                                              "eval_loss", "eval_runtime", "eval_samples_per_second", "eval_steps_per_second"])
-    writer.writeheader()
-
 # Train the model with different hyperparameter combinations
 for lr in learning_rates:
     for wd in weight_decays:
-        model_id = f"Phi35_lr{lr}_wd{wd}"
+        model_id = f"phi3_5_lr{lr}_wd{wd}"
+        output_dir = f"./phi3_5_finetuned_lr{lr}_wd{wd}"
+        log_csv_file = f"Results/{model_id}_logs.csv"
+        os.makedirs("Results", exist_ok=True)
 
         # Define training arguments
         training_args = TrainingArguments(
-            output_dir=f"./phi35_finetuned_lr{lr}_wd{wd}",
+            output_dir=output_dir,
             num_train_epochs=5,
-            per_device_train_batch_size=16,  # Adjusted batch size for large model
+            per_device_train_batch_size=16,
             per_device_eval_batch_size=16,
             eval_strategy="steps",
             save_strategy="steps",
@@ -108,10 +96,14 @@ for lr in learning_rates:
             save_steps=10,
             eval_steps=10,
             learning_rate=lr,
-            weight_decay=wd
+            weight_decay=wd,
+            #save_total_limit=1,
+            #load_best_model_at_end=True,
+            #fp16=True,  # Enable mixed precision for faster training on GPUs
+            #report_to="none"
         )
 
-        # Define custom Trainer
+        # Define Trainer
         trainer = Trainer(
             model=model,
             args=training_args,
@@ -121,29 +113,41 @@ for lr in learning_rates:
             tokenizer=tokenizer
         )
 
-        # Train and log details
-        trainer.train()
+        # Train and save logs for each combination
+        try:
+            print(f"Training model with lr={lr}, wd={wd}...")
+            trainer.train()
 
-        # Log details to CSV
-        with open(f"Results/{log_csv_file}", mode="a", newline="", encoding="utf-8") as file:
-            writer = csv.DictWriter(file, fieldnames=["Model_ID", "loss", "grad_norm", "learning_rate", "epoch", "step",
-                                                      "eval_loss", "eval_runtime", "eval_samples_per_second", "eval_steps_per_second"])
-            for log in trainer.state.log_history:
-                log_row = {
-                    "Model_ID": model_id,
-                    "loss": log.get("loss", "N/A"),
-                    "grad_norm": log.get("grad_norm", "N/A"),
-                    "learning_rate": log.get("learning_rate", "N/A"),
-                    "epoch": log.get("epoch", "N/A"),
-                    "step": log.get("step", "N/A"),
-                    "eval_loss": log.get("eval_loss", "N/A"),
-                    "eval_runtime": log.get("eval_runtime", "N/A"),
-                    "eval_samples_per_second": log.get("eval_samples_per_second", "N/A"),
-                    "eval_steps_per_second": log.get("eval_steps_per_second", "N/A"),
-                }
-                writer.writerow(log_row)
+            # Save logs to a separate CSV for each combination
+            with open(log_csv_file, mode="w", newline="", encoding="utf-8") as file:
+                writer = csv.DictWriter(file, fieldnames=["Model_ID", "loss", "grad_norm", "learning_rate", "epoch", "step",
+                                                          "eval_loss", "eval_runtime", "eval_samples_per_second", "eval_steps_per_second"])
+                writer.writeheader()
+                for log in trainer.state.log_history:
+                    log_row = {
+                        "Model_ID": model_id,
+                        "loss": log.get("loss", "N/A"),
+                        "grad_norm": log.get("grad_norm", "N/A"),
+                        "learning_rate": log.get("learning_rate", "N/A"),
+                        "epoch": log.get("epoch", "N/A"),
+                        "step": log.get("step", "N/A"),
+                        "eval_loss": log.get("eval_loss", "N/A"),
+                        "eval_runtime": log.get("eval_runtime", "N/A"),
+                        "eval_samples_per_second": log.get("eval_samples_per_second", "N/A"),
+                        "eval_steps_per_second": log.get("eval_steps_per_second", "N/A"),
+                    }
+                    writer.writerow(log_row)
 
-        # Save the fine-tuned model
-        trainer.save_model(f"./phi35_finetuned_lr{lr}_wd{wd}")
+            # Save the fine-tuned model
+            trainer.save_model(output_dir)
+            print(f"Model {model_id} trained and saved.")
 
-print(f"Training logs saved to Results/{log_csv_file}")
+        except Exception as e:
+            print(f"Error training model {model_id}: {e}")
+
+        # Clear memory after each combination
+        del trainer
+        torch.cuda.empty_cache()
+        gc.collect()
+
+print("Training completed for all combinations.")
