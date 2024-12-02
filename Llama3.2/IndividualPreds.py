@@ -22,12 +22,12 @@ weight_decays = [0.005]
 # Preprocess the test dataset
 def preprocess_data(data):
     processed_data = []
-    for idx, item in enumerate(data):
+    for item in data:
         question = item['question']
         choices = item['choice_list']
         label = item['label']
         processed_data.append({
-            'id': idx + 1,
+            'id': item['id'],  # Use actual ID from the dataset (e.g., 'SP-180')
             'text': question,
             'choices': choices,
             'correct_answer': choices[label]
@@ -36,19 +36,12 @@ def preprocess_data(data):
 
 processed_test_data = preprocess_data(test_data)
 
-# Define the prompt
-PROMPT = (
-    "Answer the following question by selecting the most appropriate choice:\n"
-    "Question: {question}\nChoices:\n"
-    + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
-    + "\nAnswer:"
-)
-
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
+    # Define the prompt dynamically based on the question and choices
     prompt = (
-        PROMPT
-        + f"\n\nQuestion: {question}\nChoices:\n"
+        "Answer the following question by selecting the most appropriate choice:\n"
+        f"Question: {question}\nChoices:\n"
         + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
         + "\nAnswer:"
     )
