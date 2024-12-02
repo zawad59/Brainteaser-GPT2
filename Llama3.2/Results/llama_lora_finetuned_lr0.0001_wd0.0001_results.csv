@@ -1,0 +1,284 @@
+Question_ID,Question_Text,Answer_Choices,Model_Predicted_Answer,Actual_Answer,Predicted == Actual,Explanation
+1,"How could a man go outside in the pouring rain without protection, and not have a hair on his head get wet?","
+The man was lucky enough to avoid all the rain.; He is bald.; The man is an athlete that can avoid rain in high speed.; None of above.","': 'd get.',.',.', aboved and,  ':':{'22..', 'id.
+
+.
+
+ and.', brothers.',..',actor1 moved.',.', '.', married movedistristr.'their family away brother'' '",He is bald.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+2,How could a guy go outdoors in the torrential rain without getting a single hair on his head wet?,"He is bald.; 
+The man was lucky enough to avoid all the rain.; The man is an athlete that can avoid rain in high speed.; None of above.","(1, family-':.', married?',?', abovedd,1 1': marriedd.',.',.',': married.
+
+.
+
+': wife.',.',.',.actoractor moved.',.',.',.', married moved‘actor brother'their family family':",He is bald.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+3,How can you enter a exam session and have the answers sooner than everybody else in the room?,You have to be a teacher.; You have to prepate for the whole year.; You have to ask teacher for the asnwer.; None of above.,"istristractoristr family family family moved'the.',.',':.', aboved':',  ':':{'d...', byactor.
+
+.
+
+':1.',.',actor.',actoractor moved.',.', brothers.', marriedunch'brother moved '",You have to be a teacher.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+4,"If a monkey, a squirrel, and a bird are racing to the top of a coconut tree, who will get the banana first?",The squirrel.; The monkey.; The bird.; None of above.,"{'':': theiristr brother the married.istristrd': and1  family family 'd.', married':.',', family and':  1': movedanswer daughter '.', 'id.
+
+.
+
+':1.',.',': theactoractor moved",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+5,"Who will grab the banana first if a monkey, a squirrel, and a bird race to the top of a coconut tree?",The bird.; The squirrel.; The monkey.; None of above.,"1{'.',':.',, family family familyactor1istristr have',  the the,,': 'WP and1.',.', family and2 same ':{' married...':dactor.
+
+.
+
+d1 brother.',.',actor':",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+6,"A rooster and a bull were expecting their first child, but since they were having a competition, they wanted to precipitate the process. Which one of them gave birth first?","The rooster.; The bull.; 
+Both, they happen to finish at the same time.; None of above.","d.',d.',.',.', and and, married1':': married2...',': and.
+
+.
+
+d.',.',.',.',{'':actor moved.', brothers.',.', married1 ABOVEactor.'favorite family away':':label daughtersactoractor",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+7,"A group of ten ostriches are in a field. If four of them take off flying, how many are left in the field?",Six.; Four.; Ten.; None of above.,"1WP{'':':, same theiractoractoristractor', have', lovedd1,-':':.',.',':.', above family and': 1':': married...',.',d their.
+
+.
+
+ (1.',.',.',actor3",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+8,Ten chickens are gathered in a field. How many of them remain on the field if four of them take off flying?,Six.; Four.; Ten.; None of above.,"Some brother':istr1WP{'':.',,.', their family family.d'],istr': by familyd family,''.',.',.',.', above.', and' ':': moveddd daughter.',':actor.
+
+dd.', brothers",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+9,"If we have two bulls, and each cow can produce two gallons of milk every day. How much milk do we have after 2 days?",Eight.; Four.; Sixteen.; None of above.,".',':( the family their family familyactord'],',',istr family1, family':':.', and married2 away married',':  choice':orderd...',': theird.
+
+dchoice.',.',.',':actoractor moved",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+10,Two people were playing chess and both won. How did this happen?,"They were playing against other opponents.; The both lose, in fact, which is also both won.; The referee is new and doesn't know the chess rules.; None of above.","istr '':': the  family brother': '.',.',.',.',.', family and' 1':{' '.',actor.',did.
+
+.
+
+ '.',.',.',.actoractor':':.',.',.', loved.', married-istrid '",They were playing against other opponents.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+11,Both persons who were playing chess won. What caused this to happen?,"They were playing against other opponents.; The both lose, in fact, which is also both won.; The referee is new and doesn't know the chess rules.; None of above.","and'],,istractor (  moved': '.',.',.',.',WPd2':  ':':{'..2.',id their.
+
+.
+
+d1 brother.',.',actoractoractor moved.',.',.',.', '1ureistr. '",They were playing against other opponents.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+12,"Two chefs were making food, at some points both poured a salt and pepper into their food, however the food wasn't too spicy afterall when customers were eating it. How's that possible?",The salt and pepper are  expired.; Two chefs were making two different foods and they didn't add the spices twice to the same food.; All customers were polite and didn't tell them in public.; None of above.,".',.',..',actor1 moved.',.',.',.', family moved131130.'shares same family':'' and andactoristristristristractor111.
+
+.
+
+d.',d other1 their1 brother brotherNone the same theanswer",Two chefs were making two different foods and they didn't add the spices twice to the same food.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+13," A hiker arrives near a lake. He sees a sign where it is written ""No swimming allowed."", but the duck jumps into the water. Why? ",Because ducks can't read.; Because ducks won't polluted water.; Because ducks are tiny to be detected.; None of above.,"':'get.',.',.',.', family and, 1':':d....',':..
+
+.
+
+': brothers family.',actor{'':actor moved''.',.', married marriedansweristr.'shares family family''d''",Because ducks can't read.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+14,"A hiker lands near a lake. He sees a sign that says ""No swimming allowed,"" yet the duck dives into the water anyhow. Why? ",Because ducks are tiny to be detected.; Because ducks can't read.; Because ducks won't polluted water.; None of above.,", family''', '':.', aboved':2111':{'d...',': their.
+
+.
+
+d.',.',.':actor3 moved moved.', 'actor.', family moved-choice.'favorite's away':d '",Because ducks can't read.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+15,"A cat was walking pass a security guard when the guard told him not to enter the area since it was restricted. However, the cat passed the security guard without any sense of obedience.Why?",The cat thought it won't bring danger; Since cats can't understand humans' language; The cat thought it was hard to detect itself.; None of above.,"': married....',actorid.
+
+.
+
+d1.',.',':':Family': moved.',.',.',.',.', movedanswer brother.'their loved family'' brothers.istractoristristristractoractor1111.
+
+,d",Since cats can't understand humans' language,no,"Based on context and semantic similarity, the chosen answer matches the question."
+16," Twenty-seven ducks are going to the pond. Five of them got lost, thirteen of them are staying home, and nine of them are at the pond. Where are the rest of them? ",Home.; The way to the pond.; Pond.; None of above.,"the family, family 'd.', married':.', daughterd':' ':':{'...',.',d brother.
+
+.
+
+':1.',.',.',actoractor0 moved.', brothers '.',.', moved-':.'the family away.',",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+17," Twenty-seven ducks are going to the pond. Five of them got lost, thirteen of them are staying home, and nine of them are at the pond. Where are the rest of them? ",The way to the pond.; Home.; Pond.; None of above.,"the by family,':',.',':.',.', above',actor',  1':.',d.',..', 'actor.
+
+d': brothers.',.',': the':actoractor.',.',.',.',.', movedistristr.'their their..',",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+18,"James was taking a test with 31 questions. He answered to 17 questions. Towards the end of the time, he looked onto other people's choices and answered 7 questions that way. He was so lucky that he remembered how to answer another 7 questions as well. Surprisingly, he got 100% in the test. What did he do with the rest of the questions that he got 100?",It is so difficult that he cheated with others.; He didn't know the answer and just guessed them randomly.; He owned a nice relation with the teacher and just asked his teacher.; None of above.,"their1 bychoice same‘',.',''?', family.','''' family'family?',actor':.',.', moved'' 'actor{'{'..':d':..
+
+.
+
+.', '':'''family-- '",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+19,"Ten fish are in a tank. Two fish drown. Four fish swim away.Three fish die.
+How many fish are left in the tank?",Seven.; Five.; Twenty.; None of above.,"{'':':.',, same the family familyistrdistr',':  the  - '-.',.',.',.', aboved and, 1':': married.',. '.',': and and.
+
+d moved.',.',.',actoractor1",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+20,A tank contains ten fish. Two fish drown. Four fish are swimming away.Three fish perish. How many fish are there left in the tank?,Seven.; Twenty.; Five.; None of above.,"':':  family family family1istristristr': and  family (, the '':.','married.',.',d and':   ‘':{'d.2.',':actor their.
+
+':1.',.',actoractoractoractoranswer.",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+21,"A chopper had ten pigeons inside and threw all of them out to die. However, there were some tall trees that could've survived them. How many survived?",Eight.; Five.; Three.; None of above.,", same brotherButistr1'], and':  their (, brotherd.', married.',.',.',d and,  id':{' and..',.','their and.
+
+21.',.',actor':answeranswer moved.', brother.',.',",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+22," A woman went to Virginia to get a job. She promised her mother she would come back and visit sometime. Then, in the middle of winter, her mother shouted, ""April is here!"". How is this possible? ",The woman's name is April.; Her mother stayed in the home for the whole winter.; The weather in Virginia is pretty special.; None of above.,".',actor by.
+
+.
+
+ '1.',.',.',actoractor moved moved.', brothers.',.', married moved lovedoke..', their loved..', 'd and-actoristrdNoneactoractor1111.
+
+d of.', have.',1':",The woman's name is April.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+23,"A woman travelled to Virginia to look for work. She promised her mother that she would return someday. Her mother then exclaimed, ""April is here!"" in the dead of winter. What makes this possible? ",Her mother stayed in the home for the whole winter.; The weather in Virginia is pretty special.; The woman's name is April.; None of above.,"{'answer...',actor':.
+
+.
+
+d brothers.',.',{'':': movedactor.', brothers.',.',actor1WPistr moved 'actor family family.','away. daughtersactoristristr sameistractor1':111d  questions",The woman's name is April.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+24,"A man was asking somebody where is you?, the man then pointed out to the person asking the question. How's that possible?",The man pointed to some people at random.; The name of the man who was asking the question was You; The man was angry for his impolite question.; None of above.,".', aboved and,  ':':{'d..',.',actor and.
+
+.
+
+':1.',.',_list.',actoractor moved.',.
+
+.',.',.', moved'moved,': their family family':'' from actoristractoractoristr",The name of the man who was asking the question was You,no,"Based on context and semantic similarity, the chosen answer matches the question."
+25,"What animal has no wings, but yet will fly?",An elephant.; A caterpillar.; An eagle.; None of above.,"'areanswer.', one their by1':':answer066{'{'':(  same the by familyistrd'],d': by family family,,':1.',.',.', above?',d and, .',': married2d",A caterpillar.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+26,What animal does not have wings but can fly?,An elephant.; An eagle.; A caterpillar.; None of above.,"own'are.',question.', by.', theiractor':actor.',.',{'WPWP':( their family1 family11istr.', family',  (1, family':-.',.',.',.', above theird,1 1 married.',d",A caterpillar.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+27,What animal does not have legs but can jump?,A fish.; A tadpole.; A rabbit.; None of above.,"actor'arequestion.', wife 1 by.': brother.',.',6WP{'':':,', family1 familyistr by3 have':  family moved,':':.',.',1.',.', their and,  ':':{'d",A tadpole.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+28,"A logical with some time to kill in a small town decided to get a haircut. The town had only two barber, each with his own shop. The logical glance into one shop and saw that it was extremely until. The barber needed a shave, his clothes were unkempt, and his hair was badly cut. The other shop was extremely neat. The barber was freshly shaved and spotlessly dressed, his hair neatly trimmed. Why did the logical return to the first shop for his haircut?",The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy.; Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.; The logician went to the first barber because he felt sympathy for him.; None of above.,"..','''''the family':''' from.',ure''d.',ure':Some.',''dd',.',''1 have brother brother brother''.', brother brothersistr?',istr family brother '.
+
+.",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+29,"In a small town, a logical with some free time made the decision to get a haircut. There were only two barbers in the town, and they each had a shop. The rational glance into one store revealed that it was incredibly expensive. His clothes were messy, his hair was poorly cut, and the barber needed to shave. The other store was very well-kept. The barber had recently had his hair cut and was immaculately dressed. Why did the logical get his haircut at the first place he went?",The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy.; Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.; The logician went to the first barber because he felt sympathy for him.; None of above.,"family '': moved moved.',d '.', 'actord''': 'But.',.', and',','' '1 brother brother brother'' '1 brother brothers 'actoristr family brother '.
+
+ '': ',', '.',",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+30,"In a remote village, a wise traveler decides to check out local dental implants. There are only two dentists in the village, each with a clinic. Glance at the first clinic and see that the dentist's own teeth are badly planted and his salon is poorly maintained. The second salon is tidy, the dentist's teeth are well planted and his attire is spotless. Why smart travelers choose dental implants in the first clinic?",Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.; The traveler chose the first dentist because he believed the untidy appearance suggested that the dentist was so busy.; The traveler went to the first dentist because he felt sympathy for him.; None of above.,"'‘?',?',questionWP.',.',.',.',.
+
+.
+
+1actor'''' ''''  ure.', '.',d'' 'None Mr.
+
+.', and and',istr': family1'brother':': ‘.',",Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+31,A plane crashed between the border of Canada and America. Where do you bury the survivors?,America.; Canada.; In the middle of America and Canada.; None of above.,"':.',':.',WPWP':( family{' family1 theistristr22  byd,--':.',.',':?', married'],'],,111':.',d.',.',.',actor..
+
+.
+
+.':.",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+32,A jet crashed near the border between Canada and America. Where do the surviving go to be buried?,Canada.; In the middle of America and Canada.; America.; None of above.,"':..WPWP':.',  family the the theistr brotherlabel have':?', , '- '.',.',.',.', and married movedactor 11':.',..',.',.',id..
+
+.
+
+': wife.',.', by",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+33,We have 5 roosters and each one gives 1 egg per day. How many eggs do we have after a week?,Five.; Thirty-five.; Seven.; None of above.,".{'{'':', familyistr brother family familyistristr3 '':istractor the, the''.',.',':.',?',', and3 1':':.',....','by.
+
+.
+
+':1 brother.',.',actoractor",None of above.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+34,"Imagine you are in a room, with no doors, windows, or anything. How do you get out?",Stop imagining.; Jump out of the roof.; Break the Wall.; None of above.,"WP{'',( their family family1 familyactoristr'], eachistr one 1,--',.','married2.', and and,  [1':.',d..2actor by.
+
+.
+
+ '': the.', by.',':actor",Stop imagining.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+35,"Assume you're in a room with no doors, windows, or anything else. How do you escape?",Stop imagining.; Jump out of the roof.; Break the Wall.; None of above.,"1WP{'':( ': family familyidistrdactoristr two  the1,': 'd.',.',.',.', family and and  ':':.',d..',.',,actor and.
+
+ wife1 brothers.',actor{'actor",Stop imagining.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+36,You're dreaming that you're in a jungle in which a tiger is approaching you. What's the best thing to do in that situation?,Fight with the tiger.; Jump over it.; Waking up.; None of above.,"family familyactoristristrd has'],11 family,,ure':d.',.',.', aboved and,  ':':{'2...', moved their and.
+
+ their.',.',.',_list.',': moved moved.', brother.',.',.',",Waking up.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+37,"I buried a stone in the ground, and it grew and produced fruit. How is this possible?","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.; The stone that was buried in the ground symbolizes an idea or a concept. By burying the idea and nurturing it with care and effort, it grew and blossomed into a fruitful outcome or achievement.; You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself.; None of above.","dd.',  the1  SomeC marriedexample thed the.', '.','s '1.',.', moved1?',':.',.',.',actord family 'uns from.',d1.',.',':..':.',':'' '","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.",no,"Based on context and semantic similarity, the chosen answer matches the question."
+38,"I planted a stone, and it sprouted leaves and fruit. How is that even possible?","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.; You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself.; The stone that was buried in the ground symbolizes an idea or a concept. By burying the idea and nurturing it with care and effort, it grew and blossomed into a fruitful outcome or achievement.; None of above.","1 givend.', away3': but brotheractorC the examples.', '1 given.',.','' 'actoractorSome1?',1.',.',.', family and.
+
+ 'istr.',.', job..',':':..
+
+..',.',.', '","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.",no,"Based on context and semantic similarity, the chosen answer matches the question."
+39,"Two farmers got into a heated argument and started fighting. A farmer was so enraged that he threw a handful of stones at the other farmer. The stones hit the farmer exactly, but the other farmer received no harm at all.  Why?","The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone.; The other farmer was wearing protective clothing or had some form of shield that prevented the stones from causing harm.; The stones were small or lacked enough force to cause any significant injury.; None of above.","'actor.',.',actor byactor1 1.
+
+1.',,istr the.',.',1  brotherSome ‘ examples'the '.', each.', and 'actor.',actoractord?',1.',.',?',answer''''.',?',.","The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone.",no,"Based on context and semantic similarity, the chosen answer matches the question."
+40,How many birth days does the average person have?,"People may celebrate their birthdays annually, so it depends on their life span.; They technically only have one birth day in their lifetime.; It can be zero as some people are too busy to celebrating their birthdays.; None of above.","by family- '.',.',.', above2d and',  ':':_orderd...',actor and.
+
+.
+
+':1.',.',.',{'': moved moved.', brothers.',.', familyactorC brother.'their's moved': '",They technically only have one birth day in their lifetime.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+41,How many birth days do most people have on average?,"People may celebrate their birthdays annually, so it depends on their life span.; It can be zero as some people are too busy to celebrating their birthdays.; They technically only have one birth day in their lifetime.; None of above.","family family- '.', get.',.',.', family and' ':': married2. daughter.',':id.
+
+.
+
+':.',.',.',.',':
+actor movedactor.', '.',.', marriedansweransweractor. get?', family..',dd",They technically only have one birth day in their lifetime.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+42,"From elementary school to collage, how many ""first day of school"" does the average person have in their lifetime?","Average poeple have 4: lementary school, middle school, high school, and college.; They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.; Average people have ""first day of school"" in each semester, so it will be more than 10!; None of above.","'istr the family..','' '3istr2actoractord 1 11.
+
+ daughter.',.', questions'the_orderactor ‘Some same'daughteranswer'married.',.
+
+ the.''.','by?',':':?',",They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+43,An electric train is going south at 98 mph. The wind is blowing northeast. Which direction is the smoke blowing?," Wind is blowing northeast and is more powerful than the train's speed, it would overpower the train's forward motion. It would likely cause the smoke to blow in northeast.; The train is traveling at a higher speed, which has a significant impact on the direction of the smoke. In this case, smoke is blowing to the opposite direction, north.; There is no smoke. it's an electric train!; None of above.","2istristractoractor butThe11.
+
+answer2d',1 the their_order brothers]}
+‘istr'' answer?',.',.', each family family.',family 'd?',.',',.',.', family and''actor{'.',question..',",There is no smoke. it's an electric train!,no,"Based on context and semantic similarity, the chosen answer matches the question."
+44,"At 98 mph, an electric train is traveling south. There is a northeast wind. Where is the smoke coming from?","There is no smoke. it's an electric train!;  Wind is blowing northeast and is more powerful than the train's speed, it would overpower the train's forward motion. It would likely cause the smoke to blow in northeast.; The train is traveling at a higher speed, which has a significant impact on the direction of the smoke. In this case, smoke is blowing to the opposite direction, north.; None of above.","istristristractor 111.
+
+ moved of.',',11,  boxer same theistr theanswer answer?',.',.','s'' 'actor'family?',':':.',.',actor'' 'istr{'.',.',1.',.',",There is no smoke. it's an electric train!,no,"Based on context and semantic similarity, the chosen answer matches the question."
+45,A submarine is moving west at a speed of 30 knots. There is a strong current moving east. Where are the trail of bubbles coming from?,"The current is moving east, the bubbles would be carried by the current towards the west.; The submarine is moving west, the bubbles would be carried in the direction opposite to the current.; There are no bubbles. Modern submarines are designed to move through water without leaving a trail of bubbles.; None of above.","brothers.',.',.', moved above brother.istr  family1.','brothers and-actoristrdactoristractor1 11.
+
+ddd eachistr':': Some'}
+ P, 'd and.',.',''''",There are no bubbles. Modern submarines are designed to move through water without leaving a trail of bubbles.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+46,"There is a pink single-story house and everything in it is pink. The doors are pink, the windows are pink and the top is pink. What color are the stairs?",There are no stairs in a single story house.; It should be pink as the whole house is in pink.; The stairs is uncolored as people always step on that.; None of above.,".',.',':actor.
+
+.
+
+': brothers.',.',.',actoractor moved moved.', brothers '.',.', marriedansweristr moved'their family family brother'' away-actor.',actoristractoractor 1':1.
+
+ and':.',',',",There are no stairs in a single story house.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+47,"The entire single-story home is pink, including the outside. The windows, the top, and the doors are all pink. What are the stair's colors?",The stairs is uncolored as people always step on that.; It should be pink as the whole house is in pink.; There are no stairs in a single story house.; None of above.,"': marriedd..',dd.',.
+
+.
+
+ their1.',.',':':
+actor moved moved.',. '.', family Broslabel brother.'their's away.',''- 'actor.',istr by.',actor 1111answerd",There are no stairs in a single story house.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+48,"A one-story house is built from red bricks. The doors, windows, and roof are all made of red bricks. What color is the basement?",There is no basement in a one-story house built on a single floor.; It should be red as the whole house is in red.; The basement is uncolored as the basement is only used for storing stuffs.; None of above.,"':.
+
+.
+
+':.', family.',actoractor.', moved moved.',.',.',.',.', married{' brother.'the their away.',.d and daughteractor.',2 theiractoractor by:
+
+1.
+
+.
+
+,d.',.',istr their1actor same",There is no basement in a one-story house built on a single floor.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+49,"Ten pears hanging high, Ten men come passing by, Each took a pear and left nine hanging there. How could that be?",EACH is the name of one of the men.; Other men can't reach the pear.; Other men didn't see the pear.; None of above.,"the brother':.',d married.', aboved and, 11':orderactor2..', theiractor andd':1 brothers.',.',?',actoractor moved.', brothers.',.', marriedistranswer brother. their the family family.', '.', and",EACH is the name of one of the men.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+50,"Ten pears hung high, ten men passed past, Each taking a fruit and leaving nine hanging there. How is that possible?",Other men can't reach the pear.; Other men didn't see the pear.; EACH is the name of one of the men.; None of above.,", family'thed.',':.', aboved andactor1 1':{'.d..',actor their.
+
+.
+
+ and1 family.',..',actor moved':.', brother '.',.', movedNoneistr.'away family moved':.',d",EACH is the name of one of the men.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+51,"There were twenty boys with different names in the classroom, All went up to the blackboard and wrote names on the board, however, there was only one name on the board, how's that possible?",Other boys don't have names.; All is the name of one of the boys.; Other boys don't know how to write.; None of above.,"':':dd',.','and and.
+
+ '1 brothers.',.actoractoractoranswer.', brothers.', loved married married brotheristr.'shares.',''d andistractor.',actoractoractoractor1111.
+
+ movedd",All is the name of one of the boys.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+52,"The more you take, the more you leave behind",Love.; Footsteps.; Money.; None of above.,"':ure.',orderanswer some.', their by1?',':':Some':?',{'WP{'':{'  same family family familyistractoristristr': d brother ': '':.',d':.',.', and and', uns':':",Footsteps.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+53,"The more you take, the more you abandon.",Love.; Footsteps.; Money.; None of above.,"'': are.',{'actorWP.', their their1.',op':P':istrid{'.',':.', their same the family familyistractoristrd': familyd1,,-':.', get.',.',.',d and,  ':",Footsteps.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+54,You are running so fast but you're not getting closer. Where are you?,Country road.; Treadmill.; High way.; None of above.,"!',': loved':.',.',?',0WPWP':( their same, family theistr brother2',.',  family( by familyd '', married':2 d':,  1 married.', '.',.',.',order their.",Treadmill.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+55,What type of bank doesn't hold money?,Snowbank.; Investment bank.; Central bank.; None of above.,". loved.',actor areSome.', their their.',.',actor':answer.',.',0{'id':.', the same family1 marriedistristr'],2':istr ( family family--.', married':.',2 married family,   their':",Snowbank.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+56,What kind of bank doesn't keep cash on hand?,Snowbank.; Investment bank.; Central bank.; None of above.,".',lab]}
+ some.',.', by11.':.',':d.',WP{'':{',istr their1actor.istrd':istr,d the(':':':.', get':.', aboved by31 ':': movedd",Snowbank.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+57,What kind of bank doesn't have money on hand?,Riverbank.; Investment bank.; Central bank.; None of above.,"ownchoiceSomeSome.', their their11actor':actor':51{'{'':(  family1 family familyactor away2'],',istr 1  family '':.', married.',.',.',d and2  ':':{'d",Riverbank.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+58,What type of root can't be eaten?,Carrot root.; Cabbage root.; Square root.; None of above.,"Somechoiceactorchoice.', their their11.':.',':istr3WP{'':',  same actor.',istrdand':istristr family ( moved': '.',.',.',.', above and and,  ':':order2",Square root.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+59,What kind of root cannot be consumed?,Square root.; Carrot root.; Cabbage root.; None of above.,"ure ownactoranswer some.', one their11':':Some':d1WP{'':( istr their family familyistrWPactor each': loved 1 brother family '':.',.',.',.',.',d2' ':': married",Square root.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+60,What sort of root should one not eat?,Cube root.; Cabbage root.; Carrot root.; None of above.,"actor 'choice some.', daughters their  by.actor':':d1WP{'': family own same family family.',istrdistristristr  brother family - 'd.',.',.',.',.', married and'1':':{'d",Cube root.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+61,What kind of mouse can't you feed cheese to?,A computer mouse.; A hungry mouse.; An old mouse.; None of above.,"choicequestion their their 1.': brother.',.',{'WPWP':': their same brother family familyistristristrd':  the the by,''.',.',.',.', marriedd13  ':':.',d...',",A computer mouse.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+62,What type of mouse are ineligible for cheese feeding?,A computer mouse.; A hungry mouse.; An old mouse.; None of above.,"‘ some.', daughter their.',1':':':2.',1WPid.',( family family family family1istrdistr':':    family,':':': married married.',.',',':':11id':{'d.', '",A computer mouse.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+63,The kind of mouse engineers like most？,A young mouse.; A white mouse.; A computer mouse.; None of above.,"actorchoiceanswer somequestion  by  ':':':':istr{'WP':':{' the same familyactor familyistrddd':istrd  moved moved 'd.',':.',.',.', their and '11':':dd",A computer mouse.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+64,What kind of plant can't photosynthesize?,An indoor plant.; A house plant; A power plant.; None of above.,"answer.',.', Mrs  by1None':.', 60WP{'.',(, family. loved theistr brother2d',istr family1,--.',.',.', marrieddd and,  1':idid.',',",A power plant.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+65,Which plants are incapable of photosynthesizing?,A house plant; A power plant.; An indoor plant.; None of above.,"WPanswerquestion same their None':.',.',.',label6WP.',':( their family brother familyistractoristr3',': loved family1 familyBut '':.',.',.',.', aboved andactor 1':':{'.',..",A power plant.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+66,What plants can not photosyntheszie but can produce energy.,A wetland plant.; A nuclear plant.; An aquatic plant.; None of above.,"their.',order1':':':.',.',.':':.',  same familyactoractoristrd'], have': by    moved'brotherd married':.',.', married and21 ':':{'.2.',.',': and.",A nuclear plant.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+67,What kind of wood never gets chopped?,Softwood.; Hollywood.; Hardwood.; None of above.,"': '. own own 'WP somequestion?', their by':.':':':.',1WP{'':':  brothers theactorWP.actoristr'],istristr family1 [ family':':.',.',':.',2d and'",Hollywood.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+68,What sort of wood is never cut?,Hollywood.; Hardwood.; Softwood.; None of above.,"'' 'ureactor'someanswer.',.', their by1 loved':':':.',3WP{'':.',  family their familyactor1 byd':':  family ( family moved brotherd.', get.',.',2 family and'",Hollywood.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+69,What sort of wood is never cut?,Hardwood.; Sherwood.; Softwood.; None of above.,"':'get{'choicechoiceanswer?', their  ':':.',.',.',.',1WP.',{'{' ':  loved familyactoristrand':':1 family the family by '.',d.', married.', aboved and' ':",Sherwood.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+70,What type of dish doesn't hold food?,A satellite dish.; A fish dish.; A side dish.; None of above.,"'arequestion.', one their11.':':':.',1{'{'':', their family family lovedactoractoractor2'],'], d1 family family': 'WP.',.',.',.', married and,  d': marriedd.",A satellite dish.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+71,What kind of dish cannot accommodate food?,A satellite dish.; A fish dish.; A side dish.; None of above.,".', ']}
+Some.', by and by but.':answer':.',{'WP{'':(, same their family1istrdistr',actoristr the1 family,-1d married':.', aboved and and  the':':{'2",A satellite dish.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+72,What sort of dish is incapable of holding food?,Side dish.; Petri dish.; Fish dish.; None of above.,"order'some some.', their their?',But.',.', daughter.',.',3{'{'':(  same brother familyistristristrd'],actoristractor1, family 'd.',.',.', above have away and,  ':':{'d",Petri dish.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+73,What kind of bottle can't hold a liquid?,A bottle neck.; A glass bottle.; A water bottle.; None of above.,"areanswer.',.  11':.'
+
+':.',{'WPWP':( their. family family family. but2.',istr  (, family--.', married.',?', question married moved,   ': Marriedd.',',",A bottle neck.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+74,What sort of bottle is incapable of holding a liquid?,A glass bottle.; A water bottle.; A bottle neck.; None of above.,".',.', their their by loved':':..',{'WPWP':(  family the familyactoristractord haveistr by  brother by--',.',.', married.', aboved and family111': married '...',",A bottle neck.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+75,What kind of bottle is smallest.,Soda bottle.; Wine bottle.; Baby bottle.; None of above.,"'''brother ownactoranswerquestion.',  theirWP loved':.',.',':.',1WP.',':( their family their family familyistristrd have.',  family d,': '.', get':.',2': and-",Baby bottle.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+76,What kind of note can't be played?,A music note.; A footnote.; A high note.; None of above.,"actoractor are{'.', their their byoke':':.',.',.',{'{'WP':( the same the loved marriedactoristr'],',',  ( (, moved--.',.',.',.',.',d and,1 1': marriedd",A footnote.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+77,What sort of note is impossible to play?,A high note.; A music note.; A footnote.; None of above.,"choice 'okeSome.', one theirLab1.':':':.',.',WP{'':( theistr their familyactoristrWP.',','],  ( (,,-dd and.',.',.', family': '1  ':id.",A footnote.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+78,What sort of note is valuable?,A music note.; A banknote.; A high note.; None of above.,"d{''are some.',question  answer1': married.',6{'WP{'':',  family same married familyistristristr'],,istr the1  moved''.',.',':.', above',':'1istr':.',",A banknote.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+79,What kind of watch can't tell time?,A pocket watch.; A wristwatch.; A watchdog.; None of above.,"actororder are some.', same by 1 loved':':.',96{'{'':',  same their1actor.dd',', d family -':':.', '.',.',.', the and,  ]}
+':{'d",A watchdog.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+80,What sort of watch is unable to tell the time?,A pocket watch.; A wristwatch.; A watchdog.; None of above.,"answer some.',Mr their?',oke.':.',':.',.',{'{'':.', theiristr brother familyactoristrdd':': andd, moved 'd.',.',':.',.', their and' the':': movedd..',",A watchdog.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+81,What kind of watch only works at night?,Stopwatch.; Nightwatch.; Wristwatch.; None of above.,"'brother'''some.', their and 1orderactor.',.',.',1{'.',':', family family family family1labelistristr each':istr  family( familyBut':.', get.', above.', away and' ':':",Nightwatch.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+82,What type of pump doesn't inflate anything?,Bicycle pump.; Pumpkin.; Air pump.; None of above.,"1 '':{''‘ some.', their their by1 lovedSomeanswer':op3{'.',':.', their's the their familyistristristrd': byd  family--d.', get.',.',', and'],':1 1",Pumpkin.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+83,What kind of pump is incapable of inflating anything?,Bicycle pump.; Air pump.; Pumpkin.; None of above.,"_order own'‘.',.',.', their?', loved':':':.',d{'WP{'':( family family11 theistractor2'],istristr   family---.',.',.',.', above', away,1 idid{'",Pumpkin.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+84,What type of pan doesn't help with cooking?,Saucepan.; Frying pan.; Company.; None of above.,"'choice_order ‘ ‘question their 1But.':':':.',1WP{'': moved, same brotherWP1istractor'],d haveactor the1 by family '',id.',.',.', above and23  1actord",Company.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+85,What type of ink never leaves a stain?,Link.; Blue ink.; Red ink.; None of above.,"'' ownactor 'answer some.', and their1 but.': loved':.',1WP{'':', their family brother1 family1distr have',  the (,,':':.', married.', above daughterd and',  ':",Link.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+86,What kind of ink doesn't leave stains behind?,Link.; Red ink.; Blue ink.; None of above.,"'.',.', labanswer ‘.',.', their 1.': brother.',?',1{'{'':( istr family1istr.1istr two'],, 1,1':d.',.',.',.', awayd and' 1':",Link.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+87,What type of ball can't be thrown or kicked?,Eyeball.; Baseball.; Football.; None of above.,"areactor''.',.', their 1But1':':':6.',WP.',':',, same same family marriedistristristrd,, family  by,':':.', 'None.',.',d and,  ':': married",Eyeball.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+88,What type of art doesn't hang in a gallery?,Contemporary art.; Fine art.; Tart.; None of above.,"ownSomeure]}
+ some.',  by 1.':':':.',.WP{'':.',, same family familyistr2istristr hasistr  the1 family-- '.',.',':.',.', family and':1 [':':{'",Tart.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+89,What kind of artwork isn't displayed in galleries?,Fine art.; Contemporary art.; Tart.; None of above.,"'were_orderureWP ‘.', their  ':1':':':d1{'{'': family  their same lovedactoristristr'],'],': d the family,- '.',.',.',.',2d and' ':':",Tart.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+90,What kind of man can't walk or talk?,A business man.; A snowman.; A fireman.; None of above.,"that somequestion their by11':': brother':?',.WPactor':.', the same their loved familyistr1and and',dactor1 family-ure':.',.',':.', the familyactor-  id':{'...",A snowman.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+91,What kind of bell doesn't make a sound?,A doorbell.; A cowbell.; A dumbbell.; None of above.,"]}
+Some.',?', by1': lovedanswer.',':.',1WP{'':{' their theiractor loved marriedistrdandd': and family family, family':':.', get.',.',.', their2',1 ':':{'d..",A dumbbell.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+92,Which sort of bell doesn't ring?,A dumbbell.; A doorbell.; A cowbell.; None of above.,".','‘ some.',.', their ':':':':2istr1WP{'':',  family11 family1d2 andistr by1 the, moved''.',.',.',.',.', married and'1':': marriedd",A dumbbell.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+93," What kind of ""stone"" can't be found in a quarry?",Cobblestone.; Sandstone.; Milestone.; None of above.,"their their WP':':answer':d1WP{'':(  same same the same1distr have':  the1,, brother '.', get':.',.',d and':11':':{'..',.',': their",Milestone.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+94,What type of ice never melts?,Dice.; Flaked ice.; Glacier ice.; None of above.,"'' '':actorchoice ‘job.',?',  11': loved.',d.{'{'':( their their family1actoristrd2d have  family not, moved''.',.',.',.', aboved and,,",Dice.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+95,What kind of ice doesn't melt?,Glacier ice.; Dice.; Flaked ice.; None of above.,"''ureactor'are some. their their But':actorQ':.',1WP{'':',,istr loved family family. brother2 have': loved the ( family brother '.',.',.',.',.',dand':, ':",Dice.,no,"Based on context and semantic similarity, the chosen answer matches the question."
+96,What kind of ice doesn't contain water?,Flaked ice.; Dry ice.; Glacier ice.; None of above.,"actor own 'actorchoice question same their11':': loved2istr.',{'{'':{'  same same the1.istr haved':':d (,,''',': married.','], married and': uns':':{'",Dry ice.,no,"Based on context and semantic similarity, the chosen answer matches the question."
