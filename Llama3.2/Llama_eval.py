@@ -46,7 +46,6 @@ PROMPT = (
 )
 
 
-
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
     prompt = (
@@ -87,11 +86,13 @@ def evaluate_model(model, tokenizer, test_data):
 # Evaluate all combinations
 def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays,
                               base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
-    results = []
     for lr in learning_rates:
         for wd in weight_decays:
             model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
             model_path = os.path.join(base_model_dir, model_id)
+            output_csv = f"Results/{model_id}_results.csv"
+            os.makedirs("Results", exist_ok=True)
+
             try:
                 # Load the fine-tuned model
                 model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
@@ -102,27 +103,30 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
                 # Evaluate the model
                 accuracy = evaluate_model(model, tokenizer, processed_test_data)
 
-                # Log results
-                results.append({
+                # Save results to a separate CSV
+                result = {
                     "Model ID": model_id,
                     "Learning Rate": lr,
                     "Weight Decay": wd,
                     "Accuracy": accuracy
-                })
-                print(f"Evaluated {model_id}: Accuracy = {accuracy:.4f}")
+                }
+                result_df = pd.DataFrame([result])
+                result_df.to_csv(output_csv, index=False)
+
+                print(f"Evaluated {model_id}: Accuracy = {accuracy:.4f}. Results saved to {output_csv}")
+
             except Exception as e:
                 print(f"Error evaluating {model_id}: {e}")
-                results.append({
+                result = {
                     "Model ID": model_id,
                     "Learning Rate": lr,
                     "Weight Decay": wd,
                     "Accuracy": None
-                })
-    return results
+                }
+                result_df = pd.DataFrame([result])
+                result_df.to_csv(output_csv, index=False)
 
 
-# Run evaluation and save results
-results = evaluate_all_combinations(processed_test_data, learning_rates, weight_decays)
-results_df = pd.DataFrame(results)
-results_df.to_csv("Llama_finetuning_results_with_prompt_Test.csv", index=False)
-print("Results saved to Llama_finetuning_results_with_prompt.csv")
+# Run evaluation
+evaluate_all_combinations(processed_test_data, learning_rates, weight_decays)
+print("Evaluation completed. Individual CSV files saved for each combination.")
