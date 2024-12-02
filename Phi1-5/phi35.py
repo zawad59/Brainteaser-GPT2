@@ -68,7 +68,7 @@ data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 # Adjusted LoRA configuration
 lora_config = LoraConfig(
     r=8,  # Higher rank for better representation
-    target_modules=["q_proj", "v_proj"],  # Update to actual model structure
+    target_modules=["qkv_proj", "o_proj"],  # Update to actual model structure
     lora_alpha=16,  # Increased scaling factor for stability
     lora_dropout=0.2,  # Higher dropout for regularization
     task_type="CAUSAL_LM"  # Task type for causal language modeling
