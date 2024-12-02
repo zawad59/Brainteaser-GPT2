@@ -66,11 +66,12 @@ data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 # Adjusted LoRA configuration
 lora_config = LoraConfig(
     r=8,  # Higher rank for better representation
-    target_modules=["qkv_proj", "o_proj"],  # Modules from Phi-3.5 model
-    lora_alpha=16,  # Scaling factor
-    lora_dropout=0.2,  # Dropout probability for regularization
+    target_modules=["qkv_proj", "o_proj"],  # Update to actual model structure
+    lora_alpha=16,  # Increased scaling factor for stability
+    lora_dropout=0.2,  # Higher dropout for regularization
     task_type="CAUSAL_LM"  # Task type for causal language modeling
 )
+
 
 # Prepare model for LoRA fine-tuning
 model = prepare_model_for_kbit_training(model)
