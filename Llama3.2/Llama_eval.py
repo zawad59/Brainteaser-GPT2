@@ -76,7 +76,7 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
     results = []
     for lr in learning_rates:
         for wd in weight_decays:
-            model_id = f"llama_lora_Zero_Shotfinetuned_lr{lr}_wd{wd}"
+            model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
             model_path = os.path.join(base_model_dir, model_id)
             try:
                 # Load the fine-tuned model
@@ -97,7 +97,7 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
                 }
                 print(f"Evaluated {model_id}: Accuracy = {accuracy:.4f}")
                 df = pd.DataFrame([result])
-                csv_path = f"Results/{model_id}_results.csv"
+                csv_path = f"Results/{model_id}_ZeroSHot_results.csv"
                 os.makedirs("Results", exist_ok=True)
                 df.to_csv(csv_path, index=False)
 
