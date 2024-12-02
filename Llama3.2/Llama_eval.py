@@ -47,17 +47,20 @@ PROMPT = (
 
 
 # Generate answers using the model
+# Define the prompt dynamically within the function
 def generate_answer(model, tokenizer, question, choices):
+    # Construct the prompt dynamically
     prompt = (
-            PROMPT
-            + f"\n\nQuestion: {question}\nChoices:\n"
-            + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
-            + "\nAnswer:"
+        "Answer the following question by selecting the most appropriate choice:\n"
+        f"Question: {question}\nChoices:\n"
+        + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
+        + "\nAnswer:"
     )
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(device)
     outputs = model.generate(inputs["input_ids"], attention_mask=inputs["attention_mask"], max_new_tokens=50)
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return generated_text.split("Answer:")[-1].strip()
+
 
 
 # Refine the generated answer using cosine similarity
