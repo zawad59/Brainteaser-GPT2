@@ -6,7 +6,7 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from datasets import Dataset as HFDataset
 import csv
 import gc
-
+from transformers import TrainerCallback
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
@@ -32,6 +32,16 @@ PROMPT = (
 # Load datasets
 train_data = np.load('../CombinedDatasets/All_train 1.npy', allow_pickle=True)
 dev_data = np.load('../CombinedDatasets/All_dev 1.npy', allow_pickle=True)
+
+# Custom callback to handle NaN or Inf values in loss
+class NaNHandlingCallback(TrainerCallback):
+    def on_step_end(self, args, state, control, logs=None, **kwargs):
+        if logs and "loss" in logs:
+            loss = logs["loss"]
+            if isinstance(loss, float) and (torch.isnan(torch.tensor(loss)) or torch.isinf(torch.tensor(loss))):
+                print("NaN or Inf detected in loss. Skipping step...")
+                # You can also raise an exception or take other actions here if needed
+                control.should_skip = True
 
 # Function to preprocess and tokenize data
 def preprocess_and_tokenize(data):
@@ -97,6 +107,7 @@ for lr in learning_rates:
             eval_steps=10,
             learning_rate=lr,
             weight_decay=wd,
+            max_grad_norm=1.0
             #save_total_limit=1,
             #load_best_model_at_end=True,
             #fp16=True,  # Enable mixed precision for faster training on GPUs
@@ -110,7 +121,8 @@ for lr in learning_rates:
             train_dataset=tokenized_train_dataset,
             eval_dataset=tokenized_dev_dataset,
             data_collator=data_collator,
-            tokenizer=tokenizer
+            tokenizer=tokenizer,
+            callbacks=[NaNHandlingCallback()]
         )
 
         # Train and save logs for each combination
