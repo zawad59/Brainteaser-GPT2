@@ -1,8 +1,8 @@
 import os
 import numpy as np
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, DataCollatorForLanguageModeling
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from transformers import AutoTokenizer, AutoModelForCausalLM, DataCollatorForLanguageModeling, TrainingArguments
+from peft import LoraConfig, PeftTrainer, prepare_model_for_kbit_training
 from datasets import Dataset as HFDataset
 import csv
 import gc
@@ -12,18 +12,17 @@ from transformers import TrainerCallback
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# Initialize models
+# Initialize model and tokenizer
 model_name = "microsoft/Phi-3.5-mini-instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
 model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
 tokenizer.pad_token = tokenizer.eos_token
 model.config.pad_token_id = tokenizer.pad_token_id
 
-# Define prompt
+# Define the prompt
 PROMPT = (
     "You're a model to select correct answers from the given questions and answer choices. "
     "The answer choices might look similar to each other but it's your job to figure out the correct one given the training you got.\n\n"
-    "Here are some examples:\n"
 )
 
 # Load datasets
@@ -68,9 +67,9 @@ data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 # Adjusted LoRA configuration
 lora_config = LoraConfig(
     r=8,  # Higher rank for better representation
-    target_modules=["qkv_proj", "o_proj"],  # Update to actual model structure
-    lora_alpha=16,  # Increased scaling factor for stability
-    lora_dropout=0.2,  # Higher dropout for regularization
+    target_modules=["qkv_proj", "o_proj"],  # Modules from Phi-3.5 model
+    lora_alpha=16,  # Scaling factor
+    lora_dropout=0.2,  # Dropout probability for regularization
     task_type="CAUSAL_LM"  # Task type for causal language modeling
 )
 
@@ -79,10 +78,7 @@ model = prepare_model_for_kbit_training(model)
 model = get_peft_model(model, lora_config)
 
 # Fine-tuning configurations
-#learning_rates = [0.0001, 0.00005, 0.00001]  # Lower learning rates
-#weight_decays = [0.00001, 0.0001, 0.0005]  # Moderate weight decays
-
-learning_rates = [0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
+learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 
 # Train the model with different hyperparameter combinations
@@ -114,8 +110,8 @@ for lr in learning_rates:
             report_to="none"
         )
 
-        # Define Trainer
-        trainer = Trainer(
+        # Define PeftTrainer
+        trainer = PeftTrainer(
             model=model,
             args=training_args,
             train_dataset=tokenized_train_dataset,
