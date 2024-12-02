@@ -7,6 +7,7 @@ from datasets import Dataset as HFDataset
 import csv
 import gc
 from transformers import TrainerCallback
+
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
@@ -23,10 +24,6 @@ PROMPT = (
     "You're a model to select correct answers from the given questions and answer choices. "
     "The answer choices might look similar to each other but it's your job to figure out the correct one given the training you got.\n\n"
     "Here are some examples:\n"
-    "{'id': 'SP-0', 'question': 'Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible?', "
-    "'answer': 'Each daughter shares the same brother.', 'distractor1': 'Some daughters get married and have their own family.', "
-    "'distractor2': 'Some brothers were not loved by family and moved away.', 'distractor(unsure)': 'None of above.', 'label': 1, "
-    "'choice_list': ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n"
 )
 
 # Load datasets
@@ -40,7 +37,6 @@ class NaNHandlingCallback(TrainerCallback):
             loss = logs["loss"]
             if isinstance(loss, float) and (torch.isnan(torch.tensor(loss)) or torch.isinf(torch.tensor(loss))):
                 print("NaN or Inf detected in loss. Skipping step...")
-                # You can also raise an exception or take other actions here if needed
                 control.should_skip = True
 
 # Function to preprocess and tokenize data
@@ -71,10 +67,10 @@ data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
 # Adjusted LoRA configuration
 lora_config = LoraConfig(
-    r=4,  # Rank
-    target_modules=["qkv_proj", "o_proj"],
-    lora_alpha=8,  # Scaling factor
-    lora_dropout=0.1,  # Dropout probability
+    r=8,  # Higher rank for better representation
+    target_modules=["q_proj", "v_proj"],  # Update to actual model structure
+    lora_alpha=16,  # Increased scaling factor for stability
+    lora_dropout=0.2,  # Higher dropout for regularization
     task_type="CAUSAL_LM"  # Task type for causal language modeling
 )
 
@@ -83,8 +79,8 @@ model = prepare_model_for_kbit_training(model)
 model = get_peft_model(model, lora_config)
 
 # Fine-tuning configurations
-learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
-weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
+learning_rates = [0.0001, 0.00005, 0.00001]  # Lower learning rates
+weight_decays = [0.00001, 0.0001, 0.0005]  # Moderate weight decays
 
 # Train the model with different hyperparameter combinations
 for lr in learning_rates:
@@ -98,8 +94,8 @@ for lr in learning_rates:
         training_args = TrainingArguments(
             output_dir=output_dir,
             num_train_epochs=5,
-            per_device_train_batch_size=16,
-            per_device_eval_batch_size=16,
+            per_device_train_batch_size=8,  # Reduce batch size for stability
+            per_device_eval_batch_size=8,
             eval_strategy="steps",
             save_strategy="steps",
             logging_strategy="steps",
@@ -108,11 +104,11 @@ for lr in learning_rates:
             eval_steps=10,
             learning_rate=lr,
             weight_decay=wd,
-            max_grad_norm=1.0
-            #save_total_limit=1,
-            #load_best_model_at_end=True,
-            #fp16=True,  # Enable mixed precision for faster training on GPUs
-            #report_to="none"
+            max_grad_norm=1.0,  # Gradient clipping
+            fp16=True,  # Mixed-precision training
+            save_total_limit=1,
+            load_best_model_at_end=True,
+            report_to="none"
         )
 
         # Define Trainer
@@ -123,7 +119,7 @@ for lr in learning_rates:
             eval_dataset=tokenized_dev_dataset,
             data_collator=data_collator,
             tokenizer=tokenizer,
-            callbacks=[NaNHandlingCallback()]
+            callbacks=[NaNHandlingCallback()]  # Include the custom callback
         )
 
         # Train and save logs for each combination
