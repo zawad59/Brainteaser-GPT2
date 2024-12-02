@@ -16,8 +16,8 @@ embedder = SentenceTransformer('all-MiniLM-L6-v2').to(device)
 test_data = np.load("/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy", allow_pickle=True)
 
 # Define learning rates and weight decays
-learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
-weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
+learning_rates = [0.0001]
+weight_decays = [0.005]
 
 # Preprocess the test dataset
 def preprocess_data(data):
@@ -38,15 +38,10 @@ processed_test_data = preprocess_data(test_data)
 
 # Define the prompt
 PROMPT = (
-    "You're a model to select correct answers from the given questions and answer choices. "
-    "The answer choices might look similar to each other but it's your job to figure out the correct one given the training you got.\n\n"
-    "Here are some examples:\n"
-    "{'id': 'SP-0', 'question': 'Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible?', "
-    "'answer': 'Each daughter shares the same brother.', 'distractor1': 'Some daughters get married and have their own family.', "
-    "'distractor2': 'Some brothers were not loved by family and moved away.', 'distractor(unsure)': 'None of above.', 'label': 1, "
-    "'choice_list': ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n"
-    "{'id': 'WP-131', 'question': 'What is a boxer’s favorite drink?', 'answer': 'Punch.', 'distractor1': 'Coke.', 'distractor2': 'Sprite.', "
-    "'distractor(unsure)': 'None of above.', 'label': 1, 'choice_list': ['Coke.', 'Punch.', 'Sprite.', 'None of above.'], 'choice_order': [1, 0, 2, 3]}\n"
+    "Answer the following question by selecting the most appropriate choice:\n"
+    "Question: {question}\nChoices:\n"
+    + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
+    + "\nAnswer:"
 )
 
 # Generate answers using the model
