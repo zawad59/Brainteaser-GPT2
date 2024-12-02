@@ -1,8 +1,8 @@
 import os
 import numpy as np
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, DataCollatorForLanguageModeling
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments
+from peft import LoraConfig, PeftTrainer, prepare_model_for_kbit_training
 from datasets import Dataset as HFDataset
 import csv
 import gc
@@ -21,7 +21,7 @@ model.config.pad_token_id = tokenizer.pad_token_id
 
 # Define prompt
 PROMPT = (
-        "You're a model to select correct answers from the given questions and answer choices. "
+    "You're a model to select correct answers from the given questions and answer choices. "
     "The answer choices might look similar to each other but it's your job to figure out the correct one given the training you got.\n\n"
     "Here are some examples:\n"
     "{'id': 'SP-0', 'question': 'Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible?', "
@@ -33,15 +33,6 @@ PROMPT = (
 # Load datasets
 train_data = np.load('../CombinedDatasets/All_train 1.npy', allow_pickle=True)
 dev_data = np.load('../CombinedDatasets/All_dev 1.npy', allow_pickle=True)
-
-# Custom callback to handle NaN/Inf values in loss
-class NaNHandlingCallback(TrainerCallback):
-    def on_step_end(self, args, state, control, logs=None, **kwargs):
-        if logs and "loss" in logs:
-            loss = logs["loss"]
-            if isinstance(loss, float) and (torch.isnan(torch.tensor(loss)) or torch.isinf(torch.tensor(loss))):
-                print("NaN or Inf detected in loss. Skipping step...")
-                control.should_skip = True
 
 # Function to preprocess and tokenize data
 def preprocess_and_tokenize(data):
@@ -65,9 +56,6 @@ def preprocess_and_tokenize(data):
 print("Processing and tokenizing datasets...")
 tokenized_train_dataset = preprocess_and_tokenize(train_data)
 tokenized_dev_dataset = preprocess_and_tokenize(dev_data)
-
-# Data collator for language modeling
-data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
 # Adjusted LoRA configuration
 lora_config = LoraConfig(
@@ -98,7 +86,7 @@ for lr in learning_rates:
         training_args = TrainingArguments(
             output_dir=output_dir,
             num_train_epochs=5,
-            per_device_train_batch_size=8,  # Reduce batch size for stability
+            per_device_train_batch_size=8,  # Batch size reduced for stability
             per_device_eval_batch_size=8,
             eval_strategy="steps",
             save_strategy="steps",
@@ -117,15 +105,13 @@ for lr in learning_rates:
             lr_scheduler_type="cosine"  # Cosine decay for learning rate
         )
 
-        # Define Trainer
-        trainer = Trainer(
+        # Define PeftTrainer
+        trainer = PeftTrainer(
             model=model,
             args=training_args,
             train_dataset=tokenized_train_dataset,
             eval_dataset=tokenized_dev_dataset,
-            data_collator=data_collator,
-            tokenizer=tokenizer,
-            callbacks=[NaNHandlingCallback()]  # Include the custom callback
+            tokenizer=tokenizer
         )
 
         # Train and save logs for each combination
