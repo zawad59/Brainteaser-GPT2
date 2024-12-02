@@ -84,7 +84,7 @@ model = prepare_model_for_kbit_training(model)
 model = get_peft_model(model, lora_config)
 
 # Fine-tuning configurations
-learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
+learning_rates = [0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 
 # Train the model with different hyperparameter combinations
