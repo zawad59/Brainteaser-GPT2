@@ -15,11 +15,13 @@ embedder = SentenceTransformer('all-MiniLM-L6-v2').to(device)
 # Load test dataset
 test_data = np.load("/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy", allow_pickle=True)
 
-
-
 # Define learning rates and weight decays
-learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
-weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
+# learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
+# weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
+
+learning_rates = [0.0001]
+weight_decays = [0.005]
+
 
 # Preprocess the test dataset
 def preprocess_data(data):
@@ -35,10 +37,11 @@ def preprocess_data(data):
         })
     return processed_data
 
+
 processed_test_data = preprocess_data(test_data)
 
 # Define the prompt
-PROMPT = (
+'''PROMPT = (
     "You're a model to select correct answers from the given questions and answer choices. "
     "The answer choices might look similar to each other but it's your job to figure out the correct one given the training you got.\n\n"
     "Here are some examples:\n"
@@ -56,20 +59,30 @@ PROMPT = (
     "'distractor(unsure)': 'None of above.', 'label': 1, 'choice_list': ['The walls of the saloon retract or collapse inwards, creating more space for the horse to reach the food.', "
     "\"The rope wasn't tied to anything so he could reach the food.\", 'The rope stretches proportionally, providing the extra length needed for the horse to reach the hay fifteen meters away.', 'None of above.'], "
     "'choice_order': [1, 0, 2, 3]}\n"
+)'''
+
+PROMPT = (
+    "Answer the following question by selecting the most appropriate choice:\n"
+    "Question: {question}\nChoices:\n"
+    + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
+    + "\nAnswer:"
 )
+
+
 
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
     prompt = (
-        PROMPT
-        + f"\n\nQuestion: {question}\nChoices:\n"
-        + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
-        + "\nAnswer:"
+            PROMPT
+            + f"\n\nQuestion: {question}\nChoices:\n"
+            + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
+            + "\nAnswer:"
     )
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(device)
     outputs = model.generate(inputs["input_ids"], attention_mask=inputs["attention_mask"], max_new_tokens=50)
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return generated_text.split("Answer:")[-1].strip()
+
 
 # Refine the generated answer using cosine similarity
 def refine_prediction_with_similarity(embedder, generated_answer, choices):
@@ -78,6 +91,7 @@ def refine_prediction_with_similarity(embedder, generated_answer, choices):
     cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
     best_index = torch.argmax(cosine_similarities).item()
     return choices[best_index]
+
 
 # Evaluate the model on the test data
 def evaluate_model(model, tokenizer, test_data):
@@ -92,8 +106,10 @@ def evaluate_model(model, tokenizer, test_data):
             correct_count += 1
     return correct_count / len(test_data)
 
+
 # Evaluate all combinations
-def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays, base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
+def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays,
+                              base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
     results = []
     for lr in learning_rates:
         for wd in weight_decays:
@@ -105,10 +121,10 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
                 tokenizer.pad_token = tokenizer.eos_token
                 tokenizer.pad_token_id = tokenizer.eos_token_id  # Avoid warning during generation
-                
+
                 # Evaluate the model
                 accuracy = evaluate_model(model, tokenizer, processed_test_data)
-                
+
                 # Log results
                 results.append({
                     "Model ID": model_id,
@@ -127,8 +143,9 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
                 })
     return results
 
+
 # Run evaluation and save results
 results = evaluate_all_combinations(processed_test_data, learning_rates, weight_decays)
 results_df = pd.DataFrame(results)
-results_df.to_csv("Llama_finetuning_results_with_prompt.csv", index=False)
+results_df.to_csv("Llama_finetuning_results_with_prompt_Test.csv", index=False)
 print("Results saved to Llama_finetuning_results_with_prompt.csv")
