@@ -6,6 +6,7 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from datasets import Dataset as HFDataset
 import csv
 import gc
+from transformers import TrainerCallback
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
