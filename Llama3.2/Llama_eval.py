@@ -19,7 +19,6 @@ test_data = np.load("/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.
 learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 
-
 # Preprocess the test dataset
 def preprocess_data(data):
     processed_data = []
@@ -34,22 +33,11 @@ def preprocess_data(data):
         })
     return processed_data
 
-
 processed_test_data = preprocess_data(test_data)
 
-# Define the prompt
-PROMPT = (
-    "Answer the following question by selecting the most appropriate choice:\n"
-    "Question: {question}\nChoices:\n"
-    + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
-    + "\nAnswer:"
-)
-
-
 # Generate answers using the model
-# Define the prompt dynamically within the function
 def generate_answer(model, tokenizer, question, choices):
-    # Construct the prompt dynamically
+    # Dynamically construct the prompt
     prompt = (
         "Answer the following question by selecting the most appropriate choice:\n"
         f"Question: {question}\nChoices:\n"
@@ -61,8 +49,6 @@ def generate_answer(model, tokenizer, question, choices):
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return generated_text.split("Answer:")[-1].strip()
 
-
-
 # Refine the generated answer using cosine similarity
 def refine_prediction_with_similarity(embedder, generated_answer, choices):
     choice_embeddings = embedder.encode(choices, convert_to_tensor=True)
@@ -70,7 +56,6 @@ def refine_prediction_with_similarity(embedder, generated_answer, choices):
     cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
     best_index = torch.argmax(cosine_similarities).item()
     return choices[best_index]
-
 
 # Evaluate the model on the test data
 def evaluate_model(model, tokenizer, test_data):
@@ -85,17 +70,14 @@ def evaluate_model(model, tokenizer, test_data):
             correct_count += 1
     return correct_count / len(test_data)
 
-
 # Evaluate all combinations
 def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays,
                               base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
+    results = []
     for lr in learning_rates:
         for wd in weight_decays:
             model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
             model_path = os.path.join(base_model_dir, model_id)
-            output_csv = f"Results/{model_id}_results.csv"
-            os.makedirs("Results", exist_ok=True)
-
             try:
                 # Load the fine-tuned model
                 model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
@@ -106,30 +88,32 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
                 # Evaluate the model
                 accuracy = evaluate_model(model, tokenizer, processed_test_data)
 
-                # Save results to a separate CSV
+                # Log results to individual CSV
                 result = {
                     "Model ID": model_id,
                     "Learning Rate": lr,
                     "Weight Decay": wd,
                     "Accuracy": accuracy
                 }
-                result_df = pd.DataFrame([result])
-                result_df.to_csv(output_csv, index=False)
+                print(f"Evaluated {model_id}: Accuracy = {accuracy:.4f}")
+                df = pd.DataFrame([result])
+                csv_path = f"Results/{model_id}_results.csv"
+                os.makedirs("Results", exist_ok=True)
+                df.to_csv(csv_path, index=False)
 
-                print(f"Evaluated {model_id}: Accuracy = {accuracy:.4f}. Results saved to {output_csv}")
+                results.append(result)
 
             except Exception as e:
                 print(f"Error evaluating {model_id}: {e}")
-                result = {
+                results.append({
                     "Model ID": model_id,
                     "Learning Rate": lr,
                     "Weight Decay": wd,
                     "Accuracy": None
-                }
-                result_df = pd.DataFrame([result])
-                result_df.to_csv(output_csv, index=False)
+                })
 
+    return results
 
 # Run evaluation
-evaluate_all_combinations(processed_test_data, learning_rates, weight_decays)
-print("Evaluation completed. Individual CSV files saved for each combination.")
+results = evaluate_all_combinations(processed_test_data, learning_rates, weight_decays)
+print("Evaluation completed. Individual results saved as CSV files.")
