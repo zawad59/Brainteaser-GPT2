@@ -17,8 +17,8 @@ embedder = SentenceTransformer('all-MiniLM-L6-v2').to(device)
 test_data = np.load("/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy", allow_pickle=True)
 
 # Define learning rates and weight decays
-learning_rates = [0.00001]
-weight_decays = [0.001]
+learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
+weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 
 # Preprocess the test dataset
 def preprocess_data(data):
