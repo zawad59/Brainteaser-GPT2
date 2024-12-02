@@ -111,7 +111,7 @@ for lr in learning_rates:
         )
 
         # Define PeftTrainer
-        trainer = PeftTrainer(
+        trainer = Trainer(
             model=model,
             args=training_args,
             train_dataset=tokenized_train_dataset,
