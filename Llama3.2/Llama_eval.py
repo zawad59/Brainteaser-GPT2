@@ -76,7 +76,7 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
     results = []
     for lr in learning_rates:
         for wd in weight_decays:
-            model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
+            model_id = f"llama_lora_Zero_Shotfinetuned_lr{lr}_wd{wd}"
             model_path = os.path.join(base_model_dir, model_id)
             try:
                 # Load the fine-tuned model
