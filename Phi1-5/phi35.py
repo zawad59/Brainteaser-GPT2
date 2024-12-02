@@ -12,14 +12,14 @@ from transformers import TrainerCallback
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# Initialize model and tokenizer
+# Initialize models
 model_name = "microsoft/Phi-3.5-mini-instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
 model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
 tokenizer.pad_token = tokenizer.eos_token
 model.config.pad_token_id = tokenizer.pad_token_id
 
-# Define the prompt
+# Define prompt
 PROMPT = (
         "You're a model to select correct answers from the given questions and answer choices. "
     "The answer choices might look similar to each other but it's your job to figure out the correct one given the training you got.\n\n"
@@ -34,7 +34,7 @@ PROMPT = (
 train_data = np.load('../CombinedDatasets/All_train 1.npy', allow_pickle=True)
 dev_data = np.load('../CombinedDatasets/All_dev 1.npy', allow_pickle=True)
 
-# Custom callback to handle NaN or Inf values in loss
+# Custom callback to handle NaN/Inf values in loss
 class NaNHandlingCallback(TrainerCallback):
     def on_step_end(self, args, state, control, logs=None, **kwargs):
         if logs and "loss" in logs:
@@ -78,13 +78,12 @@ lora_config = LoraConfig(
     task_type="CAUSAL_LM"  # Task type for causal language modeling
 )
 
-
 # Prepare model for LoRA fine-tuning
 model = prepare_model_for_kbit_training(model)
 model = get_peft_model(model, lora_config)
 
 # Fine-tuning configurations
-learning_rates = [0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
+learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
 
 # Train the model with different hyperparameter combinations
@@ -113,10 +112,12 @@ for lr in learning_rates:
             fp16=True,  # Mixed-precision training
             save_total_limit=1,
             load_best_model_at_end=True,
-            report_to="none"
+            report_to="none",
+            warmup_steps=500,  # Gradual warmup
+            lr_scheduler_type="cosine"  # Cosine decay for learning rate
         )
 
-        # Define PeftTrainer
+        # Define Trainer
         trainer = Trainer(
             model=model,
             args=training_args,
