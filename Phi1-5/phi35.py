@@ -2,7 +2,6 @@ import os
 import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, DataCollatorForLanguageModeling, TrainingArguments
-from peft import LoraConfig, PeftTrainer, prepare_model_for_kbit_training
 from datasets import Dataset as HFDataset
 import csv
 import gc
