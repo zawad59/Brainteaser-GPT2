@@ -1,4 +1,4 @@
-import os
+rimport os
 import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -119,7 +119,7 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
         for wd in weight_decays:
             model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
             model_path = os.path.join(base_model_dir, model_id)
-            output_file = f"Results/{model_id}_results.csv"
+            output_file = f"ResultsZero/{model_id}_results.csv"
             os.makedirs("Results", exist_ok=True)
             try:
                 # Debug: Print model path
