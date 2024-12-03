@@ -1,0 +1,2 @@
+Model ID,Learning Rate,Weight Decay,Accuracy
+llama_lora_finetuned_lr0.0001_wd1e-05,0.0001,1e-05,0.23958333333333334
