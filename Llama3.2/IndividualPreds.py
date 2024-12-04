@@ -34,29 +34,24 @@ processed_test_data = preprocess_data(test_data)
 
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
-    prompt = (
-        "Answer the following questions by choosing the correct option (e.g., 1, 2, 3):\n\n"
+   prompt = (
+        "Using the fine-tuned training models, learn to generate responses that are accurate and aligned with the examples provided. "
+        "Based on the given examples, generate responses to the following question without producing gibberish:\n\n"
         "Example 1:\n"
-        "Question: What is a gardener's favorite type of music?\n"
-        "Choices:\n"
-        "1. Rock.\n"
-        "2. Blue.\n"
-        "3. Jazz.\n"
-        "4. None of above.\n"
-        "Answer (choose the number only): 1\n\n"
+        "{'id': 'WP-131_CR', 'question': \"What is a gardener's favorite type of music?\", 'answer': 'Rock.', "
+        "'distractor1': 'Jazz.', 'distractor2': 'Blue.', 'distractor(unsure)': 'None of above.', "
+        "'label': 0, 'choice_list': ['Rock.', 'Blue.', 'Jazz.', 'None of above.'], 'choice_order': [0, 2, 1, 3]}\n\n"
         "Example 2:\n"
-        "Question: What question can someone ask all day long, always get completely different answers, "
-        "and yet all the answers could be correct?\n"
-        "Choices:\n"
-        "1. What time is it?\n"
-        "2. What's the square root of 16?\n"
-        "3. What is the result of 5317 by 9321.\n"
-        "4. None of above.\n"
-        "Answer (choose the number only): 1\n\n"
+        "{'id': 'SP-149_SR', 'question': 'What question can someone ask all day and receive radically different responses, "
+        "yet all of them might be correct?', 'answer': 'What time is it?', 'distractor1': \"What's the square root of 16?\", "
+        "'distractor2': 'What is the result of 5317 by 9321.', 'distractor(unsure)': 'None of above.', "
+        "'label': 1, 'choice_list': [\"What's the square root of 16?\", 'What time is it?', 'What is the result of 5317 by 9321.', "
+        "'None of above.'], 'choice_order': [1, 0, 2, 3]}\n\n"
         f"Now answer this question:\n"
-        f"Question: {question}\nChoices:\n" +
+        f"Question: {question}\n"
+        "Choices:\n" +
         "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)]) +
-        "\nAnswer (choose the number only):"
+        "
     )
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding=True, max_length=512).to(device)
     outputs = model.generate(
