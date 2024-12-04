@@ -43,20 +43,37 @@ processed_test_data = preprocess_data(test_data)
 def generate_answer(model, tokenizer, question, choices):
     # Define the prompt dynamically based on the question and choices
     prompt = (
-            "Answer the following question by selecting the most appropriate choice:\n"
-            f"Question: {question}\nChoices:\n"
-            + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
-            + "\nAnswer:"
+        "Answer the following question by selecting the most appropriate choice:\n"
+        f"Question: {question}\nChoices:\n"
+        + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)]) +
+        "\nAnswer with the choice number (e.g., 1, 2, 3):"
     )
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(device)
-    outputs = model.generate(inputs["input_ids"], attention_mask=inputs["attention_mask"], max_new_tokens=100)
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding=True, max_length=512).to(device)
+    outputs = model.generate(
+        inputs["input_ids"],
+        attention_mask=inputs["attention_mask"],
+        max_new_tokens=10,  # Limit to ensure focused responses
+        pad_token_id=tokenizer.eos_token_id,
+    )
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    explanation = "Based on context and semantic similarity, the chosen answer matches the question."
-    return generated_text.split("Answer:")[-1].strip(), explanation
+    # Extract the answer (expecting a single number corresponding to the choice)
+    answer_part = generated_text.split("Answer with the choice number:")[-1].strip()
+    generated_answer = answer_part.split("\n")[0].strip()
+    explanation = "The model's answer is based on its understanding of the question and choices."
+    return generated_answer, explanation
 
 
 # Refine the generated answer using cosine similarity
 def refine_prediction_with_similarity(generated_answer, choices):
+    # Convert generated answer to choice index (if valid)
+    try:
+        answer_index = int(generated_answer) - 1  # Adjust to 0-based index
+        if 0 <= answer_index < len(choices):
+            return choices[answer_index]  # If valid, return choice directly
+    except ValueError:
+        pass  # Continue to semantic similarity if parsing fails
+
+    # Fallback to semantic similarity if direct parsing fails
     choice_embeddings = embedder.encode(choices, convert_to_tensor=True)
     generated_embedding = embedder.encode(generated_answer, convert_to_tensor=True)
     cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
@@ -112,31 +129,9 @@ def save_predictions_to_csv(predictions, filename):
     print(f"Predictions saved to {filename}")
 
 
-# Evaluate all combinations
-def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays,
-                              base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
-    for lr in learning_rates:
-        for wd in weight_decays:
-            model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
-            model_path = os.path.join(base_model_dir, model_id)
-            output_file = f"ResultsZero/{model_id}_results.csv"
-            os.makedirs("ResultsZero", exist_ok=True)
-            try:
-                # Debug: Print model path
-                print(f"Loading model from {model_path}")
+# Debugging modifications
+print("Refactored code for better question-answer generation.")
 
-                # Load the fine-tuned model
-                model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
-                tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
-                tokenizer.pad_token = tokenizer.eos_token
-                tokenizer.pad_token_id = tokenizer.eos_token_id  # Avoid warning during generation
-
-                # Evaluate the model
-                accuracy = evaluate_model(model, tokenizer, processed_test_data, output_file)
-                print(f"Model {model_id} Accuracy: {accuracy:.4f}")
-            except Exception as e:
-                print(f"Error evaluating {model_id}: {e}")
-
-
-# Run evaluation
+# Proceed to evaluate as before
 evaluate_all_combinations(processed_test_data, learning_rates, weight_decays)
+
