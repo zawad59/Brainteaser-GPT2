@@ -4,7 +4,6 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from sentence_transformers import SentenceTransformer, util
 import csv
-import pandas as pd
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -16,10 +15,6 @@ embedder = SentenceTransformer('all-MiniLM-L6-v2').to(device)
 # Load test dataset
 test_data = np.load("/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy", allow_pickle=True)
 
-# Define learning rates and weight decays
-learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
-weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
-
 # Preprocess the test dataset
 def preprocess_data(data):
     processed_data = []
@@ -28,7 +23,7 @@ def preprocess_data(data):
         choices = item['choice_list']
         label = item['label']
         processed_data.append({
-            'id': item['id'],  # Use actual ID from the dataset (e.g., 'SP-180')
+            'id': item['id'],
             'text': question,
             'choices': choices,
             'correct_answer': choices[label]
@@ -39,45 +34,41 @@ processed_test_data = preprocess_data(test_data)
 
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
-    # Define the prompt dynamically based on the question and choices
     prompt = (
-        "Answer the following question by selecting the most appropriate choice:\n"
-        f"Question: {question}\nChoices:\n"
-        + "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)]) +
-        "\nAnswer with the choice number (e.g., 1, 2, 3):"
+        "Answer the question by choosing the correct option (e.g., 1, 2, 3):\n"
+        f"Question: {question}\nChoices:\n" +
+        "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)]) +
+        "\nAnswer (choose the number only):"
     )
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding=True, max_length=512).to(device)
     outputs = model.generate(
         inputs["input_ids"],
         attention_mask=inputs["attention_mask"],
-        max_new_tokens=10,  # Limit to ensure focused responses
+        max_new_tokens=10,
         pad_token_id=tokenizer.eos_token_id,
     )
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    # Extract the answer (expecting a single number corresponding to the choice)
-    answer_part = generated_text.split("Answer with the choice number:")[-1].strip()
-    generated_answer = answer_part.split("\n")[0].strip()
-    explanation = "The model's answer is based on its understanding of the question and choices."
-    return generated_answer, explanation
+    answer_part = generated_text.split("Answer (choose the number only):")[-1].strip()
+    return answer_part.split("\n")[0].strip()  # Return the raw choice number
 
-# Refine the generated answer using cosine similarity
+# Refine prediction using cosine similarity
 def refine_prediction_with_similarity(generated_answer, choices):
-    # Convert generated answer to choice index (if valid)
     try:
-        answer_index = int(generated_answer) - 1  # Adjust to 0-based index
+        # Check if generated answer is a valid choice number
+        answer_index = int(generated_answer) - 1
         if 0 <= answer_index < len(choices):
-            return choices[answer_index]  # If valid, return choice directly
+            return choices[answer_index]
     except ValueError:
-        pass  # Continue to semantic similarity if parsing fails
+        pass  # Continue to similarity matching if not valid
 
-    # Fallback to semantic similarity if direct parsing fails
+    # Fall back to semantic similarity
     choice_embeddings = embedder.encode(choices, convert_to_tensor=True)
     generated_embedding = embedder.encode(generated_answer, convert_to_tensor=True)
     cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
     best_index = torch.argmax(cosine_similarities).item()
     return choices[best_index]
 
-# Evaluate the model on the test data
+# Evaluate the model
 def evaluate_model(model, tokenizer, test_data, output_file):
     predictions = []
     correct_predictions = 0
@@ -87,12 +78,10 @@ def evaluate_model(model, tokenizer, test_data, output_file):
         choices = item['choices']
         correct_answer = item['correct_answer']
 
-        # Generate and refine answer
-        generated_answer, explanation = generate_answer(model, tokenizer, question, choices)
+        generated_answer = generate_answer(model, tokenizer, question, choices)
         refined_answer = refine_prediction_with_similarity(generated_answer, choices)
 
-        # Debug information
-        is_correct = "yes" if refined_answer == correct_answer else "no"
+        is_correct = refined_answer == correct_answer
         predictions.append({
             "Question_ID": question_id,
             "Question_Text": question,
@@ -100,16 +89,13 @@ def evaluate_model(model, tokenizer, test_data, output_file):
             "Generated Answer": generated_answer,
             "Refined Answer": refined_answer,
             "Correct Answer": correct_answer,
-            "Predicted == Correct": is_correct,
-            "Explanation": explanation
+            "Predicted == Correct": "yes" if is_correct else "no"
         })
-        if is_correct == "yes":
+        if is_correct:
             correct_predictions += 1
 
     accuracy = correct_predictions / len(test_data)
     print(f"Test Accuracy: {accuracy:.4f}")
-
-    # Save predictions to a CSV
     save_predictions_to_csv(predictions, output_file)
     return accuracy
 
@@ -118,7 +104,7 @@ def save_predictions_to_csv(predictions, filename):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=["Question_ID", "Question_Text", "Choices",
                                                   "Generated Answer", "Refined Answer",
-                                                  "Correct Answer", "Predicted == Correct", "Explanation"])
+                                                  "Correct Answer", "Predicted == Correct"])
         writer.writeheader()
         writer.writerows(predictions)
     print(f"Predictions saved to {filename}")
@@ -133,16 +119,12 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
             output_file = f"ResultsZero/{model_id}_results.csv"
             os.makedirs("ResultsZero", exist_ok=True)
             try:
-                # Debug: Print model path
                 print(f"Loading model from {model_path}")
-
-                # Load the fine-tuned model
                 model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
                 tokenizer.pad_token = tokenizer.eos_token
-                tokenizer.pad_token_id = tokenizer.eos_token_id  # Avoid warning during generation
+                tokenizer.pad_token_id = tokenizer.eos_token_id
 
-                # Evaluate the model
                 accuracy = evaluate_model(model, tokenizer, processed_test_data, output_file)
                 print(f"Model {model_id} Accuracy: {accuracy:.4f}")
             except Exception as e:
