@@ -17,7 +17,7 @@ WEIGHT_DECAYS = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 # Load tokenizer
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-3b-chat-hf")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
 tokenizer.pad_token = tokenizer.eos_token
 
 
