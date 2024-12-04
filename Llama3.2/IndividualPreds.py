@@ -34,8 +34,6 @@ processed_test_data = preprocess_data(test_data)
 
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
-  # Generate answers using the model
-def generate_answer(model, tokenizer, question, choices):
     prompt = (
         "Using the fine-tuned training models, learn to generate responses that are accurate and aligned with the examples provided. "
         "Based on the given examples, generate responses to the following question without producing gibberish:\n\n"
