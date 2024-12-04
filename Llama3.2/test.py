@@ -9,7 +9,7 @@ from peft import prepare_model_for_kbit_training
 CUTOFF_LEN = 256
 MAX_NEW_TOKENS = 50
 RESULTS_DIR = "llama-brainteasers-results"
-CHECKPOINTS_DIR = "llama-brainteasers-tuning"
+CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/"
 LEARNING_RATES = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 WEIGHT_DECAYS = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 
@@ -19,6 +19,7 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 # Load tokenizer
 tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-3b-chat-hf")
 tokenizer.pad_token = tokenizer.eos_token
+
 
 # Function to generate zero-shot and few-shot prompts
 def generate_prompt(item, few_shot=False):
@@ -57,13 +58,14 @@ def generate_prompt(item, few_shot=False):
 
                     '''
         return (
-            f"<s> [INST]{sys_msg}\n{examples}{question}\nChoose one of the following answers from the following choices:\n"
-            + "\n".join(ordered_choices) + "[/INST]</s>"
+                f"<s> [INST]{sys_msg}\n{examples}{question}\nChoose one of the following answers from the following choices:\n"
+                + "\n".join(ordered_choices) + "[/INST]</s>"
         )
     return (
-        f"<s> [INST]{sys_msg}\n{question}\nChoose one of the following answers from the following choices:\n"
-        + "\n".join(ordered_choices) + "[/INST]</s>"
+            f"<s> [INST]{sys_msg}\n{question}\nChoose one of the following answers from the following choices:\n"
+            + "\n".join(ordered_choices) + "[/INST]</s>"
     )
+
 
 # Function to tokenize prompt
 def tokenize(prompt):
@@ -75,20 +77,17 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
+
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
+
 
 # Main function to run predictions for all models
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
-            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"lr({lr})-wd({wd})", "checkpoint-225")
+            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"lr({lr})_wd({wd})")
             csv_file = os.path.join(RESULTS_DIR, f"results_lr({lr})_wd({wd}).csv")
-
-            # Skip if results already exist
-            if os.path.exists(csv_file):
-                print(f"Results for lr={lr}, wd={wd} already exist. Skipping.")
-                continue
 
             # Load model
             print(f"Loading model for lr={lr}, wd={wd}...")
@@ -136,7 +135,7 @@ def run_predictions():
 
                     # Write results
                     writer.writerow([question_id, question, answer, zero_shot_answer, few_shot_answer])
-                    
+
                     # Accuracy calculations
                     total += 1
                     if zero_shot_answer == answer:
@@ -166,6 +165,7 @@ def run_predictions():
             print(f"Results saved to {csv_file}")
             del model
             torch.cuda.empty_cache()
+
 
 # Execute
 if __name__ == "__main__":
