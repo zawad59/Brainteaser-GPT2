@@ -1,108 +1,172 @@
+import os
 import torch
-import transformers
-from datasets import Dataset
-from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments
-from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
 import numpy as np
+import csv
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from peft import prepare_model_for_kbit_training
 
-# Load the tokenizer and model for LLaMA 3.2B
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-3.2b-chat-hf")
-model = AutoModelForCausalLM.from_pretrained(
-    "meta-llama/Llama-2-3.2b-chat-hf",
-    load_in_4bit=True,
-    torch_dtype=torch.float16,
-    device_map="auto"
-)
-model = prepare_model_for_kbit_training(model)
+# Constants
+CUTOFF_LEN = 256
+MAX_NEW_TOKENS = 50
+RESULTS_DIR = "llama-brainteasers-results"
+CHECKPOINTS_DIR = "llama-brainteasers-tuning"
+LEARNING_RATES = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
+WEIGHT_DECAYS = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 
-# Set the padding token
+# Ensure results directory exists
+os.makedirs(RESULTS_DIR, exist_ok=True)
+
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-3b-chat-hf")
 tokenizer.pad_token = tokenizer.eos_token
 
-# Hyperparameters for LoRA
-CUTOFF_LEN = 256  # Context length
-LORA_R = 4
-LORA_ALPHA = 2 * LORA_R
-LORA_DROPOUT = 0.2
+# Function to generate zero-shot and few-shot prompts
+def generate_prompt(item, few_shot=False):
+    question = item['question']
+    answer = item['answer']
 
-config = LoraConfig(
-    r=LORA_R,
-    lora_alpha=LORA_ALPHA,
-    target_modules=["q_proj", "v_proj"],  # LLaMA modules to target for LoRA
-    lora_dropout=LORA_DROPOUT,
-    bias="none",
-    task_type="CAUSAL_LM"
-)
+    if 'choice_list' in item:
+        ordered_choices = item['choice_list']  # use for preordered test dataset
+    else:
+        distractor1 = str(item['distractor1'])  # order the eval dataset
+        distractor2 = str(item['distractor2'])
+        distractor_unsure = str(item['distractor(unsure)'])
+        # Create choice_list and reorder based on choice_order
+        choice_list = [answer, distractor1, distractor2, distractor_unsure]
+        choice_order = item['choice_order']
+        ordered_choices = [choice_list[i] for i in choice_order]
 
-model = get_peft_model(model, config)
+    sys_msg = "You are an assistant answering riddle questions for a test. For each question you must choose an answer from the choice list. Output the chosen answer and nothing else."
+    if few_shot:
+        examples = '''
+                    Here are some examples of questions and their answers
+                    SP-0 
+                    Question:        Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible? 
+                    Choices:         ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'] 
+                    Answer:  Each daughter shares the same brother. 
 
-# Load the training and dev datasets
-dataWP = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/WP_train 1.npy', allow_pickle=True).tolist()
-dataSP = np.load('TestAutri/datasets-brainteasers/SP_train 1.npy', allow_pickle=True).tolist()
-data = dataWP + dataSP  # Combine datasets
+                    SP-0_SR 
+                    Question:        The six daughters of Mr. and Mrs. Mustard each have one brother. However, the family only consists of nine people; how is that possible? 
+                    Choices:         ['Some brothers were not loved by family and moved away.', 'Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'None of above.'] 
+                    Answer:  Each daughter shares the same brother. 
 
-devWP = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/WP_dev 1.npy', allow_pickle=True).tolist()
-devSP = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/SP_dev 1.npy', allow_pickle=True).tolist()
-dev_data = devWP + devSP  # Combine dev datasets
+                    SP-0_CR 
+                    Question:        A chess team has five players, and each player has one coach. But there are only six participants in the team. How is that possible? 
+                    Choices:         ['Each player shares the same coach.', 'Some players are backups and not allowed to play.', 'Some coaches get a raise.', 'None of above.'] 
+                    Answer:  Each player shares the same coach. 
 
-# Prepare inputs
-def ParseQuestion(question):
-    parsed_question = question['question'] + "\nChoose one of the following answers and give an explanation below the answer:\n"
-    for i in question['choice_order']:
-        parsed_question += question['choice_list'][i] + "\n"
-    parsed_question += "The correct answer is {}\n".format(question['answer'])
-    return parsed_question
+                    '''
+        return (
+            f"<s> [INST]{sys_msg}\n{examples}{question}\nChoose one of the following answers from the following choices:\n"
+            + "\n".join(ordered_choices) + "[/INST]</s>"
+        )
+    return (
+        f"<s> [INST]{sys_msg}\n{question}\nChoose one of the following answers from the following choices:\n"
+        + "\n".join(ordered_choices) + "[/INST]</s>"
+    )
 
+# Function to tokenize prompt
 def tokenize(prompt):
     return tokenizer(
         prompt + tokenizer.eos_token,
         truncation=True,
         max_length=CUTOFF_LEN,
-        padding="max_length"
+        padding="max_length",
+        return_tensors="pt"
     )
 
-# Prepare the training dataset
-prompts = [ParseQuestion(item) for item in data]
-tokenized_data = [tokenize(prompt) for prompt in prompts]
-input_ids = [td['input_ids'] for td in tokenized_data]
+# Load test data
+test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
 
-dataset = Dataset.from_dict({'input_ids': input_ids})
+# Main function to run predictions for all models
+def run_predictions():
+    for lr in LEARNING_RATES:
+        for wd in WEIGHT_DECAYS:
+            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"lr({lr})-wd({wd})", "checkpoint-225")
+            csv_file = os.path.join(RESULTS_DIR, f"results_lr({lr})_wd({wd}).csv")
 
-# Prepare the dev dataset
-dev_prompts = [ParseQuestion(item) for item in dev_data]
-tokenized_dev_data = [tokenize(prompt) for prompt in dev_prompts]
-dev_input_ids = [td['input_ids'] for td in tokenized_dev_data]
+            # Skip if results already exist
+            if os.path.exists(csv_file):
+                print(f"Results for lr={lr}, wd={wd} already exist. Skipping.")
+                continue
 
-dev_dataset = Dataset.from_dict({'input_ids': dev_input_ids})
+            # Load model
+            print(f"Loading model for lr={lr}, wd={wd}...")
+            model = AutoModelForCausalLM.from_pretrained(
+                checkpoint_path,
+                load_in_4bit=True,
+                torch_dtype=torch.float16,
+                device_map="auto"
+            )
+            model = prepare_model_for_kbit_training(model)
 
-# Training arguments
-training_args = TrainingArguments(
-    per_device_train_batch_size=2,
-    gradient_accumulation_steps=4,
-    num_train_epochs=3,
-    learning_rate=1e-4,
-    weight_decay=0.1,
-    max_grad_norm=0.3,
-    logging_steps=50,
-    evaluation_strategy="steps",
-    eval_steps=100,
-    save_strategy="epoch",
-    optim="adamw_torch",
-    output_dir="llama-3.2b-lora-brainteasers",
-    save_total_limit=2,
-    report_to="none"  # Disable reporting to third-party services
-)
+            # Prepare CSV file
+            total, correct = 0, 0
+            wp_total, wp_correct = 0, 0
+            sp_total, sp_correct = 0, 0
 
-# Initialize the Trainer
-trainer = Trainer(
-    model=model,
-    train_dataset=dataset,
-    eval_dataset=dev_dataset,
-    args=training_args,
-    data_collator=transformers.DataCollatorForLanguageModeling(tokenizer, mlm=False)
-)
-model.config.use_cache = False
+            with open(csv_file, mode="w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(["Question ID", "Question", "Answer", "Zero-Shot Prediction", "Few-Shot Prediction"])
 
-# Train the model
-trainer.train()
+                # Predict for each test example
+                for item in test_data:
+                    question_id = item.get('id', 'N/A')  # Assuming each test item has a unique ID
+                    question = item['question']
+                    answer = item['answer']
 
-print("Model fine-tuned and checkpoints saved to ./llama-3.2b-lora-brainteasers")
+                    # Zero-shot prediction
+                    zero_shot_prompt = generate_prompt(item, few_shot=False)
+                    zero_shot_inputs = tokenize(zero_shot_prompt)
+                    zero_shot_inputs = {key: val.to(model.device) for key, val in zero_shot_inputs.items()}
+                    model.eval()
+                    with torch.no_grad():
+                        zero_shot_outputs = model.generate(**zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS)
+                        zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
+                    zero_shot_answer = zero_shot_prediction.split("[/INST]")[-1].strip()
+
+                    # Few-shot prediction
+                    few_shot_prompt = generate_prompt(item, few_shot=True)
+                    few_shot_inputs = tokenize(few_shot_prompt)
+                    few_shot_inputs = {key: val.to(model.device) for key, val in few_shot_inputs.items()}
+                    with torch.no_grad():
+                        few_shot_outputs = model.generate(**few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS)
+                        few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
+                    few_shot_answer = few_shot_prediction.split("[/INST]")[-1].strip()
+
+                    # Write results
+                    writer.writerow([question_id, question, answer, zero_shot_answer, few_shot_answer])
+                    
+                    # Accuracy calculations
+                    total += 1
+                    if zero_shot_answer == answer:
+                        correct += 1
+                        if question_id.startswith("WP"):
+                            wp_total += 1
+                            wp_correct += 1
+                        elif question_id.startswith("SP"):
+                            sp_total += 1
+                            sp_correct += 1
+                    elif question_id.startswith("WP"):
+                        wp_total += 1
+                    elif question_id.startswith("SP"):
+                        sp_total += 1
+
+            # Calculate accuracies
+            overall_accuracy = (correct / total) * 100 if total > 0 else 0
+            wp_accuracy = (wp_correct / wp_total) * 100 if wp_total > 0 else 0
+            sp_accuracy = (sp_correct / sp_total) * 100 if sp_total > 0 else 0
+
+            # Print accuracies
+            print(f"Results for lr={lr}, wd={wd}:")
+            print(f"  Overall Accuracy: {overall_accuracy:.2f}%")
+            print(f"  WP Accuracy: {wp_accuracy:.2f}%")
+            print(f"  SP Accuracy: {sp_accuracy:.2f}%")
+
+            print(f"Results saved to {csv_file}")
+            del model
+            torch.cuda.empty_cache()
+
+# Execute
+if __name__ == "__main__":
+    run_predictions()
