@@ -34,7 +34,9 @@ processed_test_data = preprocess_data(test_data)
 
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
-   prompt = (
+  # Generate answers using the model
+def generate_answer(model, tokenizer, question, choices):
+    prompt = (
         "Using the fine-tuned training models, learn to generate responses that are accurate and aligned with the examples provided. "
         "Based on the given examples, generate responses to the following question without producing gibberish:\n\n"
         "Example 1:\n"
@@ -62,6 +64,7 @@ def generate_answer(model, tokenizer, question, choices):
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     answer_part = generated_text.split("Answer (choose the number only):")[-1].strip()
     return answer_part.split("\n")[0].strip()  # Return the raw choice number
+
 
 # Refine prediction using cosine similarity
 def refine_prediction_with_similarity(generated_answer, choices):
