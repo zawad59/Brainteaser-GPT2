@@ -138,8 +138,8 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
         for wd in weight_decays:
             model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
             model_path = os.path.join(base_model_dir, model_id)
-            output_file = f"ResultsZero/{model_id}_results.csv"
-            os.makedirs("ResultsZero", exist_ok=True)
+            output_file = f"ResultsFewShot/{model_id}_results.csv"
+            os.makedirs("ResultsFewShot", exist_ok=True)
             try:
                 print(f"Loading model from {model_path}")
                 model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
