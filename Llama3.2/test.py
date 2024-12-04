@@ -17,7 +17,7 @@ WEIGHT_DECAYS = [0.005]
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 # Load tokenizer
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-3b-chat-hf")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
 tokenizer.pad_token = tokenizer.eos_token
 
 # Function to generate zero-shot and few-shot prompts
