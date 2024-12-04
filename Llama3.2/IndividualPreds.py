@@ -35,30 +35,7 @@ processed_test_data = preprocess_data(test_data)
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
     prompt = (
-        "Below are examples of questions with their answers. Use these examples to guide your response. "
-        "Choose the correct option from the provided choices based on the question:\n\n"
-        "Example 1:\n"
-        "Question: What is a gardener's favorite type of music?\n"
-        "Choices:\n"
-        "1. Rock.\n"
-        "2. Blue.\n"
-        "3. Jazz.\n"
-        "4. None of the above.\n"
-        "Answer: 1\n\n"
-        "Example 2:\n"
-        "Question: What question can someone ask all day and receive radically different responses, "
-        "yet all of them might be correct?\n"
-        "Choices:\n"
-        "1. What time is it?\n"
-        "2. What's the square root of 16?\n"
-        "3. What is the result of 5317 by 9321?\n"
-        "4. None of the above.\n"
-        "Answer: 1\n\n"
-        f"Now answer this question:\n"
-        f"Question: {question}\n"
-        "Choices:\n" +
-        "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)]) +
-        "\nAnswer:"
+        "\nChoose one of the following answers and give an explanation below the answer.\n"
     )
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding=True, max_length=1024).to(device)
     outputs = model.generate(
