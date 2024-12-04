@@ -34,7 +34,7 @@ processed_test_data = preprocess_data(test_data)
 
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
-   prompt = (
+    prompt = (
         "Answer the following questions by choosing the correct option (e.g., 1, 2, 3):\n\n"
         "Example 1:\n"
         "Question: What is a gardener's favorite type of music?\n"
