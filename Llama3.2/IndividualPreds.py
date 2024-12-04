@@ -35,9 +35,7 @@ def preprocess_data(data):
         })
     return processed_data
 
-
 processed_test_data = preprocess_data(test_data)
-
 
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
@@ -62,7 +60,6 @@ def generate_answer(model, tokenizer, question, choices):
     explanation = "The model's answer is based on its understanding of the question and choices."
     return generated_answer, explanation
 
-
 # Refine the generated answer using cosine similarity
 def refine_prediction_with_similarity(generated_answer, choices):
     # Convert generated answer to choice index (if valid)
@@ -79,7 +76,6 @@ def refine_prediction_with_similarity(generated_answer, choices):
     cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
     best_index = torch.argmax(cosine_similarities).item()
     return choices[best_index]
-
 
 # Evaluate the model on the test data
 def evaluate_model(model, tokenizer, test_data, output_file):
@@ -117,7 +113,6 @@ def evaluate_model(model, tokenizer, test_data, output_file):
     save_predictions_to_csv(predictions, output_file)
     return accuracy
 
-
 # Save predictions to CSV
 def save_predictions_to_csv(predictions, filename):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
@@ -128,10 +123,30 @@ def save_predictions_to_csv(predictions, filename):
         writer.writerows(predictions)
     print(f"Predictions saved to {filename}")
 
+# Evaluate all combinations
+def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays,
+                              base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
+    for lr in learning_rates:
+        for wd in weight_decays:
+            model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
+            model_path = os.path.join(base_model_dir, model_id)
+            output_file = f"ResultsZero/{model_id}_results.csv"
+            os.makedirs("ResultsZero", exist_ok=True)
+            try:
+                # Debug: Print model path
+                print(f"Loading model from {model_path}")
 
-# Debugging modifications
-print("Refactored code for better question-answer generation.")
+                # Load the fine-tuned model
+                model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
+                tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
+                tokenizer.pad_token = tokenizer.eos_token
+                tokenizer.pad_token_id = tokenizer.eos_token_id  # Avoid warning during generation
 
-# Proceed to evaluate as before
+                # Evaluate the model
+                accuracy = evaluate_model(model, tokenizer, processed_test_data, output_file)
+                print(f"Model {model_id} Accuracy: {accuracy:.4f}")
+            except Exception as e:
+                print(f"Error evaluating {model_id}: {e}")
+
+# Run evaluation
 evaluate_all_combinations(processed_test_data, learning_rates, weight_decays)
-
