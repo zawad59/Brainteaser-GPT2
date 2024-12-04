@@ -36,12 +36,12 @@ config = LoraConfig(
 model = get_peft_model(model, config)
 
 # Load the training and dev datasets
-dataWP = np.load('TestAutri/datasets-brainteasers/WP_train 1.npy', allow_pickle=True).tolist()
+dataWP = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/WP_train 1.npy', allow_pickle=True).tolist()
 dataSP = np.load('TestAutri/datasets-brainteasers/SP_train 1.npy', allow_pickle=True).tolist()
 data = dataWP + dataSP  # Combine datasets
 
-devWP = np.load('TestAutri/datasets-brainteasers/WP_dev 1.npy', allow_pickle=True).tolist()
-devSP = np.load('TestAutri/datasets-brainteasers/SP_dev 1.npy', allow_pickle=True).tolist()
+devWP = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/WP_dev 1.npy', allow_pickle=True).tolist()
+devSP = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/SP_dev 1.npy', allow_pickle=True).tolist()
 dev_data = devWP + devSP  # Combine dev datasets
 
 # Prepare inputs
