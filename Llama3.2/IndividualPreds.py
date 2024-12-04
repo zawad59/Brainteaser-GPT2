@@ -50,8 +50,7 @@ def generate_answer(model, tokenizer, question, choices):
         f"Now answer this question:\n"
         f"Question: {question}\n"
         "Choices:\n" +
-        "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)]) +
-        "
+        "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)])
     )
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding=True, max_length=512).to(device)
     outputs = model.generate(
