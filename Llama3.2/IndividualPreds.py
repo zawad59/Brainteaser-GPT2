@@ -113,8 +113,8 @@ def evaluate_model(model, tokenizer, test_data, output_file):
     return accuracy
 
 # Define learning rates and weight decays
-learning_rates = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
-weight_decays = [0.00001, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]
+learning_rates = [0.1]
+weight_decays = [0.05]
 
 # Save predictions to CSV
 def save_predictions_to_csv(predictions, filename):
