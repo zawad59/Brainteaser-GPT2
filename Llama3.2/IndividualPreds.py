@@ -35,38 +35,45 @@ processed_test_data = preprocess_data(test_data)
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
     prompt = (
-    "Below are examples of questions and correct answers based on fine-tuned training models.\n"
-    "Analyze the examples and generate the correct response for the given question.\n\n"
-    "Example 1:\n"
-    "{'id': 'WP-131_CR', 'question': \"What is a gardener's favorite type of music?\", 'answer': 'Rock.', "
-    "'distractor1': 'Jazz.', 'distractor2': 'Blue.', 'distractor(unsure)': 'None of above.', "
-    "'label': 0, 'choice_list': ['Rock.', 'Blue.', 'Jazz.', 'None of above.'], 'choice_order': [0, 2, 1, 3]}\n\n"
-    "Example 2:\n"
-    "{'id': 'SP-149_SR', 'question': 'What question can someone ask all day and receive radically different responses, "
-    "yet all of them might be correct?', 'answer': 'What time is it?', 'distractor1': \"What's the square root of 16?\", "
-    "'distractor2': 'What is the result of 5317 by 9321.', 'distractor(unsure)': 'None of above.', "
-    "'label': 1, 'choice_list': [\"What's the square root of 16?\", 'What time is it?', 'What is the result of 5317 by 9321.', "
-    "'None of above.'], 'choice_order': [1, 0, 2, 3]}\n\n"
-    f"Now answer this question:\n"
-    f"Question: {question}\n"
-    "Choices:\n" +
-    "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)]) +
-    "\nAnswer (choose the number corresponding to the correct choice):"
-)
+        "Below are examples of questions with their answers. Use these examples to guide your response. "
+        "Choose the correct option from the provided choices based on the question:\n\n"
+        "Example 1:\n"
+        "Question: What is a gardener's favorite type of music?\n"
+        "Choices:\n"
+        "1. Rock.\n"
+        "2. Blue.\n"
+        "3. Jazz.\n"
+        "4. None of the above.\n"
+        "Answer: 1\n\n"
+        "Example 2:\n"
+        "Question: What question can someone ask all day and receive radically different responses, "
+        "yet all of them might be correct?\n"
+        "Choices:\n"
+        "1. What time is it?\n"
+        "2. What's the square root of 16?\n"
+        "3. What is the result of 5317 by 9321?\n"
+        "4. None of the above.\n"
+        "Answer: 1\n\n"
+        f"Now answer this question:\n"
+        f"Question: {question}\n"
+        "Choices:\n" +
+        "\n".join([f"{i + 1}. {choice}" for i, choice in enumerate(choices)]) +
+        "\nAnswer:"
+    )
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding=True, max_length=1024).to(device)
     outputs = model.generate(
         inputs["input_ids"],
         attention_mask=inputs["attention_mask"],
-        max_new_tokens=10,
+        max_new_tokens=50,
         pad_token_id=tokenizer.eos_token_id,
+        repetition_penalty=1.5,
+        top_p=0.9,
+        top_k=50,
     )
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    # Ensure the answer is extracted cleanly
-    if "Answer (choose the number corresponding to the correct choice):" in generated_text:
-        answer_part = generated_text.split("Answer (choose the number corresponding to the correct choice):")[-1].strip()
-    else:
-        answer_part = generated_text.strip()
-    return answer_part.split("\n")[0].strip()
+    answer_part = generated_text.split("Answer:")[-1].strip()
+    return answer_part.split("\n")[0].strip()  # Return the extracted answer
+
 
 
 # Refine prediction using cosine similarity
