@@ -4,7 +4,7 @@ import numpy as np
 import csv
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import prepare_model_for_kbit_training
-from sentence_transformers import SentenceTransformer, util  # Add for cosine similarity calculations
+from sentence_transformers import SentenceTransformer, util  # For cosine similarity
 
 # Constants
 CUTOFF_LEN = 512 
@@ -22,7 +22,7 @@ tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
 tokenizer.pad_token = tokenizer.eos_token
 
 # Load sentence embedding model for cosine similarity
-embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight and effective model for embeddings
+embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Function to generate zero-shot and few-shot prompts
 def generate_prompt(item, few_shot=False):
@@ -30,49 +30,47 @@ def generate_prompt(item, few_shot=False):
     answer = item['answer']
 
     if 'choice_list' in item:
-        ordered_choices = item['choice_list']  # use for preordered test dataset
+        ordered_choices = item['choice_list']
     else:
-        distractor1 = str(item['distractor1'])  # order the eval dataset
+        distractor1 = str(item['distractor1'])
         distractor2 = str(item['distractor2'])
         distractor_unsure = str(item['distractor(unsure)'])
-        # Create choice_list and reorder based on choice_order
         choice_list = [answer, distractor1, distractor2, distractor_unsure]
         choice_order = item['choice_order']
         ordered_choices = [choice_list[i] for i in choice_order]
 
-    sys_msg = "You are an assistant answering riddle questions for a test. For each question you must choose a answer from the choice list. Output the chosen answer and nothing else."
+    sys_msg = (
+        "You are an assistant answering riddle questions for a test. "
+        "Choose the correct answer from the choices provided. "
+        "Output the answer exactly as it appears in the choices."
+    )
+    
+    examples = ""
     if few_shot:
         examples = '''
-                    Here are some examples of questions and their answers
-                    SP-0 
-                    Question:        Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible? 
-                    Choices:         ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'] 
-                    Answer:  Each daughter shares the same brother. 
-
-                    SP-0_SR 
-                    Question:        The six daughters of Mr. and Mrs. Mustard each have one brother. However, the family only consists of nine people; how is that possible? 
-                    Choices:         ['Some brothers were not loved by family and moved away.', 'Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'None of above.'] 
-                    Answer:  Each daughter shares the same brother. 
-
-                    SP-0_CR 
-                    Question:        A chess team has five players, and each player has one coach. But there are only six participants in the team. How is that possible? 
-                    Choices:         ['Each player shares the same coach.', 'Some players are backups and not allowed to play.', 'Some coaches get a raise.', 'None of above.'] 
-                    Answer:  Each player shares the same coach. 
-
-                    '''
-        return (
-            f"<s> [INST]{sys_msg}\n{examples}{question}\nChoose one of the following answers from the following choices:\n"
-            + "\n".join(ordered_choices) + "[/INST]</s>" + answer + "</s>"
-        )
+        Example 1:
+        Question: Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible?
+        Choices: ['Each daughter shares the same brother.', 'Some daughters get married.', 'Some brothers were not loved by family.', 'None of above.']
+        Answer: Each daughter shares the same brother.
+        
+        Example 2:
+        Question: What TV program should you watch in the bathtub?
+        Choices: ['Soap operas.', 'Sports live.', 'Talk show.', 'None of above.']
+        Answer: Soap operas.
+        
+        ---
+        '''
     return (
-        f"<s> [INST]{sys_msg}\n{question}\nChoose one of the following answers from the following choices:\n"
-        + "\n".join(ordered_choices) + "[/INST]</s>" + answer + "</s>"
+        f"{sys_msg}\n\n{examples}"
+        f"Question: {question}\n"
+        f"Choices: {', '.join(ordered_choices)}\n"
+        "Answer:"
     )
 
 # Function to tokenize prompt
 def tokenize(prompt):
     return tokenizer(
-        prompt + tokenizer.eos_token,
+        prompt,
         truncation=True,
         max_length=CUTOFF_LEN,
         padding="max_length",
@@ -82,18 +80,19 @@ def tokenize(prompt):
 # Function to refine answer using cosine similarity and enforce valid output
 def refine_answer(generated_answer, choices):
     # Clean up generated answer
-    generated_answer = generated_answer.strip()  # Remove extra spaces
-    generated_answer = generated_answer.replace("Question:", "").replace("Answer:", "").strip()  # Remove prefixes
+    generated_answer = generated_answer.strip()
+    generated_answer = generated_answer.replace("[INST]", "").replace("</s>", "").strip()
+    if "Answer:" in generated_answer:
+        generated_answer = generated_answer.split("Answer:")[-1].strip()
     # Validate against choices
     if generated_answer in choices:
-        return generated_answer  # Valid answer
+        return generated_answer
     # Otherwise, refine using cosine similarity
     generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
     choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
     cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
     best_choice_idx = torch.argmax(cosine_scores).item()
     return choices[best_choice_idx]
-
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
@@ -134,7 +133,7 @@ def run_predictions():
                     question_id = item.get('id', 'N/A')
                     question = item['question']
                     answer = item['answer']
-                    choices = item['choice_list']  # Get choices
+                    choices = item['choice_list']
 
                     # Zero-shot prediction
                     zero_shot_prompt = generate_prompt(item, few_shot=False)
@@ -146,11 +145,8 @@ def run_predictions():
                             **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
-                    zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
-
-                    # Refine zero-shot prediction (ensure it's one of the choices)
-                    refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
-                    refined_zero_shot_correct = refined_zero_shot_answer == answer
+                    zero_shot_answer = refine_answer(zero_shot_prediction, choices)
+                    refined_zero_shot_correct = zero_shot_answer == answer
 
                     # Few-shot prediction
                     few_shot_prompt = generate_prompt(item, few_shot=True)
@@ -161,11 +157,8 @@ def run_predictions():
                             **few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
-                    few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
-
-                    # Refine few-shot prediction (ensure it's one of the choices)
-                    refined_few_shot_answer = refine_answer(few_shot_answer, choices)
-                    refined_few_shot_correct = refined_few_shot_answer == answer
+                    few_shot_answer = refine_answer(few_shot_prediction, choices)
+                    refined_few_shot_correct = few_shot_answer == answer
 
                     # Update accuracy
                     total += 1
@@ -179,8 +172,8 @@ def run_predictions():
                     # Write results
                     writer.writerow([
                         question_id, question, answer, ", ".join(choices),
-                        zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
-                        few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
+                        zero_shot_prediction, zero_shot_answer, refined_zero_shot_correct,
+                        few_shot_prediction, few_shot_answer, refined_few_shot_correct
                     ])
 
             # Calculate accuracies
