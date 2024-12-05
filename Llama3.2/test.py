@@ -1,145 +1,189 @@
 import os
-import numpy as np
 import torch
+import numpy as np
 import csv
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from sentence_transformers import SentenceTransformer, util  # For cosine similarity
+from peft import prepare_model_for_kbit_training
+from sentence_transformers import SentenceTransformer, util  # Add for cosine similarity calculations
 
-# Set device
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Using device: {device}")
+# Constants
+CUTOFF_LEN = 512
+MAX_NEW_TOKENS = 50
+RESULTS_DIR = "llama-brainteasers-results/test"
+CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/LlamaFinetuned"
+LEARNING_RATES = [0.0001]
+WEIGHT_DECAYS = [0.01]
 
-# Load SentenceTransformer for embeddings
-embedder = SentenceTransformer('all-MiniLM-L6-v2').to(device)
+# Ensure results directory exists
+os.makedirs(RESULTS_DIR, exist_ok=True)
 
-# Load test dataset
-test_data = np.load("/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy", allow_pickle=True)
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
+tokenizer.pad_token = tokenizer.eos_token
 
-# Preprocess the test dataset
-def preprocess_data(data):
-    processed_data = []
-    for item in data:
-        question = item['question']
-        choices = item['choice_list']
-        label = item['label']
-        processed_data.append({
-            'id': item['id'],
-            'text': question,
-            'choices': choices,
-            'correct_answer': choices[label]
-        })
-    return processed_data
+# Load sentence embedding model for cosine similarity
+embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight and effective model for embeddings
 
-processed_test_data = preprocess_data(test_data)
+# Function to generate zero-shot and few-shot prompts
+def generate_prompt(item, few_shot=True):
+    question = item['question']
+    answer = item['answer']
 
-# Few-shot examples
-FEW_SHOT_EXAMPLES = """
-Example 1:
-Q: Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible?
-Choices: ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.']
-A: Each daughter shares the same brother.
-
-Example 2:
-Q: The six daughters of Mr. and Mrs. Mustard each have one brother. However, the family only consists of nine people; how is that possible?
-Choices: ['Some brothers were not loved by family and moved away.', 'Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'None of above.']
-A: Each daughter shares the same brother.
-"""
-
-# Generate answers using the LLaMA model
-def generate_answer(model, tokenizer, question, choices, few_shot=False):
-    if few_shot:
-        prompt = f"{FEW_SHOT_EXAMPLES}\nQ: {question}\nChoices: {', '.join(choices)}\nA:"
+    if 'choice_list' in item:
+        ordered_choices = item['choice_list']
     else:
-        prompt = f"Q: {question}\nChoices: {', '.join(choices)}\nA:"
-    
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding=True, max_length=512).to(device)
-    outputs = model.generate(
-        inputs["input_ids"],
-        attention_mask=inputs["attention_mask"],
-        max_new_tokens=20,
-        pad_token_id=tokenizer.eos_token_id,
-        repetition_penalty=1.5,
-        temperature=0.0,
-        num_beams=1,
-        do_sample=False
+        distractor1 = str(item['distractor1'])
+        distractor2 = str(item['distractor2'])
+        distractor_unsure = str(item['distractor(unsure)'])
+        choice_list = [answer, distractor1, distractor2, distractor_unsure]
+        choice_order = item['choice_order']
+        ordered_choices = [choice_list[i] for i in choice_order]
+
+    system_message = (
+        "You are an assistant answering riddle questions for a test. Choose the correct answer from the choices."
+        " Return only the answer. Don't generate anything which is not in the answer choices or in other words don't generate something random"
     )
-    generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    answer_part = generated_text.split("A:")[-1].strip()
-    return answer_part.split("\n")[0].strip()
+    if few_shot:
+        examples = '''
+        Example 1:
+        Question: Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible? 
+        Choices: ['Each daughter shares the same brother.', 'Some daughters get married.', 'Some brothers were not loved by family.', 'None of the above.']
+        Answer: Each daughter shares the same brother.
+        Example 2:
+        Question: A chess team has five players, and each player has one coach. But there are only six participants in the team. How is that possible? 
+        Choices: ['Each player shares the same coach.', 'Some players are backups.', 'Some coaches got a raise.', 'None of the above.']
+        Answer: Each player shares the same coach.
+        '''
+        return (
+            f"{system_message}\n\n{examples}\n"
+            f"Question: {question}\nChoices: {ordered_choices}\nAnswer:"
+        )
+    return (
+        f"{system_message}\n\n"
+        f"Question: {question}\nChoices: {ordered_choices}\nAnswer:"
+    )
 
-# Refine prediction using cosine similarity
-def refine_prediction_with_similarity(generated_answer, choices):
-    if generated_answer in choices:
-        return generated_answer
-    choice_embeddings = embedder.encode(choices, convert_to_tensor=True)
-    generated_embedding = embedder.encode(generated_answer, convert_to_tensor=True)
-    cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
-    best_index = torch.argmax(cosine_similarities).item()
-    return choices[best_index]
+# Function to tokenize prompt
+def tokenize(prompt):
+    return tokenizer(
+        prompt + tokenizer.eos_token,
+        truncation=True,
+        max_length=CUTOFF_LEN,
+        padding="max_length",
+        return_tensors="pt"
+    )
 
-# Evaluate the LLaMA model
-def evaluate_model(model, tokenizer, test_data, output_file, few_shot=False):
-    predictions = []
-    correct_predictions = 0
-    for item in test_data:
-        question_id = item['id']
-        question = item['text']
-        choices = item['choices']
-        correct_answer = item['correct_answer']
+# Function to refine answer using cosine similarity
+def refine_answer(generated_answer, choices):
+    generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
+    choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
+    cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
+    best_choice_idx = torch.argmax(cosine_scores).item()
+    return choices[best_choice_idx]
 
-        generated_answer = generate_answer(model, tokenizer, question, choices, few_shot=few_shot)
-        refined_answer = refine_prediction_with_similarity(generated_answer, choices)
+# Load test data
+test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
 
-        is_correct = refined_answer == correct_answer
-        predictions.append({
-            "Question_ID": question_id,
-            "Question_Text": question,
-            "Choices": '; '.join(choices),
-            "Generated Answer": generated_answer,
-            "Refined Answer": refined_answer,
-            "Correct Answer": correct_answer,
-            "Predicted == Correct": "yes" if is_correct else "no"
-        })
-        if is_correct:
-            correct_predictions += 1
+# Main function to run predictions for all models
+def run_predictions():
+    for lr in LEARNING_RATES:
+        for wd in WEIGHT_DECAYS:
+            checkpoint_path = os.path.join(CHECKPOINTS_DIR)
+            csv_file = os.path.join(RESULTS_DIR, f"llama_lora_finetuned_results_lr{lr}_wd{wd}.csv")
 
-    accuracy = correct_predictions / len(test_data)
-    print(f"{'Few-Shot' if few_shot else 'Zero-Shot'} Test Accuracy: {accuracy:.4f}")
-    save_predictions_to_csv(predictions, output_file)
-    return accuracy
+            # Load model
+            print(f"Loading model for lr={lr}, wd={wd}...")
+            model = AutoModelForCausalLM.from_pretrained(
+                checkpoint_path,
+                load_in_4bit=True,
+                torch_dtype=torch.float16,
+                device_map="auto"
+            )
+            model = prepare_model_for_kbit_training(model)
 
-# Save predictions to CSV
-def save_predictions_to_csv(predictions, filename):
-    with open(filename, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=["Question_ID", "Question_Text", "Choices",
-                                                  "Generated Answer", "Refined Answer",
-                                                  "Correct Answer", "Predicted == Correct"])
-        writer.writeheader()
-        writer.writerows(predictions)
-    print(f"Predictions saved to {filename}")
+            # Prepare CSV file
+            total = 0  # Initialize counters
+            zero_shot_correct = 0
+            few_shot_correct = 0
+            combined_correct = 0
+            with open(csv_file, mode="w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow([
+                    "Question ID", "Question", "Answer",
+                    "Refined Zero-Shot", "Refined Zero-Shot Correct",
+                    "Refined Few-Shot", "Refined Few-Shot Correct"
+                    "Generated Zero-Shot", "Refined Zero-Shot", "Refined Zero-Shot Correct",
+                    "Generated Few-Shot", "Refined Few-Shot", "Refined Few-Shot Correct"
+                ])
 
-# Evaluate all combinations using LLaMA
-def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays,
-                              base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
-    for lr in learning_rates:
-        for wd in weight_decays:
-            model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
-            model_path = os.path.join(base_model_dir, model_id)
-            zero_shot_output_file = f"ResultsFewShot/{model_id}_zero_shot_results.csv"
-            few_shot_output_file = f"ResultsFewShot/{model_id}_few_shot_results.csv"
-            os.makedirs("ResultsFewShot", exist_ok=True)
-            try:
-                print(f"Loading model from {model_path}")
-                model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
-                tokenizer = AutoTokenizer.from_pretrained(model_path)
-                tokenizer.pad_token = tokenizer.eos_token
+                # Predict for each test example
+                for item in test_data:
+                    question_id = item.get('id', 'N/A')
+                    question = item['question']
+                    answer = item['answer']
+                    choices = item['choice_list']
 
-                zero_shot_accuracy = evaluate_model(model, tokenizer, processed_test_data, zero_shot_output_file, few_shot=False)
-                few_shot_accuracy = evaluate_model(model, tokenizer, processed_test_data, few_shot_output_file, few_shot=True)
-                print(f"Model {model_id} Zero-Shot Accuracy: {zero_shot_accuracy:.4f}")
-                print(f"Model {model_id} Few-Shot Accuracy: {few_shot_accuracy:.4f}")
-            except Exception as e:
-                print(f"Error evaluating {model_id}: {e}")
+                    # Zero-shot prediction
+                    zero_shot_prompt = generate_prompt(item, few_shot=False)
+                    zero_shot_inputs = tokenize(zero_shot_prompt)
+                    zero_shot_inputs = {key: val.to(model.device) for key, val in zero_shot_inputs.items()}
+                    model.eval()
+                    with torch.no_grad():
+                        zero_shot_outputs = model.generate(
+                            **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
+                        )
+                        zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
+                    zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
 
-# Run evaluation
-evaluate_all_combinations(processed_test_data, [0.01], [0.0001])
+                    # Refine zero-shot prediction
+                    refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
+                    refined_zero_shot_correct = refined_zero_shot_answer == answer
+
+                    # Few-shot prediction
+                    few_shot_prompt = generate_prompt(item, few_shot=True)
+                    few_shot_inputs = tokenize(few_shot_prompt)
+                    few_shot_inputs = {key: val.to(model.device) for key, val in few_shot_inputs.items()}
+                    with torch.no_grad():
+                        few_shot_outputs = model.generate(
+                            **few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
+                        )
+                        few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
+                    few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
+
+                    # Refine few-shot prediction
+                    refined_few_shot_answer = refine_answer(few_shot_answer, choices)
+                    refined_few_shot_correct = refined_few_shot_answer == answer
+
+                    # Update accuracy
+                    total += 1
+                    if refined_zero_shot_correct:
+                        zero_shot_correct += 1
+                    if refined_few_shot_correct:
+                        few_shot_correct += 1
+                    if refined_zero_shot_correct or refined_few_shot_correct:
+                        combined_correct += 1
+                    # Write results
+                    writer.writerow([
+                        question_id, question, answer,
+                        refined_zero_shot_answer, refined_zero_shot_correct,
+                        refined_few_shot_answer, refined_few_shot_correct
+                        zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
+                        few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
+                    ])
+
+            # Calculate accuracies
+            zero_shot_accuracy = (zero_shot_correct / total) * 100 if total > 0 else 0
+            few_shot_accuracy = (few_shot_correct / total) * 100 if total > 0 else 0
+            combined_accuracy = (combined_correct / total) * 100 if total > 0 else 0
+            # Print results
+            print(f"Results for lr={lr}, wd={wd}:")
+            print(f"  Refined Zero-Shot Accuracy: {zero_shot_accuracy:.2f}%")
+            print(f"  Refined Few-Shot Accuracy: {few_shot_accuracy:.2f}%")
+            print(f"  Combined Accuracy (Zero-Shot or Few-Shot Correct): {combined_accuracy:.2f}%")
+            print(f"Results saved to {csv_file}")
+            del model
+            torch.cuda.empty_cache()
+
+# Execute
+if __name__ == "__main__":
+    run_predictions()
