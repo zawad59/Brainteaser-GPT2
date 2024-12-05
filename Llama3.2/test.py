@@ -85,7 +85,7 @@ def refine_answer(generated_answer, choices):
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
 
-# Main function to run predictions for all models
+# Updated main function
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
@@ -103,7 +103,7 @@ def run_predictions():
             model = prepare_model_for_kbit_training(model)
 
             # Prepare CSV file
-            total = 0  # Initialize counters
+            total = 0
             zero_shot_correct = 0
             few_shot_correct = 0
             combined_correct = 0
@@ -111,7 +111,7 @@ def run_predictions():
             with open(csv_file, mode="w", newline="") as file:
                 writer = csv.writer(file)
                 writer.writerow([
-                    "Question ID", "Question", "Answer", 
+                    "Question ID", "Question", "Answer", "Choices",
                     "Generated Zero-Shot", "Refined Zero-Shot", "Refined Zero-Shot Correct",
                     "Generated Few-Shot", "Refined Few-Shot", "Refined Few-Shot Correct"
                 ])
@@ -121,7 +121,7 @@ def run_predictions():
                     question_id = item.get('id', 'N/A')
                     question = item['question']
                     answer = item['answer']
-                    choices = item['choice_list']
+                    choices = item['choice_list']  # Get choices
 
                     # Zero-shot prediction
                     zero_shot_prompt = generate_prompt(item, few_shot=False)
@@ -135,7 +135,7 @@ def run_predictions():
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                     zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
 
-                    # Refine zero-shot prediction
+                    # Refine zero-shot prediction (ensure it's one of the choices)
                     refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
                     refined_zero_shot_correct = refined_zero_shot_answer == answer
 
@@ -150,7 +150,7 @@ def run_predictions():
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                     few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
 
-                    # Refine few-shot prediction
+                    # Refine few-shot prediction (ensure it's one of the choices)
                     refined_few_shot_answer = refine_answer(few_shot_answer, choices)
                     refined_few_shot_correct = refined_few_shot_answer == answer
 
@@ -165,7 +165,7 @@ def run_predictions():
 
                     # Write results
                     writer.writerow([
-                        question_id, question, answer, 
+                        question_id, question, answer, ", ".join(choices),
                         zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
                         few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
                     ])
