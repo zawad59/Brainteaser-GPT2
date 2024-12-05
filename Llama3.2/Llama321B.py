@@ -35,7 +35,6 @@ LORA_DROPOUT = 0.1
 lora_config = LoraConfig(
     r=LORA_R,
     lora_alpha=LORA_ALPHA,
-    target_modules=["query_proj", "value_proj"],  # Target MoE layers
     lora_dropout=LORA_DROPOUT,
     bias="none",
     task_type="CAUSAL_LM"
