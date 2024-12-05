@@ -7,7 +7,7 @@ from peft import prepare_model_for_kbit_training
 from sentence_transformers import SentenceTransformer, util  # For cosine similarity
 
 # Constants
-CUTOFF_LEN = 512 
+CUTOFF_LEN = 512
 MAX_NEW_TOKENS = 50
 RESULTS_DIR = "llama-brainteasers-results/test"
 CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/"
@@ -24,27 +24,17 @@ tokenizer.pad_token = tokenizer.eos_token
 # Load sentence embedding model for cosine similarity
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Function to generate zero-shot and few-shot prompts
+# Function to generate prompts
 def generate_prompt(item, few_shot=False):
     question = item['question']
     answer = item['answer']
-
-    if 'choice_list' in item:
-        ordered_choices = item['choice_list']
-    else:
-        distractor1 = str(item['distractor1'])
-        distractor2 = str(item['distractor2'])
-        distractor_unsure = str(item['distractor(unsure)'])
-        choice_list = [answer, distractor1, distractor2, distractor_unsure]
-        choice_order = item['choice_order']
-        ordered_choices = [choice_list[i] for i in choice_order]
+    ordered_choices = item.get('choice_list', [])
 
     sys_msg = (
         "You are an assistant answering riddle questions for a test. "
-        "Choose the correct answer from the choices provided. "
-        "Output the answer exactly as it appears in the choices."
+        "Choose the correct answer from the choices provided. Output only the answer."
     )
-    
+
     examples = ""
     if few_shot:
         examples = '''
@@ -52,12 +42,12 @@ def generate_prompt(item, few_shot=False):
         Question: Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible?
         Choices: ['Each daughter shares the same brother.', 'Some daughters get married.', 'Some brothers were not loved by family.', 'None of above.']
         Answer: Each daughter shares the same brother.
-        
+
         Example 2:
         Question: What TV program should you watch in the bathtub?
         Choices: ['Soap operas.', 'Sports live.', 'Talk show.', 'None of above.']
         Answer: Soap operas.
-        
+
         ---
         '''
     return (
@@ -77,22 +67,15 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
-# Function to refine answer using cosine similarity and enforce valid output
-def refine_answer(generated_answer, choices):
-    # Clean up generated answer
-    generated_answer = generated_answer.strip()
-    generated_answer = generated_answer.replace("[INST]", "").replace("</s>", "").strip()
-    if "Answer:" in generated_answer:
-        generated_answer = generated_answer.split("Answer:")[-1].strip()
-    # Validate against choices
-    if generated_answer in choices:
-        return generated_answer
-    # Otherwise, refine using cosine similarity
-    generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
-    choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
-    cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
-    best_choice_idx = torch.argmax(cosine_scores).item()
-    return choices[best_choice_idx]
+# Function to clean generated answer
+def clean_generated_answer(generated_text):
+    """
+    Cleans generated text to ensure only the answer is returned.
+    """
+    generated_text = generated_text.replace("[INST]", "").replace("</s>", "").strip()
+    if "Answer:" in generated_text:
+        return generated_text.split("Answer:")[-1].strip()
+    return generated_text
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
@@ -118,7 +101,6 @@ def run_predictions():
             total = 0
             zero_shot_correct = 0
             few_shot_correct = 0
-            combined_correct = 0
 
             with open(csv_file, mode="w", newline="") as file:
                 writer = csv.writer(file)
@@ -145,8 +127,7 @@ def run_predictions():
                             **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
-                    zero_shot_answer = refine_answer(zero_shot_prediction, choices)
-                    refined_zero_shot_correct = zero_shot_answer == answer
+                    zero_shot_answer = clean_generated_answer(zero_shot_prediction)
 
                     # Few-shot prediction
                     few_shot_prompt = generate_prompt(item, few_shot=True)
@@ -157,8 +138,14 @@ def run_predictions():
                             **few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
-                    few_shot_answer = refine_answer(few_shot_prediction, choices)
-                    refined_few_shot_correct = few_shot_answer == answer
+                    few_shot_answer = clean_generated_answer(few_shot_prediction)
+
+                    # Refine predictions and validate against choices
+                    refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
+                    refined_zero_shot_correct = refined_zero_shot_answer == answer
+
+                    refined_few_shot_answer = refine_answer(few_shot_answer, choices)
+                    refined_few_shot_correct = refined_few_shot_answer == answer
 
                     # Update accuracy
                     total += 1
@@ -166,26 +153,22 @@ def run_predictions():
                         zero_shot_correct += 1
                     if refined_few_shot_correct:
                         few_shot_correct += 1
-                    if refined_zero_shot_correct or refined_few_shot_correct:
-                        combined_correct += 1
 
                     # Write results
                     writer.writerow([
                         question_id, question, answer, ", ".join(choices),
-                        zero_shot_prediction, zero_shot_answer, refined_zero_shot_correct,
-                        few_shot_prediction, few_shot_answer, refined_few_shot_correct
+                        zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
+                        few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
                     ])
 
             # Calculate accuracies
             zero_shot_accuracy = (zero_shot_correct / total) * 100 if total > 0 else 0
             few_shot_accuracy = (few_shot_correct / total) * 100 if total > 0 else 0
-            combined_accuracy = (combined_correct / total) * 100 if total > 0 else 0
 
             # Print results
             print(f"Results for lr={lr}, wd={wd}:")
             print(f"  Refined Zero-Shot Accuracy: {zero_shot_accuracy:.2f}%")
             print(f"  Refined Few-Shot Accuracy: {few_shot_accuracy:.2f}%")
-            print(f"  Combined Accuracy (Zero-Shot or Few-Shot Correct): {combined_accuracy:.2f}%")
             print(f"Results saved to {csv_file}")
             del model
             torch.cuda.empty_cache()
