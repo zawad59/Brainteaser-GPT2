@@ -28,7 +28,7 @@ model.config.pad_token_id = tokenizer.pad_token_id
 # Set constants
 CUTOFF_LEN = 256
 LORA_R = 4
-LORA_ALPHA = 2 * LORA_R
+LORA_ALPHA = 8
 LORA_DROPOUT = 0.1
 
 # LoRA fine-tuning configuration
@@ -103,21 +103,19 @@ for lr in LEARNING_RATES:
         # Define training arguments
         training_args = TrainingArguments(
             output_dir=f"./llama_lora_finetuned_lr{lr}_wd{wd}",
-            per_device_train_batch_size=1,
-            per_device_eval_batch_size=1,
-            gradient_accumulation_steps=4,
-            num_train_epochs=3,
+            per_device_train_batch_size=16,
+            per_device_eval_batch_size=16,
+            logging_strategy = "steps",
+            num_train_epochs=5,
             learning_rate=lr,
             weight_decay=wd,
-            max_grad_norm=0.3,
-            logging_steps=50,
+            logging_steps=10,
             evaluation_strategy="steps",
-            eval_steps=100,
+            eval_steps=10,
             save_strategy="epoch",
             logging_dir=f"./logs_lr{lr}_wd{wd}",
-            report_to="none",
-            optim="adamw_torch"
         )
+
 
         # Define data collator
         data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
