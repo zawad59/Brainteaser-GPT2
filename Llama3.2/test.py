@@ -4,6 +4,7 @@ import numpy as np
 import csv
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import prepare_model_for_kbit_training
+from sentence_transformers import SentenceTransformer, util  # Add for cosine similarity calculations
 
 # Constants
 CUTOFF_LEN = 512 
@@ -18,8 +19,10 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 
 # Load tokenizer
 tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
+tokenizer.pad_token = tokenizer.eos_token
 
-tokenizer.pad_token = "!"
+# Load sentence embedding model for cosine similarity
+embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight and effective model for embeddings
 
 # Function to generate zero-shot and few-shot prompts
 def generate_prompt(item, few_shot=True):
@@ -71,6 +74,14 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
+# Function to refine answer using cosine similarity
+def refine_answer(generated_answer, choices):
+    generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
+    choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
+    cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
+    best_choice_idx = torch.argmax(cosine_scores).item()
+    return choices[best_choice_idx]
+
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
 
@@ -92,19 +103,20 @@ def run_predictions():
             model = prepare_model_for_kbit_training(model)
 
             # Prepare CSV file
-            total, correct = 0, 0
-            wp_total, wp_correct = 0, 0
-            sp_total, sp_correct = 0, 0
-
             with open(csv_file, mode="w", newline="") as file:
                 writer = csv.writer(file)
-                writer.writerow(["Question ID", "Question", "Answer", "Zero-Shot Prediction", "Few-Shot Prediction"])
+                writer.writerow([
+                    "Question ID", "Question", "Answer", 
+                    "Refined Zero-Shot", "Refined Zero-Shot Correct",
+                    "Refined Few-Shot", "Refined Few-Shot Correct"
+                ])
 
                 # Predict for each test example
                 for item in test_data:
                     question_id = item.get('id', 'N/A')
                     question = item['question']
                     answer = item['answer']
+                    choices = item['choice_list']
 
                     # Zero-shot prediction
                     zero_shot_prompt = generate_prompt(item, few_shot=False)
@@ -118,6 +130,10 @@ def run_predictions():
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                     zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
 
+                    # Refine zero-shot prediction
+                    refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
+                    refined_zero_shot_correct = refined_zero_shot_answer == answer
+
                     # Few-shot prediction
                     few_shot_prompt = generate_prompt(item, few_shot=True)
                     few_shot_inputs = tokenize(few_shot_prompt)
@@ -129,39 +145,20 @@ def run_predictions():
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                     few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
 
+                    # Refine few-shot prediction
+                    refined_few_shot_answer = refine_answer(few_shot_answer, choices)
+                    refined_few_shot_correct = refined_few_shot_answer == answer
+
                     # Write results
-                    writer.writerow([question_id, question, answer, zero_shot_answer, few_shot_answer])
-
-                    # Accuracy calculations
-                    total += 1
-                    if zero_shot_answer == answer:
-                        correct += 1
-                        if question_id.startswith("WP"):
-                            wp_total += 1
-                            wp_correct += 1
-                        elif question_id.startswith("SP"):
-                            sp_total += 1
-                            sp_correct += 1
-                    elif question_id.startswith("WP"):
-                        wp_total += 1
-                    elif question_id.startswith("SP"):
-                        sp_total += 1
-
-            # Calculate accuracies
-            overall_accuracy = (correct / total) * 100 if total > 0 else 0
-            wp_accuracy = (wp_correct / wp_total) * 100 if wp_total > 0 else 0
-            sp_accuracy = (sp_correct / sp_total) * 100 if sp_total > 0 else 0
-
-            # Print accuracies
-            print(f"Results for lr={lr}, wd={wd}:")
-            print(f"  Overall Accuracy: {overall_accuracy:.2f}%")
-            print(f"  WP Accuracy: {wp_accuracy:.2f}%")
-            print(f"  SP Accuracy: {sp_accuracy:.2f}%")
+                    writer.writerow([
+                        question_id, question, answer, 
+                        refined_zero_shot_answer, refined_zero_shot_correct,
+                        refined_few_shot_answer, refined_few_shot_correct
+                    ])
 
             print(f"Results saved to {csv_file}")
             del model
             torch.cuda.empty_cache()
-
 
 # Execute
 if __name__ == "__main__":
