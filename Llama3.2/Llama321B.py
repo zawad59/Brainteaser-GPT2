@@ -5,6 +5,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from datasets import Dataset
 from transformers import DataCollatorForLanguageModeling
+from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments
 import gc
 
 # Set device
@@ -113,7 +114,7 @@ training_args = TrainingArguments(
 data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
 # Define Trainer
-trainer = transformers.Trainer(
+trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=train_dataset,
