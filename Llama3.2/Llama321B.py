@@ -88,13 +88,26 @@ training_args = TrainingArguments(
 )
 
 # Define custom Trainer
-trainer = Trainer(
+'''trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=tokenized_train_dataset,
     eval_dataset=tokenized_dev_dataset,
     data_collator=data_collator,
     tokenizer=tokenizer
+)'''
+
+trainer = SFTTrainer(
+    model=model,
+    train_dataset=tokenized_train_dataset,
+    eval_dataset=tokenized_dev_dataset,
+    data_collator=data_collator,
+    peft_config=peft_config,
+    max_seq_length= 512,
+    dataset_text_field="text",
+    tokenizer=tokenizer,
+    args=training_arguments,
+    packing= False,
 )
 
 # Train the model
