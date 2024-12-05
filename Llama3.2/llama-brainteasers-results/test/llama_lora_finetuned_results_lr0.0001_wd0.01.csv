@@ -1,98 +1,499 @@
-Question ID,Question,Answer,Refined Zero-Shot,Refined Zero-Shot Correct,Refined Few-Shot,Refined Few-Shot Correct
-SP-185,"How could a man go outside in the pouring rain without protection, and not have a hair on his head get wet?",He is bald.,He is bald.,True,He is bald.,True
-SP-185_SR,How could a guy go outdoors in the torrential rain without getting a single hair on his head wet?,He is bald.,He is bald.,True,The man is an athlete that can avoid rain in high speed.,False
-SP-185_CR,How can you enter a exam session and have the answers sooner than everybody else in the room?,You have to be a teacher.,You have to ask teacher for the asnwer.,False,You have to ask teacher for the asnwer.,False
-SP-188,"If a monkey, a squirrel, and a bird are racing to the top of a coconut tree, who will get the banana first?",None of above.,The monkey.,False,The bird.,False
-SP-188_SR,"Who will grab the banana first if a monkey, a squirrel, and a bird race to the top of a coconut tree?",None of above.,None of above.,True,The bird.,False
-SP-188_CR,"A rooster and a bull were expecting their first child, but since they were having a competition, they wanted to precipitate the process. Which one of them gave birth first?",None of above.,The rooster.,False,None of above.,True
-SP-192,"A group of ten ostriches are in a field. If four of them take off flying, how many are left in the field?",None of above.,Four.,False,Four.,False
-SP-192_SR,Ten chickens are gathered in a field. How many of them remain on the field if four of them take off flying?,None of above.,Ten.,False,Four.,False
-SP-192_CR,"If we have two bulls, and each cow can produce two gallons of milk every day. How much milk do we have after 2 days?",None of above.,Four.,False,None of above.,True
-SP-193,Two people were playing chess and both won. How did this happen?,They were playing against other opponents.,They were playing against other opponents.,True,They were playing against other opponents.,True
-SP-193_SR,Both persons who were playing chess won. What caused this to happen?,They were playing against other opponents.,They were playing against other opponents.,True,They were playing against other opponents.,True
-SP-193_CR,"Two chefs were making food, at some points both poured a salt and pepper into their food, however the food wasn't too spicy afterall when customers were eating it. How's that possible?",Two chefs were making two different foods and they didn't add the spices twice to the same food.,Two chefs were making two different foods and they didn't add the spices twice to the same food.,True,The salt and pepper are  expired.,False
-SP-194," A hiker arrives near a lake. He sees a sign where it is written ""No swimming allowed."", but the duck jumps into the water. Why? ",Because ducks can't read.,Because ducks can't read.,True,None of above.,False
-SP-194_SR,"A hiker lands near a lake. He sees a sign that says ""No swimming allowed,"" yet the duck dives into the water anyhow. Why? ",Because ducks can't read.,Because ducks are tiny to be detected.,False,None of above.,False
-SP-194_CR,"A cat was walking pass a security guard when the guard told him not to enter the area since it was restricted. However, the cat passed the security guard without any sense of obedience.Why?",Since cats can't understand humans' language,The cat thought it won't bring danger,False,The cat thought it was hard to detect itself.,False
-SP-195," Twenty-seven ducks are going to the pond. Five of them got lost, thirteen of them are staying home, and nine of them are at the pond. Where are the rest of them? ",None of above.,Pond.,False,None of above.,True
-SP-195_SR," Twenty-seven ducks are going to the pond. Five of them got lost, thirteen of them are staying home, and nine of them are at the pond. Where are the rest of them? ",None of above.,Home.,False,The way to the pond.,False
-SP-195_CR,"James was taking a test with 31 questions. He answered to 17 questions. Towards the end of the time, he looked onto other people's choices and answered 7 questions that way. He was so lucky that he remembered how to answer another 7 questions as well. Surprisingly, he got 100% in the test. What did he do with the rest of the questions that he got 100?",None of above.,He didn't know the answer and just guessed them randomly.,False,None of above.,True
+Question ID,Question,Answer,Generated Zero-Shot,Refined Zero-Shot,Refined Zero-Shot Correct,Generated Few-Shot,Refined Few-Shot,Refined Few-Shot Correct
+SP-185,"How could a man go outside in the pouring rain without protection, and not have a hair on his head get wet?",He is bald.,"defile He is bald.
+Explanation: The question's wording suggests that it would be impossible for someone with no hair at all (i.e., being completely bald) to stay dry in heavy rain. However, this doesn't address how he might",He is bald.,True,Question: The man is an athlete that can avoid rain in high speed.,The man is an athlete that can avoid rain in high speed.,False
+SP-185_SR,How could a guy go outdoors in the torrential rain without getting a single hair on his head wet?,He is bald.,"What I am.] 
+Explanation: The question asks how he went outdoors and got no hairs wet, so it must be because he has none.
+It's like going outside when you're already clean! That way there isn't any chance of your",He is bald.,True,Question: He is bald.,He is bald.,True
+SP-185_CR,How can you enter a exam session and have the answers sooner than everybody else in the room?,You have to be a teacher.,"An envelope.
+Question: Why did the computer go to therapy? Choices: [It had too many",None of above.,False,"Question: You have to be a teacher.
+ 
+
+Question: Why do we call it ""dog days"" when it's actually sunny outside?
+Choices: ['Because dogs sleep during this time.', 'Because they like sunshine.', 'Because they're bad",You have to be a teacher.,True
+SP-188,"If a monkey, a squirrel, and a bird are racing to the top of a coconut tree, who will get the banana first?",None of above.,"# The None of above.
+Explanation: This question requires lateral thinking. When you think about it carefully, none of them can reach the top because they're on different levels (monkey at the bottom, squirrel mid-level, and bird already at the",The squirrel.,False,"An egg.
+
+Example 4:",The bird.,False
+SP-188_SR,"Who will grab the banana first if a monkey, a squirrel, and a bird race to the top of a coconut tree?",None of above.,"The keyboard.
+Question: Why did the chicken go to the doctor?
+Choices: [He had",The bird.,False,Question: The monkey. Because they climb up on it headfirst.,The monkey.,False
+SP-188_CR,"A rooster and a bull were expecting their first child, but since they were having a competition, they wanted to precipitate the process. Which one of them gave birth first?",None of above.,"def The bull.] 
+Explanation: The question's wording makes it seem like both parents had no involvement in giving birth, so the correct answer would be ""none of above."" However, this doesn't make sense because we know that bulls give birth",The bull.,False,"Question: The Bull. (Why?) Because he was born with his head down.) 
+
+Question: What can you catch but never throw it?
+Choices: ['A cold.', 'A ball.', 'An infection.', 'None of above.']",The bull.,False
+SP-192,"A group of ten ostriches are in a field. If four of them take off flying, how many are left in the field?",None of above.,"The correct one is Four.
+Explanation: The question states that there are ten ostriches initially and if four take off flying then it must be four who were left behind as they didn't fly away.
+
+Note: This question might seem tricky because",Four.,False,The answer is Four.,Four.,False
+SP-192_SR,Ten chickens are gathered in a field. How many of them remain on the field if four of them take off flying?,None of above.,"Question: None of above.
+
+Explanation: The question itself is flawed, as it doesn't make sense to ask how many chickens would be left after some fly away when there's no reason given why they're all going to leave together.
+The best",Four.,False,def Four.,Four.,False
+SP-192_CR,"If we have two bulls, and each cow can produce two gallons of milk every day. How much milk do we have after 2 days?",None of above.,"Question:
+The answer to this question may seem simple at first glance but it's actually quite tricky because you're given that both cows give out milk all day long so they will never run out of milk even if there are no more cows left.",Four.,False,"The correct answer is Sixteen.. The first bull will give you four gallons on day one, and the second bull will give you another eight gallons on day two., so together they'll give you sixteen gallons.",Sixteen.,False
+SP-193,Two people were playing chess and both won. How did this happen?,They were playing against other opponents.,"def they played each other.
+Explanation: They played as one player on their team and another on his team but still both win.
+The best answer is: they played each other.",They were playing against other opponents.,True,Question: They were playing against other opponents.,They were playing against other opponents.,True
+SP-193_SR,Both persons who were playing chess won. What caused this to happen?,They were playing against other opponents.,"Question 
+Choices: They were playing against each other.
+Explanation: The question states that both players win when they play against each other. This means it's a game where there can be two winners at the same time., None of above.
+
+Question",They were playing against other opponents.,True,"Question The referee is new and doesn’t know the chess rules.
+
+
+
+Example 3:
+Question: Why did the scarecrow win first prize at the county fair?
+Choices: [""He was a-maize-ing!"", ""A cow's milk can",The referee is new and doesn't know the chess rules.,False
+SP-193_CR,"Two chefs were making food, at some points both poured a salt and pepper into their food, however the food wasn't too spicy afterall when customers were eating it. How's that possible?",Two chefs were making two different foods and they didn't add the spices twice to the same food.,"Question: None of above.
+Explanation: The question itself doesn't make any sense but as per given options none can be true so its None of above.
+
+Note: This type of question might seem tricky because the answers provided look like real ones but",None of above.,False,An illness.,The salt and pepper are  expired.,False
+SP-194," A hiker arrives near a lake. He sees a sign where it is written ""No swimming allowed."", but the duck jumps into the water. Why? ",Because ducks can't read.,"The hiker was blind.
+Explanation: The question states that there's no swimming allowed, yet the person who says he has arrived at the lake and saw this situation is blind, so how could they see what happened?
+Note: This kind of",Because ducks can't read.,True,"Question: Because ducks won't polluted water. 
+
+Example 3:
+Question: What do you call a fake noodle?
+Choices: [“It’s an impasta.” “An impasta”., “A spaghetti with no meat.”,",Because ducks won't polluted water.,False
+SP-194_SR,"A hiker lands near a lake. He sees a sign that says ""No swimming allowed,"" yet the duck dives into the water anyhow. Why? ",Because ducks can't read.,"An egg.
+
+Question: How do you make a Tornado",Because ducks won't polluted water.,False,"Question: Because ducks aren't reading signs.
+
+
+Example 3:
+Question: There's a man who walks around with two black eyes but no face. What could it be?
+Choices: [""He wears glasses."", ""He has been robbed."", """,Because ducks can't read.,True
+SP-194_CR,"A cat was walking pass a security guard when the guard told him not to enter the area since it was restricted. However, the cat passed the security guard without any sense of obedience.Why?",Since cats can't understand humans' language,"Question: The cat walked past the guard through a hole in the wall.
+Explanation: None of above.
+Note: This question requires lateral thinking and understanding of human behavior and psychology as well as common sense rather than just memorizing answers. It's",The cat thought it was hard to detect itself.,False,An imp,The cat thought it was hard to detect itself.,False
+SP-195," Twenty-seven ducks are going to the pond. Five of them got lost, thirteen of them are staying home, and nine of them are at the pond. Where are the rest of them? ",None of above.,"Question: None of above.
+Explanation: The question itself says that twenty-seven ducks went to the pond but five got lost so they can’t be there. So it’s none of above.
+
+Question: What has keys but cannot open locks?
+Choices",The way to the pond.,False,Question: None of above.,None of above.,True
+SP-195_SR," Twenty-seven ducks are going to the pond. Five of them got lost, thirteen of them are staying home, and nine of them are at the pond. Where are the rest of them? ",None of above.,"Question: None of above.
+Explanation: The question itself states that twenty-seven ducks were originally on their way to the pond but now five have gotten lost so they aren't there anymore. Thirteen are staying home, meaning they're still there too",The way to the pond.,False,"An egg.
+
+Example 4:
+Question: Why",The way to the pond.,False
+SP-195_CR,"James was taking a test with 31 questions. He answered to 17 questions. Towards the end of the time, he looked onto other people's choices and answered 7 questions that way. He was so lucky that he remembered how to answer another 7 questions as well. Surprisingly, he got 100% in the test. What did he do with the rest of the questions that he got 100?",None of above.,"Question: None of above.
+Explanation: The question itself implies that it might be too easy to get all answers right by cheating, guessing, or asking someone else. But since the person scored perfect marks on the exam despite having no knowledge about any",He didn't know the answer and just guessed them randomly.,False,"def None of above.] 
+
+The man had no knowledge about any answers but he used all the given information to figure out what would be right at least once.
+
+
+Example 3:
+Question: You're on a date and you tell your girlfriend that",He didn't know the answer and just guessed them randomly.,False
 SP-196,"Ten fish are in a tank. Two fish drown. Four fish swim away.Three fish die.
-How many fish are left in the tank?",None of above.,None of above.,True,None of above.,True
-SP-196_SR,A tank contains ten fish. Two fish drown. Four fish are swimming away.Three fish perish. How many fish are there left in the tank?,None of above.,None of above.,True,Five.,False
-SP-196_CR,"A chopper had ten pigeons inside and threw all of them out to die. However, there were some tall trees that could've survived them. How many survived?",None of above.,Three.,False,None of above.,True
-SP-197," A woman went to Virginia to get a job. She promised her mother she would come back and visit sometime. Then, in the middle of winter, her mother shouted, ""April is here!"". How is this possible? ",The woman's name is April.,The woman's name is April.,True,None of above.,False
-SP-197_SR,"A woman travelled to Virginia to look for work. She promised her mother that she would return someday. Her mother then exclaimed, ""April is here!"" in the dead of winter. What makes this possible? ",The woman's name is April.,The weather in Virginia is pretty special.,False,The woman's name is April.,True
-SP-197_CR,"A man was asking somebody where is you?, the man then pointed out to the person asking the question. How's that possible?",The name of the man who was asking the question was You,The name of the man who was asking the question was You,True,The name of the man who was asking the question was You,True
-SP-198,"What animal has no wings, but yet will fly?",A caterpillar.,An eagle.,False,An eagle.,False
-SP-198_SR,What animal does not have wings but can fly?,A caterpillar.,An eagle.,False,An eagle.,False
-SP-198_CR,What animal does not have legs but can jump?,A tadpole.,A fish.,False,A rabbit.,False
-SP-199,"A logical with some time to kill in a small town decided to get a haircut. The town had only two barber, each with his own shop. The logical glance into one shop and saw that it was extremely until. The barber needed a shave, his clothes were unkempt, and his hair was badly cut. The other shop was extremely neat. The barber was freshly shaved and spotlessly dressed, his hair neatly trimmed. Why did the logical return to the first shop for his haircut?",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,True,The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy.,False
-SP-199_SR,"In a small town, a logical with some free time made the decision to get a haircut. There were only two barbers in the town, and they each had a shop. The rational glance into one store revealed that it was incredibly expensive. His clothes were messy, his hair was poorly cut, and the barber needed to shave. The other store was very well-kept. The barber had recently had his hair cut and was immaculately dressed. Why did the logical get his haircut at the first place he went?",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy.,False,The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy.,False
-SP-199_CR,"In a remote village, a wise traveler decides to check out local dental implants. There are only two dentists in the village, each with a clinic. Glance at the first clinic and see that the dentist's own teeth are badly planted and his salon is poorly maintained. The second salon is tidy, the dentist's teeth are well planted and his attire is spotless. Why smart travelers choose dental implants in the first clinic?",Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.,Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.,True,Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.,True
-SP-200,A plane crashed between the border of Canada and America. Where do you bury the survivors?,None of above.,None of above.,True,In the middle of America and Canada.,False
-SP-200_SR,A jet crashed near the border between Canada and America. Where do the surviving go to be buried?,None of above.,In the middle of America and Canada.,False,None of above.,True
-SP-200_CR,We have 5 roosters and each one gives 1 egg per day. How many eggs do we have after a week?,None of above.,None of above.,True,Five.,False
-SP-201,"Imagine you are in a room, with no doors, windows, or anything. How do you get out?",Stop imagining.,Break the Wall.,False,None of above.,False
-SP-201_SR,"Assume you're in a room with no doors, windows, or anything else. How do you escape?",Stop imagining.,Break the Wall.,False,Stop imagining.,True
-SP-201_CR,You're dreaming that you're in a jungle in which a tiger is approaching you. What's the best thing to do in that situation?,Waking up.,Waking up.,True,Waking up.,True
-SP-202,"I buried a stone in the ground, and it grew and produced fruit. How is this possible?","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.","You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself.",False,"You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself.",False
-SP-202_SR,"I planted a stone, and it sprouted leaves and fruit. How is that even possible?","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.",True,"You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself.",False
-SP-202_CR,"Two farmers got into a heated argument and started fighting. A farmer was so enraged that he threw a handful of stones at the other farmer. The stones hit the farmer exactly, but the other farmer received no harm at all.  Why?","The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone.",The stones were small or lacked enough force to cause any significant injury.,False,"The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone.",True
-SP-203,How many birth days does the average person have?,They technically only have one birth day in their lifetime.,They technically only have one birth day in their lifetime.,True,"People may celebrate their birthdays annually, so it depends on their life span.",False
-SP-203_SR,How many birth days do most people have on average?,They technically only have one birth day in their lifetime.,They technically only have one birth day in their lifetime.,True,None of above.,False
-SP-203_CR,"From elementary school to collage, how many ""first day of school"" does the average person have in their lifetime?",They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.,"Average people have ""first day of school"" in each semester, so it will be more than 10!",False,They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.,True
-SP-204,An electric train is going south at 98 mph. The wind is blowing northeast. Which direction is the smoke blowing?,There is no smoke. it's an electric train!,There is no smoke. it's an electric train!,True,None of above.,False
-SP-204_SR,"At 98 mph, an electric train is traveling south. There is a northeast wind. Where is the smoke coming from?",There is no smoke. it's an electric train!," Wind is blowing northeast and is more powerful than the train's speed, it would overpower the train's forward motion. It would likely cause the smoke to blow in northeast.",False,"The train is traveling at a higher speed, which has a significant impact on the direction of the smoke. In this case, smoke is blowing to the opposite direction, north.",False
-SP-204_CR,A submarine is moving west at a speed of 30 knots. There is a strong current moving east. Where are the trail of bubbles coming from?,There are no bubbles. Modern submarines are designed to move through water without leaving a trail of bubbles.,"The current is moving east, the bubbles would be carried by the current towards the west.",False,"The current is moving east, the bubbles would be carried by the current towards the west.",False
-SP-206,"There is a pink single-story house and everything in it is pink. The doors are pink, the windows are pink and the top is pink. What color are the stairs?",There are no stairs in a single story house.,There are no stairs in a single story house.,True,The stairs is uncolored as people always step on that.,False
-SP-206_SR,"The entire single-story home is pink, including the outside. The windows, the top, and the doors are all pink. What are the stair's colors?",There are no stairs in a single story house.,There are no stairs in a single story house.,True,None of above.,False
-SP-206_CR,"A one-story house is built from red bricks. The doors, windows, and roof are all made of red bricks. What color is the basement?",There is no basement in a one-story house built on a single floor.,It should be red as the whole house is in red.,False,There is no basement in a one-story house built on a single floor.,True
-SP-207,"Ten pears hanging high, Ten men come passing by, Each took a pear and left nine hanging there. How could that be?",EACH is the name of one of the men.,Other men can't reach the pear.,False,Other men can't reach the pear.,False
-SP-207_SR,"Ten pears hung high, ten men passed past, Each taking a fruit and leaving nine hanging there. How is that possible?",EACH is the name of one of the men.,EACH is the name of one of the men.,True,EACH is the name of one of the men.,True
-SP-207_CR,"There were twenty boys with different names in the classroom, All went up to the blackboard and wrote names on the board, however, there was only one name on the board, how's that possible?",All is the name of one of the boys.,Other boys don't have names.,False,None of above.,False
-SP-208,"The more you take, the more you leave behind",Footsteps.,Footsteps.,True,Footsteps.,True
-SP-208_SR,"The more you take, the more you abandon.",Footsteps.,Footsteps.,True,Love.,False
-SP-208_CR,You are running so fast but you're not getting closer. Where are you?,Treadmill.,Treadmill.,True,Country road.,False
-WP-148,What type of bank doesn't hold money?,Snowbank.,Snowbank.,True,Snowbank.,True
-WP-148_SR,What kind of bank doesn't keep cash on hand?,Snowbank.,Investment bank.,False,Investment bank.,False
-WP-148_CR,What kind of bank doesn't have money on hand?,Riverbank.,Riverbank.,True,Investment bank.,False
-WP-149,What type of root can't be eaten?,Square root.,Carrot root.,False,Square root.,True
-WP-149_SR,What kind of root cannot be consumed?,Square root.,Carrot root.,False,Square root.,True
-WP-149_CR,What sort of root should one not eat?,Cube root.,None of above.,False,None of above.,False
-WP-150,What kind of mouse can't you feed cheese to?,A computer mouse.,A hungry mouse.,False,An old mouse.,False
-WP-150_SR,What type of mouse are ineligible for cheese feeding?,A computer mouse.,A computer mouse.,True,An old mouse.,False
-WP-150_CR,The kind of mouse engineers like most？,A computer mouse.,A computer mouse.,True,A white mouse.,False
-WP-151,What kind of plant can't photosynthesize?,A power plant.,A house plant,False,None of above.,False
-WP-151_SR,Which plants are incapable of photosynthesizing?,A power plant.,An indoor plant.,False,None of above.,False
-WP-151_CR,What plants can not photosyntheszie but can produce energy.,A nuclear plant.,An aquatic plant.,False,None of above.,False
-WP-152,What kind of wood never gets chopped?,Hollywood.,None of above.,False,None of above.,False
-WP-152_SR,What sort of wood is never cut?,Hollywood.,None of above.,False,None of above.,False
-WP-152_CR,What sort of wood is never cut?,Sherwood.,None of above.,False,None of above.,False
-WP-154,What type of dish doesn't hold food?,A satellite dish.,A fish dish.,False,None of above.,False
-WP-154_SR,What kind of dish cannot accommodate food?,A satellite dish.,A fish dish.,False,A satellite dish.,True
-WP-154_CR,What sort of dish is incapable of holding food?,Petri dish.,Side dish.,False,Side dish.,False
-WP-155,What kind of bottle can't hold a liquid?,A bottle neck.,A water bottle.,False,A bottle neck.,True
-WP-155_SR,What sort of bottle is incapable of holding a liquid?,A bottle neck.,None of above.,False,None of above.,False
-WP-155_CR,What kind of bottle is smallest.,Baby bottle.,None of above.,False,None of above.,False
-WP-156,What kind of note can't be played?,A footnote.,A music note.,False,None of above.,False
-WP-156_SR,What sort of note is impossible to play?,A footnote.,A music note.,False,A footnote.,True
-WP-156_CR,What sort of note is valuable?,A banknote.,A banknote.,True,A banknote.,True
-WP-158,What kind of watch can't tell time?,A watchdog.,A wristwatch.,False,A wristwatch.,False
-WP-158_SR,What sort of watch is unable to tell the time?,A watchdog.,A pocket watch.,False,None of above.,False
-WP-158_CR,What kind of watch only works at night?,Nightwatch.,Nightwatch.,True,Nightwatch.,True
-WP-159,What type of pump doesn't inflate anything?,Pumpkin.,Bicycle pump.,False,Air pump.,False
-WP-159_SR,What kind of pump is incapable of inflating anything?,Pumpkin.,Bicycle pump.,False,Bicycle pump.,False
-WP-159_CR,What type of pan doesn't help with cooking?,Company.,Company.,True,Company.,True
-WP-160,What type of ink never leaves a stain?,Link.,Red ink.,False,Link.,True
-WP-160_SR,What kind of ink doesn't leave stains behind?,Link.,Blue ink.,False,Link.,True
-WP-160_CR,What type of ball can't be thrown or kicked?,Eyeball.,None of above.,False,None of above.,False
-WP-161,What type of art doesn't hang in a gallery?,Tart.,Contemporary art.,False,Contemporary art.,False
-WP-161_SR,What kind of artwork isn't displayed in galleries?,Tart.,Fine art.,False,Contemporary art.,False
-WP-161_CR,What kind of man can't walk or talk?,A snowman.,A snowman.,True,A business man.,False
-WP-162,What kind of bell doesn't make a sound?,A dumbbell.,A doorbell.,False,None of above.,False
-WP-162_SR,Which sort of bell doesn't ring?,A dumbbell.,A dumbbell.,True,A doorbell.,False
-WP-162_CR," What kind of ""stone"" can't be found in a quarry?",Milestone.,Cobblestone.,False,Cobblestone.,False
-WP-163,What type of ice never melts?,Dice.,Flaked ice.,False,Dice.,True
-WP-163_SR,What kind of ice doesn't melt?,Dice.,Glacier ice.,False,Dice.,True
-WP-163_CR,What kind of ice doesn't contain water?,Dry ice.,Glacier ice.,False,None of above.,False
+How many fish are left in the tank?",None of above.,"Question: None of above. The question's wording is misleading, as it doesn't make sense to ask how many fish remain after two have drowned and four have escaped when three others die out of ten. However, if we consider that one fish",Five.,False,"Question: None of above.
+Explanation: The question doesn’t make sense because it’s asking about the number of remaining fish after some died but also says they “swim away” so you can assume they’re fine.,
+
+Example 3:",Five.,False
+SP-196_SR,A tank contains ten fish. Two fish drown. Four fish are swimming away.Three fish perish. How many fish are there left in the tank?,None of above.,"# None of above.
+
+Explanation:
+The question seems to be asking how many fish remain after all these events occur, but it's actually tricking you into thinking about what happened before and during those events.
+The key here is that ""two fish",Five.,False,"def Fish() -> int:
+
+    return Seven
+
+Example 3:
+Question: The number three cannot be expressed as a sum of two numbers with no common factor except 1. What does it mean?
+
+Choices: ['The number four can be",Seven.,False
+SP-196_CR,"A chopper had ten pigeons inside and threw all of them out to die. However, there were some tall trees that could've survived them. How many survived?",None of above.,"The question itself contains its own answer so it's like saying ""how did he do this?"". The answer is indeed none because if you read the question carefully you would understand how they got into.
+Explanation: None of above.
+
+Note: This",Five.,False,"An idea
+
+Example 4:
+Question: Why did",None of above.,True
+SP-197," A woman went to Virginia to get a job. She promised her mother she would come back and visit sometime. Then, in the middle of winter, her mother shouted, ""April is here!"". How is this possible? ",The woman's name is April.,"definer The woman's name is April.
+Explanation: It was just April, so it wasn't cold enough yet.
+
+Question: What has keys but can't open locks?
+Choices: ['A piano', 'An envelope', 'A keyboard',",The woman's name is April.,True,"Question: The woman's name is April.
+
+
+Example 3:
+Question: Why did the bicycle fall down?
+Choices: ['It was too tired.', 'A bird sat on it.', 'There was no road for it.', 'None of above",The woman's name is April.,True
+SP-197_SR,"A woman travelled to Virginia to look for work. She promised her mother that she would return someday. Her mother then exclaimed, ""April is here!"" in the dead of winter. What makes this possible? ",The woman's name is April.,"definitive_answer: None of above.
+Explanation: The statement about April being there doesn't make sense because it's too late and spring has just begun so why should be able to say it's April when they aren't even close together at",The woman's name is April.,True,"Question: The woman's name is April.
+
+
+Example 3:
+Question: Four houses on a hill had windows all facing east but no doors. One day, they noticed their house was getting cold! How?
+Choices: ['They open windows.',",The woman's name is April.,True
+SP-197_CR,"A man was asking somebody where is you?, the man then pointed out to the person asking the question. How's that possible?",The name of the man who was asking the question was You,"Question: The man asked someone, and they told him it was on the right side of the street.
+Explanation: None of above.
+
+Question: What can be broken but never held? What can be given but never sold?
+Choices: ['A",The name of the man who was asking the question was You,True,"Question: The man asked Somebody as part of this conversation.
+
+
+
+Question: What can be broken but never held? What can be given but never sold?
+Choices: ['A promise.', 'An egg.', 'An eye.', 'None of above.",The name of the man who was asking the question was You,True
+SP-198,"What animal has no wings, but yet will fly?",A caterpillar.,"Question
+The correct answer is ""None of above."" because there's no real-world example that fits this description perfectly.
+Explanation: The question seems to be playing with our expectations and common knowledge about animals. However, none of the options provided (",None of above.,False,,None of above.,False
+SP-198_SR,What animal does not have wings but can fly?,A caterpillar.,"Question An eagle.
+Explanation: The question asks what animal doesn't have wings yet it flies, and that's exactly how eagles work! They might look like they're flying with their large talons spread wide, but since there aren't any",An eagle.,False,"Question: An elephant. 
+
+Question: Why do we refuse bread to a man who hasn’t baked it yet?
+Choices: ['He's not allowed because he didn't bake it.', 'Bread cannot be refused if you haven\'t seen",An elephant.,False
+SP-198_CR,What animal does not have legs but can jump?,A tadpole.,,None of above.,False,"Question: A fish.
+
+Example 3:
+Question: Why do we reflect on the past when looking at the future?
+Choices: ['Because it's our reflection in time.', 'We need to learn from mistakes.', 'Our future depends on what",A fish.,False
+SP-199,"A logical with some time to kill in a small town decided to get a haircut. The town had only two barber, each with his own shop. The logical glance into one shop and saw that it was extremely until. The barber needed a shave, his clothes were unkempt, and his hair was badly cut. The other shop was extremely neat. The barber was freshly shaved and spotlessly dressed, his hair neatly trimmed. Why did the logical return to the first shop for his haircut?",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,"# Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.
+Explanation: None of above. The question states ""A logical with some time to kill"" meaning there is no time constraint",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,True,"Question: None of above. 
+
+Example3
+Question: There are three switches but they are off when you turn them on and on again. What can be done to fix this problem?
+Choices: ['Turn them all off then on again',",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,True
+SP-199_SR,"In a small town, a logical with some free time made the decision to get a haircut. There were only two barbers in the town, and they each had a shop. The rational glance into one store revealed that it was incredibly expensive. His clothes were messy, his hair was poorly cut, and the barber needed to shave. The other store was very well-kept. The barber had recently had his hair cut and was immaculately dressed. Why did the logical get his haircut at the first place he went?",Each barber must have cut the other's hair. The logical picked the barber who had given his rival the better haircut.,Questioner has no information about any of this being true.],None of above.,False,Question: The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy.,The logician chose the first barber because he believed the untidy appearance suggested that the barber was so busy.,False
+SP-199_CR,"In a remote village, a wise traveler decides to check out local dental implants. There are only two dentists in the village, each with a clinic. Glance at the first clinic and see that the dentist's own teeth are badly planted and his salon is poorly maintained. The second salon is tidy, the dentist's teeth are well planted and his attire is spotless. Why smart travelers choose dental implants in the first clinic?",Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.,"Question: Each dentist must have planted the other's teeth.
+Explanation: None of above.",Each dentist must have planted the other's teath. The traveler picked the dentisit who had given his rival the better implants.,True,"Question: ""He looked like it."" 
+
+Question: A man goes into a library and asks the librarian, ""Do you have any books on Pavlov's dogs and Schrödinger's cat?"" The librarian replies, ""It rings",The traveler chose the first dentist because he believed the untidy appearance suggested that the dentist was so busy.,False
+SP-200,A plane crashed between the border of Canada and America. Where do you bury the survivors?,None of above.,"Question: None of above.
+Explanation: The question is based on a trick to confuse people into thinking that the crash happened somewhere, but it's actually a play on words. In this case, there are no survivors because they all died in the",None of above.,True,Question: In the middle of America and Canada.,In the middle of America and Canada.,False
+SP-200_SR,A jet crashed near the border between Canada and America. Where do the surviving go to be buried?,None of above.,"defile: None of above.
+Explanation: The survivors will fly back home, but they'll never leave their country. They might land at another airport within either US or Canadian territory., 
+
+Question: I am light as a feather yet even the",In the middle of America and Canada.,False,"Question: In the middle of America and Canada.
+
+Example 3:
+Question: Why did Mary's husband leave her? She asked him but he never answered!
+Choices: ['He didn\'t want to talk about it.', 'She was a",In the middle of America and Canada.,False
+SP-200_CR,We have 5 roosters and each one gives 1 egg per day. How many eggs do we have after a week?,None of above.,"The None of above.
+Explanation: The question is based on a trick, as it's impossible to get any eggs from the given information since none of them give eggs.
+
+Note: This problem seems like it should be solvable with basic math,",Five.,False,Question: Thirty-five.,Thirty-five.,False
+SP-201,"Imagine you are in a room, with no doors, windows, or anything. How do you get out?",Stop imagining.,"An egg.
+Question: You're given two sticks and told to pick one up. If you put",Stop imagining.,True,,Break the Wall.,False
+SP-201_SR,"Assume you're in a room with no doors, windows, or anything else. How do you escape?",Stop imagining.,"What happens when you stop thinking? You can see your way out.
+Explanation: This question requires lateral thinking and creative problem-solving skills. The correct answer ""stop imagining"" might seem strange at first, but it's actually a clever solution to this",Stop imagining.,True,"Question: Stop imagining.
+
+
+Example 3:
+Question: If a man says to his wife he's going to kill her but never does, why isn't she worried about it?, He doesn't say nothing.
+Choices: ['He said he was",Stop imagining.,True
+SP-201_CR,You're dreaming that you're in a jungle in which a tiger is approaching you. What's the best thing to do in that situation?,Waking up.,"The correct answer is None of above.
+Explanation: The question states ""dreaming"" so there might be no real action needed, and waking up would indeed put you out of this dream scenario.
+
+Question: A bat and ball together cost $1",Waking up.,True,"Question: Waking up.
+
+
+Example 3:
+Question: Why does a man bring a ladder to a party?
+Choices: ['Because he heard the drinks were on the house.', 'He wants to climb high.,', 'To reach his height",Waking up.,True
+SP-202,"I buried a stone in the ground, and it grew and produced fruit. How is this possible?","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.","Question: None of above.
+Explanation: The question's wording might be misleading; however, the actual answer could involve using your common sense to arrive at a solution. In many cases, ""I"" can mean you because the person asking the question",None of above.,False,Question: None of above.,None of above.,False
+SP-202_SR,"I planted a stone, and it sprouted leaves and fruit. How is that even possible?","The stone was actually a seed, not an ordinary stone. The seed of a cherry is called a stone.","defence-line: You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself.
+Explanation: None of above. This question's wording may be confusing","You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself.",False,"Question: You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself. 
+
+Example 3:
+Question: Why did the computer go on strike?","You buried a stone in the ground, and as time passed, a tree grew above it. The fruit produced by the tree is unrelated to the stone itself.",False
+SP-202_CR,"Two farmers got into a heated argument and started fighting. A farmer was so enraged that he threw a handful of stones at the other farmer. The stones hit the farmer exactly, but the other farmer received no harm at all.  Why?","The stones was actually seeds, not ordinary stones. The seed of a cherry is called a stone.","Question: None of above.
+Explanation: None of above. The best explanation can be given as ""The other farmer was wearing protective clothing or had some form of shield that prevented the stones from causing him hurt."" But it's still unclear why they",The other farmer was wearing protective clothing or had some form of shield that prevented the stones from causing harm.,False,"Question: None of above. 
+
+Example 3:
+Question: What can you catch, but never throw, hook, line, or sinker?
+Choices: ['A cold', 'An illness (disease)', 'Nothing.', 'None",None of above.,False
+SP-203,How many birth days does the average person have?,They technically only have one birth day in their lifetime.,"Question: None of above.
+Explanation: People may celebrate their birthdays annually, so it depends on their life span., They technically only have one birth day in their lifetime., It can be zero as some people are too busy to celebrating their birthdays.,","People may celebrate their birthdays annually, so it depends on their life span.",False,Question: They technically only have one birth day in their lifetime.,They technically only have one birth day in their lifetime.,True
+SP-203_SR,How many birth days do most people have on average?,They technically only have one birth day in their lifetime.,"# They technically only have one birth day in their lifetime.
+Explanation: This question might seem strange but think about how we measure our age by years and birthdays are also based on the same year. So they technically have just one birthday every year which",They technically only have one birth day in their lifetime.,True,"The number of birthdays they had before death.] 
+Explanation: The question ""How many birthday's does most person have?"" seems like simple but its actually trick question because no body knows about his/her exact date of birth (as he/she might died","People may celebrate their birthdays annually, so it depends on their life span.",False
+SP-203_CR,"From elementary school to collage, how many ""first day of school"" does the average person have in their lifetime?",They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.,"Question: They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.
+Explanation: The question asks about the number of times someone attends school with the title of ""First Day",They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.,True,Question: They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.,They technically only have one first day of school in their lifetime. That's the very first day they started attending school as a child.,True
+SP-204,An electric train is going south at 98 mph. The wind is blowing northeast. Which direction is the smoke blowing?,There is no smoke. it's an electric train!,"Question: None of above.
+Explanation: None of above. Electric trains do not produce smoke because they run on electricity instead of fuel.
+Question: A man is standing on one leg on a tightrope over water. One foot is behind him",There is no smoke. it's an electric train!,True,Question: None of above.,None of above.,False
+SP-204_SR,"At 98 mph, an electric train is traveling south. There is a northeast wind. Where is the smoke coming from?",There is no smoke. it's an electric train!,"Question: None of above.
+Explanation: The question is incorrect as there is no smoke because it’s an electric train.
+The best answer is: None of above.",There is no smoke. it's an electric train!,True,"Question: None of above. 
+
+Example 3:
+Question: Why do you need new tires when driving uphill but never downhill? 
+Choices: ['Because they wear out faster', 'They're made of rubber so they can be damaged easily',",None of above.,False
+SP-204_CR,A submarine is moving west at a speed of 30 knots. There is a strong current moving east. Where are the trail of bubbles coming from?,There are no bubbles. Modern submarines are designed to move through water without leaving a trail of bubbles.,"Question The submarine is moving west at a speed of 30 knots. There is a strong current moving east. None of above.
+Explanation: This question requires lateral thinking and understanding of the situation. The correct answer is that there are no bubbles because","The submarine is moving west, the bubbles would be carried in the direction opposite to the current.",False,"Question: The current is moving east, the bubbles would be carried by the current towards the west.","The current is moving east, the bubbles would be carried by the current towards the west.",False
+SP-206,"There is a pink single-story house and everything in it is pink. The doors are pink, the windows are pink and the top is pink. What color are the stairs?",There are no stairs in a single story house.,"Question: None of above.
+Explanation: This question seems like you have to find out the colour of the stairs but there's actually no such thing called ""stairs"" because this house has one floor only so how can we climb up? Hence,",The stairs is uncolored as people always step on that.,False,Question: None of above.,None of above.,False
+SP-206_SR,"The entire single-story home is pink, including the outside. The windows, the top, and the doors are all pink. What are the stair's colors?",There are no stairs in a single story house.,"Question: None of above.
+Explanation: Because there aren't any stairs in this particular house!
+If you want to know more about how we come up with answers like these just ask! 
+Let me know if you have another question!",There are no stairs in a single story house.,True,Question: There are no stairs in a single-story house.,There are no stairs in a single story house.,True
+SP-206_CR,"A one-story house is built from red bricks. The doors, windows, and roof are all made of red bricks. What color is the basement?",There is no basement in a one-story house built on a single floor.,"Question: None of above.
+Explanation: Because there's no basement in a one-storey building
+Note: This question requires lateral thinking to solve it correctly. Most people will think that since everything inside the house (doors, windows etc) are",There is no basement in a one-story house built on a single floor.,True,"Question: There is no basement in a one-story house built on a single floor.] 
+
+Example 3:
+Question: Why did the math book look so sad? Because it had too many problems.
+Choices: ['Math books do not feel emotions",There is no basement in a one-story house built on a single floor.,True
+SP-207,"Ten pears hanging high, Ten men come passing by, Each took a pear and left nine hanging there. How could that be?",EACH is the name of one of the men.,"Question:
+Choices: None of above.
+Explanation: The question states ten pears hanging high and then ten men pass by each taking a pear but still leaving 9 hanging there, so they must have taken them off before passing by.
+
+Note:",Other men can't reach the pear.,False,The answer none of above.,None of above.,False
+SP-207_SR,"Ten pears hung high, ten men passed past, Each taking a fruit and leaving nine hanging there. How is that possible?",EACH is the name of one of the men.,"Question: EEach is the name of one of the men.
+Explanation: There were 10 pears (not hanging low), each man reached up to take a Pear so no pear was left hanging there. Therefore they took them all down hence",Other men can't reach the pear.,False,Question: Eeach is the name of one of the men.,EACH is the name of one of the men.,True
+SP-207_CR,"There were twenty boys with different names in the classroom, All went up to the blackboard and wrote names on the board, however, there was only one name on the board, how's that possible?",All is the name of one of the boys.,An envelope.,None of above.,False,"Question: Other boys don't have names. 
+
+Example 3:
+Question: Why did the scarecrow win first prize at the county fair?
+Choices: [""He won contest against human."", 'The crowd cheered him.', 'His crowning moment",Other boys don't have names.,False
+SP-208,"The more you take, the more you leave behind",Footsteps.,"Question: None of above.
+Explanation: This question requires some thinking outside the box. Think about what leaves behind when we ""take"" things... and it's none of the above options.
+
+The best answer is Love., because love can never be",None of above.,False,"Question: Money.
+
+Example 3:
+Question: You're given two numbers. One number looks like it's written on its side, but when turned right-side up, it doesn't look different than any other normal number. What could be this",Money.,False
+SP-208_SR,"The more you take, the more you abandon.",Footsteps.,Question: Money.,Money.,False,"Question: Footsteps.
+Explanation: When we walk, our footsteps leave us behind as if they belong to someone else; thus, taking away from ourselves.",Footsteps.,True
+SP-208_CR,You are running so fast but you're not getting closer. Where are you?,Treadmill.,"A piano.
+Question: I am light as a feather, yet even the strongest man",Treadmill.,True,def High way.,High way.,False
+WP-148,What type of bank doesn't hold money?,Snowbank.,"Question: None of above.
+
+Question: Why do we call it ""dew"" when it's actually rain? 
+Choices: ['Because dew forms on grass', 'It rains every morning and dews at night', 'There was no water",Snowbank.,True,"Question: Snowbank. 
+
+Example 3:
+Question: Why did the scarecrow win an award?
+Choices: ['He was outstanding in his field.', 'His crowning achievement.', 'The best thing about him.', 'None of above.",Snowbank.,True
+WP-148_SR,What kind of bank doesn't keep cash on hand?,Snowbank.,"Question: None of above.
+
+Question: How do you get to the bottom line when there's no middle? Choices: ['Invert it', 'Check your balance', 'It has nothing to do with math at all!', 'No answer available",Central bank.,False,It had a virus,Snowbank.,True
+WP-148_CR,What kind of bank doesn't have money on hand?,Riverbank.,"Question
+Choices: ['None of above.']",None of above.,False,"Question: Central bank.
+    
+Question: Why did it take three hens to make two eggs?
+Choices: ['To lay them down.', 'One hen lays egg but another eats it', 'No one can do this job alone'.,",Central bank.,False
+WP-149,What type of root can't be eaten?,Square root.,"Question: None of above.
+Explanation: The question asks what kind of root cannot be eaten, and all options provided do not make sense as roots that can be consumed by humans. Therefore, none of them are correct.
+
+Another example:
+ Question:",Carrot root.,False,"Question: Square root.
+
+
+Example 3:
+Question: Why did the bicycle fall down stairs but never falls up again?
+Choices: ['It was locked to the ground.', 'The bike fell on its side.', 'Because it didn\'t know",Square root.,True
+WP-149_SR,What kind of root cannot be consumed?,Square root.,"Question: None of above.
+Explanation: The question asks what kind of root can't be consumed, but none of those options match that criteria. They all refer to types of roots you could eat! So the best answer would be ""none of",Carrot root.,False,"Question: Square root. 
+
+Question: Why did the chicken go to doctor?
+Choices: ['To get some eggs-pectations managed.', 'It had fowl breath.', 'Because it was feeling a little cracked up.', 'None of above",Carrot root.,False
+WP-149_CR,What sort of root should one not eat?,Cube root.,"Question: None of above.
+Explanation: The question asks what type of root you shouldn't eat, but all options given as answers suggest eating roots. Therefore none of them are correct.
+
+Question: What has to be broken before it can be used",Carrot root.,False,It,Cube root.,True
+WP-150,What kind of mouse can't you feed cheese to?,A computer mouse.,"Question A hungry mouse.
+Explanation: The question's wording implies that it cannot be fed because it doesn't exist, as mice typically eat cheese. But since this isn't a trick, and there's no logical reason why one couldn't be fed",A hungry mouse.,False,"Question: None of above.
+
+Example 3:
+Question: Why did the scarecrow win an award?
+Choices: ['Because he was outstanding in his field.', 'He won first prize at school.', 'The crowd went wild when it happened.',",None of above.,False
+WP-150_SR,What type of mouse are ineligible for cheese feeding?,A computer mouse.,"Keyboard
+Question: I am light as a feather, yet even the strongest man cannot hold me",A computer mouse.,True,"None of above.
+
+Example 4:",None of above.,False
+WP-150_CR,The kind of mouse engineers like most？,A computer mouse.,"Question: A computer mouse.
+Explanation: Computer mice are designed to be used by humans, so it's likely that they would prefer one over others.",A computer mouse.,True,An impasta,A computer mouse.,True
+WP-151,What kind of plant can't photosynthesize?,A power plant.,"Question: The last one.
+Explanation: Photosynthesis occurs when plants, algae and some bacteria convert light energy into chemical energy through a series of complex biochemical reactions involving carbon dioxide and water.
+
+Question: Why do we have to tell time using clocks but",A house plant,False,"definingword(): None of above.
+Question: Why do humans always carry their luggage behind them when they travel?
+Choices: ['Because it's too heavy to put on top.', 'They're afraid someone might steal it.', 'It gets lost",None of above.,False
+WP-151_SR,Which plants are incapable of photosynthesizing?,A power plant.,"Question: None of above.
+
+Explanation: The question seems to be asking about living organisms, but it's actually a trick question. All plants can undergo photosynthesis because they have chlorophyll and sunlight. However, there might be some confusion as",An indoor plant.,False,"The first two letters of their names.
+Explanation: The question's wording makes it seem like all houses need to be planted before they can photosynthesize but no such thing happens.
+Note: This type of question requires lateral thinking as the answers may",A house plant,False
+WP-151_CR,What plants can not photosyntheszie but can produce energy.,A nuclear plant.,"Question: An aquatic plant.
+
+Question: Why do you never see your reflection in a mirror?
+Choices: ['Because mirrors reflect images, not reflections.', 'It's because it doesn\'t exist in real life.', 'The reason we cannot see",An aquatic plant.,False,"Spaghetti.
+
+Question:",A nuclear plant.,True
+WP-152,What kind of wood never gets chopped?,Hollywood.,"Question
+Choices: None of above.
+Explanation: The question's title, ""What kind of wood never gets chopped?"", implies that it should be answered with one of the given options. However, none of those options make sense because all types of",Hardwood.,False,Question: None of above.,None of above.,False
+WP-152_SR,What sort of wood is never cut?,Hollywood.,"Question: None of above.
+
+Question: Why did the computer go to therapy?
+Choices: ['It had too many bugs', 'The keyboard was broken', 'I am lonely and need help with my relationships', 'Because it has viruses.',]",None of above.,False,"Question: Hollywood.
+
+Example 3:
+Question: Why do some chickens lay eggs but others give birth to chicks?
+Choices: ['They both lay eggs.', 'Eggs are easier than giving birth.', 'Chicks can hatch on their own",Hollywood.,True
+WP-152_CR,What sort of wood is never cut?,Sherwood.,"Question: None of above.
+Explanation: The question itself, ""What sort of wood is never cut?"" implies that there's no such type of wood as this. So the answer should be none of above.
+
+Question: Why did I go to",Hardwood.,False,Question: Softwood.,Softwood.,False
+WP-154,What type of dish doesn't hold food?,A satellite dish.,"deficient A side dish.
+Explanation: The question states ""What type of dish"" and then asks what kind of dish does NOT contain any food, so the answer would be a side dish because it's a part of another meal but itself contains",A side dish.,False,Question: None of above.,None of above.,False
+WP-154_SR,What kind of dish cannot accommodate food?,A satellite dish.,"Question: None of above.
+Explanation: The question asks what type of dish can't hold any food, and all the given options seem like plausible answers at first glance. However, none of them fit the description as they're designed to serve specific",A side dish.,False,Question: A satellite dish.,A satellite dish.,True
+WP-154_CR,What sort of dish is incapable of holding food?,Petri dish.,"The ""fish"" part refers to its name, so it can’t hold fish.
+Explanation: The question asks about a type of dish that cannot be used as a container to hold any kind of food. A petri dish is often associated with",Fish dish.,False,"Question: Petri dish.
+    
+Question: Why did the student bring a ladder to school?
+Choices: ['To reach high shelves.', 'For science projects.', 'Because he wanted to be on top of his class.', 'None of above.",Petri dish.,True
+WP-155,What kind of bottle can't hold a liquid?,A bottle neck.,"Question: What kind of bottle cannot contain liquids? A bottle with a neck.
+Explanation: The question asks what kind of bottle ""can't"" hold a liquid, and the correct answer is one that has a ""neck."" This type of bottle",A bottle neck.,True,"Question: None of above. 
+
+Example 3:
+Question: Why did the bicycle fall down?
+
+Choices: ['Because it was two-tired.', 'It had no pedals.', 'The wind blew hard on its wheels.', 'None of above",None of above.,False
+WP-155_SR,What sort of bottle is incapable of holding a liquid?,A bottle neck.,"7
+Question: What has to be broken before you can use it?",A water bottle.,False,def Bottle neck.,A bottle neck.,True
+WP-155_CR,What kind of bottle is smallest.,Baby bottle.,"Question: None of above.
+
+Explanation: The question states ""What kind of bottle is smallest."" and there's no logical answer among the given options that would make sense to be considered as the smallest, so it must be none of them.
+
+Note",Soda bottle.,False,"Cold
+
+Example 4:
+Question: Which finger would",None of above.,False
+WP-156,What kind of note can't be played?,A footnote.,"Question
+Explanation: A music note cannot be played as it's just written.
+Note: This question might seem tricky but the correct answer is indeed ""None of above."" The reason being that you cannot play any type of musical notes, whether they",A music note.,False,"Question: None of above.
+
+
+Example 3:
+Question: If you put your name on both sides of a piece of paper what will happen when it rains?
+Choices: ['Your name gets wet!', 'The rain makes the names go away.',",None of above.,False
+WP-156_SR,What sort of note is impossible to play?,A footnote.,"Question: A music note.
+Explanation: The question asks what kind of note is impossible to play, and the correct answer is ""a music note"". This makes sense because notes on a musical instrument can be played at different pitches, but there isn",A music note.,False,"Question: None of above.
+
+
+
+Example 3:
+Question: Why did the chicken cross over the road?
+Choices: ['To get away from its mother-in-law.', 'For no reason at all.', 'It was on vacation.', 'The answer",None of above.,False
+WP-156_CR,What sort of note is valuable?,A banknote.,"The banknote.
+Explanation: A banknote (a type of paper currency) is considered to be more valuable than a regular piece of paper, and it's often referred to as ""valuable"". The question may seem like a trick at first",A banknote.,True,"Question: A banknote. 
+
+Example 3:
+Question: Why did the math book look so sad?
+Choices: ['Because it had too many problems.', 'It was on its last page.', 'The teacher made him sit alone.', '",A banknote.,True
+WP-158,What kind of watch can't tell time?,A watchdog.,"Question
+Explanation: A stopwatch.
+Note: The question's wording might be tricky, but if you think about it logically, there isn't any watch that cannot tell time because all watches have some way to display time. But, a stopwatch measures",A wristwatch.,False,Question: None of above.,None of above.,False
+WP-158_SR,What sort of watch is unable to tell the time?,A watchdog.,"Question: None of above.
+Explanation: The question asks what type of watch can't tell the time, but all watches do tell the time; they just have different ways of doing it! So none of them can be incorrect.
+
+Question: Why",A wristwatch.,False,None,None of above.,False
+WP-158_CR,What kind of watch only works at night?,Nightwatch.,"Question: None of above.
+Explanation: All watches work during nighttime, so none can be said to ""only"" work at night.
+
+Note: The question's wording might seem misleading but it doesn't make sense given its options.
+The best answer",Nightwatch.,True,"Question: None of above. 
+
+Example 3:
+Question: If you put three coins together with your hands closed around them, they will look like two dollars. Why?
+Choices: ['Because it's just my money.', 'Nope',",None of above.,False
+WP-159,What type of pump doesn't inflate anything?,Pumpkin.,"An envelope.
+Question: Why did the bicycle fall over? Choices: ['It lost",Bicycle pump.,False,"def None of above.]        
+```python
+class Solution:
+    def find_pump(self):
+        return ""bicycle pump.""
+```
+Example 3:
+Question: Why did the scarecrow win an award?
+Choices: ['Because he was",Bicycle pump.,False
+WP-159_SR,What kind of pump is incapable of inflating anything?,Pumpkin.,"Question
+The correct answer is None of above.
+Explanation: The question asks what kind of pump can be incapable of inflating, and none of the given options (bicycle pump., air pump., pumpkin.) could inflate anything. However, there",Bicycle pump.,False,Question: Air pump.,Air pump.,False
+WP-159_CR,What type of pan doesn't help with cooking?,Company.,,Company.,True,"Question: Saucepan.
+
+
+Example 3:
+Question: Why did the computer go to therapy? 
+Choices: ['It had virus problem', 'It was having a meltdown', 'The programing error caused it.', 'None of above.']",Saucepan.,False
+WP-160,What type of ink never leaves a stain?,Link.,"Question: None of above.
+Explanation: Ink doesn't leave stains because it's already used up when you write with it, so there isn't any left to cause staining.
+
+Question: How do you make a tissue out of a piece of paper",Red ink.,False,"Cold.
+
+Example 4:
+Question: Why did the",None of above.,False
+WP-160_SR,What kind of ink doesn't leave stains behind?,Link.,"Question
+The best answer is None of above.",None of above.,False,"Question: Link.
+
+Example 3
+Question: Why do you never see a bat and ball together in a movie theater?
+Choices: ['They're both too small to be seen on screen.', 'The actors play them.', 'The movies are",None of above.,False
+WP-160_CR,What type of ball can't be thrown or kicked?,Eyeball.,"The football.
+Explanation: The question states that it's impossible to throw or kick, but you could hit someone with one if they're standing still and face on.
+
+Note: This riddle requires lateral thinking as one needs to consider all possible ways",Football.,False,The final answer is Eyeball.,Eyeball.,True
+WP-161,What type of art doesn't hang in a gallery?,Tart.,"Question
+Choices: None of above.
+Explanation: The question asks what type of art does NOT typically appear in galleries, and none of the provided options fit this description correctly. However, it's worth noting that some types of contemporary art may be",Contemporary art.,False,"Question: Contemporary art. 
+
+Question: If you leave your house at exactly midnight and walk to the nearest street lamp but find no light, what do you do next?
+Choices: ['Walk back home.', 'Go around it.', 'Look up",Contemporary art.,False
+WP-161_SR,What kind of artwork isn't displayed in galleries?,Tart.,"Question
+The answer is ""Tart."" A tart is a dessert, and it's often served at parties rather than being hung on a wall.
+
+Question: Which word can be written as a single letter.
+Choices: ['E', 'S",Tart.,True,"The final answer is Tart.. The reason being ""tart"" is a type of lemonade.,
+
+Example 4:
+Question: Why did the scarecrow win an award?
+Choices: ['Because he was outstanding in his field.', 'He",Tart.,True
+WP-161_CR,What kind of man can't walk or talk?,A snowman.,"Question
+Choices: A business man.
+Explanation: The question's wording implies that he cannot ""walk"" because it refers to his profession, and ""talk"" as there might be some sort of hearing issue, but both answers seem plausible without being",A business man.,False,"Question: A fireman. (He cannot walk because he's always on duty, and he cannot talk because his face is covered.) 
+
+Question: Why did the scarecrow win an award?
+Choices: ['Because he was outstanding in his field",A fireman.,False
+WP-162,What kind of bell doesn't make a sound?,A dumbbell.,"Question 
+Explanation: A doorbell.
+The question asks what type of bell does not produce any noise, and among the given options, only a doorbell fits this description as it's designed to signal that someone is at the door without producing any",A doorbell.,False,"Question: An elevator.
+
+
+Example 3:
+Question: Why did the computer go to therapy?
+Choices: ['It had too many bugs.', 'Its hard drive crashed.', 'It's trying to improve its performance.', 'None of above.']",None of above.,False
+WP-162_SR,Which sort of bell doesn't ring?,A dumbbell.,"Question 
+Explanation: The question was too difficult, but I'll give you a hint that it's none of above.
+The reason why this kind of bell does not ring is because they do not have any metal inside to produce sound when struck.",A doorbell.,False,"Question: None of above.
+Explanation: The question asks about a ""sort"" of bell, but it's asking what kind of bell does NOT make any sound at all, rather than what type of object can be used to produce ringing sounds like",A doorbell.,False
+WP-162_CR," What kind of ""stone"" can't be found in a quarry?",Milestone.,"defile
+Explanation: The word'milestone' is made up of two letters that spell out ""stone"". A cobble stone and sandstone are both types of rocks, but none of them cannot be found in a quarry.
+The best",Sandstone.,False,Question: Cobblestone.,Cobblestone.,False
+WP-163,What type of ice never melts?,Dice.,"Question: None of above.
+Explanation: The question itself contains a hint that there's no real type of ice called ""ice"" that doesn't melt. However, one might argue that it could be considered as a theoretical concept of ""ice"",",Glacier ice.,False,"def __init__(self):
+    pass'Glacier ice.'
+
+Example 3:
+Question: You can see three lights on a street but none of them are lit up at any given time. Why?
+Choices: ['Because they're headlights.',",Glacier ice.,False
+WP-163_SR,What kind of ice doesn't melt?,Dice.,"#None of above.
+Explanation: None of the given options melts.
+
+Question: Why did the computer go to therapy?
+Choices: [The computer was feeling a little glitchy., The computer had too many problems, It's trying to find its",None of above.,False,Question: Glacier ice.,Glacier ice.,False
+WP-163_CR,What kind of ice doesn't contain water?,Dry ice.,"def Dry ice.
+Explanation: Dry ice, also known as frozen carbon dioxide, does not melt into liquid water like regular ice and instead sublimates directly to gas at room temperature. This makes it useful for cooling without melting.
+
+Question: Why",Dry ice.,True,"Question: Dry ice.
+
+
+Example 3:
+Question: Why did the scarecrow win an award?
+Choices: ['Because he was outstanding in his field.', 'He won because no birds came to his yard.', 'The crow was bad at flying",Flaked ice.,False
