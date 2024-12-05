@@ -18,7 +18,8 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 
 # Load tokenizer
 tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
-tokenizer.pad_token = tokenizer.eos_token
+
+tokenizer.pad_token = "!"
 
 # Function to generate zero-shot and few-shot prompts
 def generate_prompt(item, few_shot=True):
