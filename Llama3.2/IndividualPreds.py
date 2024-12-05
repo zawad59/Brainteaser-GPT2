@@ -35,7 +35,7 @@ processed_test_data = preprocess_data(test_data)
 # Generate answers using the model
 def generate_answer(model, tokenizer, question, choices):
     prompt = (
-        "\nChoose one of the following answers and give an explanation below the answer.\n"
+        "\nGenerate Answer to the Questions in the Test Data based on the loaded fine-tuned model.\n"
     )
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding=True, max_length=1024).to(device)
     outputs = model.generate(
@@ -102,8 +102,8 @@ def evaluate_model(model, tokenizer, test_data, output_file):
     return accuracy
 
 # Define learning rates and weight decays
-learning_rates = [0.1]
-weight_decays = [0.05]
+learning_rates = [0.0001]
+weight_decays = [0.1]
 
 # Save predictions to CSV
 def save_predictions_to_csv(predictions, filename):
@@ -117,7 +117,7 @@ def save_predictions_to_csv(predictions, filename):
 
 # Evaluate all combinations
 def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays,
-                              base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
+                              base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/LlamaFinetuned"):
     for lr in learning_rates:
         for wd in weight_decays:
             model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
