@@ -28,32 +28,24 @@ embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight and eff
 def generate_prompt(item, few_shot=True):
     question = item['question']
     answer = item['answer']
-
-    if 'choice_list' in item:
-        ordered_choices = item['choice_list']
-    else:
-        distractor1 = str(item['distractor1'])
-        distractor2 = str(item['distractor2'])
-        distractor_unsure = str(item['distractor(unsure)'])
-        choice_list = [answer, distractor1, distractor2, distractor_unsure]
-        choice_order = item['choice_order']
-        ordered_choices = [choice_list[i] for i in choice_order]
+    ordered_choices = item['choice_list']
 
     system_message = (
-        "You are an assistant answering riddle questions for a test. Choose the correct answer from the choices."
-        " Return only the answer. Don't generate anything which is not in the answer choices or in other words don't generate something random"
+        "You are an assistant answering riddle questions for a test. "
+        "Choose the correct answer from the choices below. "
+        "Only return the answer as it appears in the choices."
     )
     if few_shot:
         examples = '''
         Example 1:
-        Question: Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible? 
-        Choices: ['Each daughter shares the same brother.', 'Some daughters get married.', 'Some brothers were not loved by family.', 'None of the above.']
-        Answer: Each daughter shares the same brother.
+        Question: What is always coming but never arrives?
+        Choices: ['Tomorrow', 'Yesterday', 'Now', 'Never']
+        Answer: Tomorrow
 
         Example 2:
-        Question: A chess team has five players, and each player has one coach. But there are only six participants in the team. How is that possible? 
-        Choices: ['Each player shares the same coach.', 'Some players are backups.', 'Some coaches got a raise.', 'None of the above.']
-        Answer: Each player shares the same coach.
+        Question: The more of this you take, the more you leave behind. What is it?
+        Choices: ['Footsteps', 'Time', 'Money', 'Water']
+        Answer: Footsteps
         '''
         return (
             f"{system_message}\n\n{examples}\n"
@@ -74,8 +66,12 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
-# Function to refine answer using cosine similarity
+# Function to refine answer using cosine similarity and remove gibberish
 def refine_answer(generated_answer, choices):
+    # Clean up generated answer
+    generated_answer = generated_answer.strip()  # Remove extra spaces
+    generated_answer = generated_answer.replace("Question:", "").replace("Answer:", "").strip()  # Remove prefixes
+    # Compare with choices
     generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
     choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
     cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
@@ -85,7 +81,7 @@ def refine_answer(generated_answer, choices):
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
 
-# Updated main function
+# Main function to run predictions for all models
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
@@ -187,4 +183,3 @@ def run_predictions():
 # Execute
 if __name__ == "__main__":
     run_predictions()
-
