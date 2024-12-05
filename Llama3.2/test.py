@@ -25,35 +25,63 @@ tokenizer.pad_token = tokenizer.eos_token
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight and effective model for embeddings
 
 # Function to generate zero-shot and few-shot prompts
-def generate_prompt(item, few_shot=True):
+def generate_prompt(item, few_shot=False):
     question = item['question']
     answer = item['answer']
-    ordered_choices = item['choice_list']
 
-    system_message = (
-        "You are an assistant answering riddle questions for a test. "
-        "Choose the correct answer from the choices below. "
-        "Only return the answer as it appears in the choices."
-    )
+    if 'choice_list' in item:
+        ordered_choices = item['choice_list']  # use for preordered test dataset
+    else:
+        distractor1 = str(item['distractor1'])  # order the eval dataset
+        distractor2 = str(item['distractor2'])
+        distractor_unsure = str(item['distractor(unsure)'])
+        # Create choice_list and reorder based on choice_order
+        choice_list = [answer, distractor1, distractor2, distractor_unsure]
+        choice_order = item['choice_order']
+        ordered_choices = [choice_list[i] for i in choice_order]
+
+    sys_msg = "You are an assistant answering riddle questions for a test. For each question you must choose a answer from the choice list. Output the chosen answer and nothing else."
     if few_shot:
         examples = '''
-        Example 1:
-        Question: What is always coming but never arrives?
-        Choices: ['Tomorrow', 'Yesterday', 'Now', 'Never']
-        Answer: Tomorrow
+                    Here are some examples of questions and their answers
+                    SP-0 
+                    Question:        Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible? 
+                    Choices:         ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'] 
+                    Answer:  Each daughter shares the same brother. 
 
-        Example 2:
-        Question: The more of this you take, the more you leave behind. What is it?
-        Choices: ['Footsteps', 'Time', 'Money', 'Water']
-        Answer: Footsteps
-        '''
+                    SP-0_SR 
+                    Question:        The six daughters of Mr. and Mrs. Mustard each have one brother. However, the family only consists of nine people; how is that possible? 
+                    Choices:         ['Some brothers were not loved by family and moved away.', 'Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'None of above.'] 
+                    Answer:  Each daughter shares the same brother. 
+
+                    SP-0_CR 
+                    Question:        A chess team has five players, and each player has one coach. But there are only six participants in the team. How is that possible? 
+                    Choices:         ['Each player shares the same coach.', 'Some players are backups and not allowed to play.', 'Some coaches get a raise.', 'None of above.'] 
+                    Answer:  Each player shares the same coach. 
+                    
+                    WP-115 
+                    Question:         What TV program should you watch in the bathtub?
+                    Choices:          ['Soap operas.', 'Sports live.', 'Talk show.', 'None of above.']
+                    Answer:  Soap operas. 
+                    
+                    WP-115_SR 
+                    Question:         What TV show should you watch in the tub?, 
+                    Choices:          ['Soap operas.', 'Talk show.', 'Sports live.', 'None of above.']
+                    Answer:  Soap operas.
+                    
+                    WP-115_CR
+                    Question:         What TV show should people in serious denial watch ?,  
+                    Choices:          ['Reality TV shows', 'Sports live.', 'Soap operas.', 'None of above.'],
+                    Answer:  Reality TV shows.
+                    
+                    '''
         return (
-            f"{system_message}\n\n{examples}\n"
-            f"Question: {question}\nChoices: {ordered_choices}\nAnswer:"
+            f"<s> [INST]{sys_msg}\n{examples}{question}\nChoose one of the following answers from the following choices:\n"
+            + "\n".join(ordered_choices) + "[/INST]</s>" + answer + "</s>"
         )
     return (
-        f"{system_message}\n\n"
-        f"Question: {question}\nChoices: {ordered_choices}\nAnswer:"
+        f"<s> [INST]{sys_msg}\n{question}\nChoose one of the following answers from the following choices:\n"
+        + "\n".join(ordered_choices) + "[/INST]</s>" + answer + "</s>"
     )
 
 # Function to tokenize prompt
