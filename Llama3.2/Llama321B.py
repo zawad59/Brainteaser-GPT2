@@ -5,7 +5,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingA
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from datasets import Dataset as HFDataset
 import gc
-
+from trl import SFTTrainer, setup_chat_format
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
@@ -102,11 +102,10 @@ trainer = SFTTrainer(
     train_dataset=tokenized_train_dataset,
     eval_dataset=tokenized_dev_dataset,
     data_collator=data_collator,
-    peft_config=peft_config,
     max_seq_length= 512,
     dataset_text_field="text",
     tokenizer=tokenizer,
-    args=training_arguments,
+    args=training_args,
     packing= False,
 )
 
