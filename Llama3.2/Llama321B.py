@@ -92,7 +92,7 @@ train_dataset = Dataset.from_dict({"input_ids": train_input_ids, "attention_mask
 dev_dataset = Dataset.from_dict({"input_ids": dev_input_ids, "attention_mask": dev_attention_masks})
 
 # Hyperparameter combinations
-LEARNING_RATES = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
+LEARNING_RATES = [0.005, 0.001, 0.0005, 0.0001, 0.00001]
 WEIGHT_DECAYS = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 
 # Loop through all combinations
