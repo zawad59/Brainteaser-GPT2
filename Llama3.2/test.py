@@ -12,7 +12,7 @@ MAX_NEW_TOKENS = 50
 RESULTS_DIR = "llama-brainteasers-results/test"
 CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/"
 LEARNING_RATES = [0.01]
-WEIGHT_DECAYS = [0.0.0001]
+WEIGHT_DECAYS = [0.0001]
 
 # Ensure results directory exists
 os.makedirs(RESULTS_DIR, exist_ok=True)
