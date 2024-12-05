@@ -37,7 +37,7 @@ def generate_prompt(item, few_shot=True):
 
     system_message = (
         "You are an assistant answering riddle questions for a test. Choose the correct answer from the choices."
-        " Return only the answer."
+        " Return only the answer. Don't generate anything which is not in the answer choices or in other words don't generate something random"
     )
     if few_shot:
         examples = '''
