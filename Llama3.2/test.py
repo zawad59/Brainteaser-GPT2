@@ -66,17 +66,21 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
-# Function to refine answer using cosine similarity and remove gibberish
+# Function to refine answer using cosine similarity and enforce valid output
 def refine_answer(generated_answer, choices):
     # Clean up generated answer
     generated_answer = generated_answer.strip()  # Remove extra spaces
     generated_answer = generated_answer.replace("Question:", "").replace("Answer:", "").strip()  # Remove prefixes
-    # Compare with choices
+    # Validate against choices
+    if generated_answer in choices:
+        return generated_answer  # Valid answer
+    # Otherwise, refine using cosine similarity
     generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
     choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
     cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
     best_choice_idx = torch.argmax(cosine_scores).item()
     return choices[best_choice_idx]
+
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
