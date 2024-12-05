@@ -8,7 +8,8 @@ from sentence_transformers import SentenceTransformer, util  # For cosine simila
 
 # Constants
 CUTOFF_LEN = 512
-MAX_NEW_TOKENS = 50
+MAX_NEW_TOKENS = 10  # Reduced to limit output length
+TEMPERATURE = 0.0     # Set to 0 for deterministic output
 RESULTS_DIR = "llama-brainteasers-results/test"
 CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/"
 LEARNING_RATES = [0.01]
@@ -18,7 +19,7 @@ WEIGHT_DECAYS = [0.0001]
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 # Load tokenizer
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B", use_fast=False)
 tokenizer.pad_token = tokenizer.eos_token
 
 # Load sentence embedding model for cosine similarity
@@ -27,35 +28,27 @@ embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 # Function to generate prompts
 def generate_prompt(item, few_shot=False):
     question = item['question']
-    answer = item['answer']
     ordered_choices = item.get('choice_list', [])
 
-    sys_msg = (
-        "You are an assistant answering riddle questions for a test. "
-        "Choose the correct answer from the choices provided. Output only the answer."
-    )
-
-    examples = ""
     if few_shot:
-        examples = '''
-        Example 1:
-        Question: Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible?
-        Choices: ['Each daughter shares the same brother.', 'Some daughters get married.', 'Some brothers were not loved by family.', 'None of above.']
-        Answer: Each daughter shares the same brother.
+        examples = (
+            "Q: What has keys but can't open locks?\n"
+            "Choices: A piano, A map, A book, A computer\n"
+            "A: A piano\n\n"
+            "Q: What gets wetter as it dries?\n"
+            "Choices: A towel, Water, Rain, Soap\n"
+            "A: A towel\n\n"
+        )
+    else:
+        examples = ""
 
-        Example 2:
-        Question: What TV program should you watch in the bathtub?
-        Choices: ['Soap operas.', 'Sports live.', 'Talk show.', 'None of above.']
-        Answer: Soap operas.
-
-        ---
-        '''
-    return (
-        f"{sys_msg}\n\n{examples}"
-        f"Question: {question}\n"
+    prompt = (
+        f"{examples}"
+        f"Q: {question}\n"
         f"Choices: {', '.join(ordered_choices)}\n"
-        "Answer:"
+        f"A:"
     )
+    return prompt
 
 # Function to tokenize prompt
 def tokenize(prompt):
@@ -63,10 +56,22 @@ def tokenize(prompt):
         prompt,
         truncation=True,
         max_length=CUTOFF_LEN,
-        padding="max_length",
+        padding="longest",
         return_tensors="pt"
     )
 
+# Function to clean generated answer
+def clean_generated_answer(generated_text):
+    """
+    Cleans generated text to ensure only the answer is returned.
+    """
+    # Remove any unwanted tokens or text
+    answer = generated_text.strip()
+    # If the answer contains multiple lines, take the first one
+    answer = answer.split('\n')[0]
+    return answer
+
+# Function to refine answer using cosine similarity and enforce valid output
 def refine_answer(generated_answer, choices):
     """
     Refines the generated answer using cosine similarity to match the closest choice.
@@ -83,17 +88,6 @@ def refine_answer(generated_answer, choices):
     cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
     best_choice_idx = torch.argmax(cosine_scores).item()
     return choices[best_choice_idx]
-
-
-# Function to clean generated answer
-def clean_generated_answer(generated_text):
-    """
-    Cleans generated text to ensure only the answer is returned.
-    """
-    generated_text = generated_text.replace("[INST]", "").replace("</s>", "").strip()
-    if "Answer:" in generated_text:
-        return generated_text.split("Answer:")[-1].strip()
-    return generated_text
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
@@ -142,10 +136,17 @@ def run_predictions():
                     model.eval()
                     with torch.no_grad():
                         zero_shot_outputs = model.generate(
-                            **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
+                            **zero_shot_inputs,
+                            max_new_tokens=MAX_NEW_TOKENS,
+                            temperature=TEMPERATURE,
+                            num_beams=1,
+                            do_sample=False,
+                            repetition_penalty=1.0
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                     zero_shot_answer = clean_generated_answer(zero_shot_prediction)
+                    refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
+                    refined_zero_shot_correct = refined_zero_shot_answer == answer
 
                     # Few-shot prediction
                     few_shot_prompt = generate_prompt(item, few_shot=True)
@@ -153,15 +154,15 @@ def run_predictions():
                     few_shot_inputs = {key: val.to(model.device) for key, val in few_shot_inputs.items()}
                     with torch.no_grad():
                         few_shot_outputs = model.generate(
-                            **few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
+                            **few_shot_inputs,
+                            max_new_tokens=MAX_NEW_TOKENS,
+                            temperature=TEMPERATURE,
+                            num_beams=1,
+                            do_sample=False,
+                            repetition_penalty=1.0
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                     few_shot_answer = clean_generated_answer(few_shot_prediction)
-
-                    # Refine predictions and validate against choices
-                    refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
-                    refined_zero_shot_correct = refined_zero_shot_answer == answer
-
                     refined_few_shot_answer = refine_answer(few_shot_answer, choices)
                     refined_few_shot_correct = refined_few_shot_answer == answer
 
