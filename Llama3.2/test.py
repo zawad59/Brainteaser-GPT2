@@ -40,39 +40,43 @@ def generate_prompt(item, few_shot=False):
         choice_order = item['choice_order']
         ordered_choices = [choice_list[i] for i in choice_order]
 
-    sys_msg = "You are an assistant answering riddle questions for a test. For each question you must choose a answer from the choice list. Output the chosen answer and nothing else."
+    sys_msg = (
+    "You are an assistant for a test. Your task is to answer riddle questions by selecting a correct answer from the given choices."
+    "Only output the chosen answer without repeating instructions."
+)
     if few_shot:
         examples = '''
-                    Here are some examples of questions and their answers
+                    Example 1:
                     SP-0 
-                    Question:        Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible? 
-                    Choices:         ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'] 
-                    Answer:  Each daughter shares the same brother. 
+                    Question: Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible? 
+                    Choices:  ['Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'Some brothers were not loved by family and moved away.', 'None of above.'] 
+                    Answer: Each daughter shares the same brother. 
 
                     SP-0_SR 
-                    Question:        The six daughters of Mr. and Mrs. Mustard each have one brother. However, the family only consists of nine people; how is that possible? 
-                    Choices:         ['Some brothers were not loved by family and moved away.', 'Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'None of above.'] 
-                    Answer:  Each daughter shares the same brother. 
+                    Question: The six daughters of Mr. and Mrs. Mustard each have one brother. However, the family only consists of nine people; how is that possible? 
+                    Choices: ['Some brothers were not loved by family and moved away.', 'Some daughters get married and have their own family.', 'Each daughter shares the same brother.', 'None of above.'] 
+                    Answer: Each daughter shares the same brother. 
 
                     SP-0_CR 
-                    Question:        A chess team has five players, and each player has one coach. But there are only six participants in the team. How is that possible? 
-                    Choices:         ['Each player shares the same coach.', 'Some players are backups and not allowed to play.', 'Some coaches get a raise.', 'None of above.'] 
-                    Answer:  Each player shares the same coach. 
-                    
+                    Question: A chess team has five players, and each player has one coach. But there are only six participants in the team. How is that possible? 
+                    Choices: ['Each player shares the same coach.', 'Some players are backups and not allowed to play.', 'Some coaches get a raise.', 'None of above.'] 
+                    Answer: Each player shares the same coach. 
+
+                    Example 2:
                     WP-115 
-                    Question:         What TV program should you watch in the bathtub?
-                    Choices:          ['Soap operas.', 'Sports live.', 'Talk show.', 'None of above.']
-                    Answer:  Soap operas. 
+                    Question: What TV program should you watch in the bathtub?
+                    Choices: ['Soap operas.', 'Sports live.', 'Talk show.', 'None of above.']
+                    Answer: Soap operas. 
                     
                     WP-115_SR 
-                    Question:         What TV show should you watch in the tub?, 
-                    Choices:          ['Soap operas.', 'Talk show.', 'Sports live.', 'None of above.']
-                    Answer:  Soap operas.
+                    Question: What TV show should you watch in the tub?, 
+                    Choices: ['Soap operas.', 'Talk show.', 'Sports live.', 'None of above.']
+                    Answer: Soap operas.
                     
                     WP-115_CR
-                    Question:         What TV show should people in serious denial watch ?,  
-                    Choices:          ['Reality TV shows', 'Sports live.', 'Soap operas.', 'None of above.'],
-                    Answer:  Reality TV shows.
+                    Question: What TV show should people in serious denial watch ?,  
+                    Choices: ['Reality TV shows', 'Sports live.', 'Soap operas.', 'None of above.'],
+                    Answer: Reality TV shows.
                     
                     '''
         return (
