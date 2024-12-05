@@ -7,6 +7,7 @@ from datasets import Dataset
 from transformers import DataCollatorForLanguageModeling
 from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments
 import gc
+from trl import SFTTrainer, setup_chat_format
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -114,7 +115,7 @@ training_args = TrainingArguments(
 data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
 # Define Trainer
-trainer = Trainer(
+trainer = SFTTrainer(
     model=model,
     args=training_args,
     train_dataset=train_dataset,
