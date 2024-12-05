@@ -123,7 +123,7 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
                               base_model_dir="/home/jawadkk/Brainteaser-GPT2/Llama3.2/"):
     for lr in learning_rates:
         for wd in weight_decays:
-            model_id = f"llama_finetuned_lr{lr}_wd{wd}"
+            model_id = f"llama_lora_finetuned_lr{lr}_wd{wd}"
             model_path = os.path.join(base_model_dir, model_id)
             zero_shot_output_file = f"ResultsFewShot/{model_id}_zero_shot_results.csv"
             few_shot_output_file = f"ResultsFewShot/{model_id}_few_shot_results.csv"
