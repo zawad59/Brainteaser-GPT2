@@ -121,6 +121,7 @@ def evaluate_all_combinations(processed_test_data, learning_rates, weight_decays
     for lr in learning_rates:
         for wd in weight_decays:
             model_path = os.path.join(base_model_dir)
+            model_id = "Llama_Lora_FineTuned_lr_0.0001_wd_0.01"
             output_file = f"ResultsFewShot/{model_id}_results.csv"
             os.makedirs("ResultsFewShot", exist_ok=True)
             try:
