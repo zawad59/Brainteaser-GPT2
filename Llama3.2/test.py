@@ -67,6 +67,24 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
+def refine_answer(generated_answer, choices):
+    """
+    Refines the generated answer using cosine similarity to match the closest choice.
+    """
+    # Clean up the generated answer
+    generated_answer = generated_answer.strip()
+    # Validate if the answer directly matches one of the choices
+    if generated_answer in choices:
+        return generated_answer
+
+    # Use cosine similarity to find the closest choice
+    generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
+    choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
+    cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
+    best_choice_idx = torch.argmax(cosine_scores).item()
+    return choices[best_choice_idx]
+
+
 # Function to clean generated answer
 def clean_generated_answer(generated_text):
     """
