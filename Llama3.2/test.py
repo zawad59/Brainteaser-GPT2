@@ -166,10 +166,10 @@ def run_predictions():
                     writer.writerow([
                         question_id, question, answer,
                         refined_zero_shot_answer, refined_zero_shot_correct,
-                        refined_few_shot_answer, refined_few_shot_correct
+                        refined_few_shot_answer, refined_few_shot_correct,
                         zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
                         few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
-                    ])
+])
 
             # Calculate accuracies
             zero_shot_accuracy = (zero_shot_correct / total) * 100 if total > 0 else 0
