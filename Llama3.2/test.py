@@ -103,12 +103,17 @@ def run_predictions():
             model = prepare_model_for_kbit_training(model)
 
             # Prepare CSV file
+            total = 0  # Initialize counters
+            zero_shot_correct = 0
+            few_shot_correct = 0
+            combined_correct = 0
+
             with open(csv_file, mode="w", newline="") as file:
                 writer = csv.writer(file)
                 writer.writerow([
                     "Question ID", "Question", "Answer", 
-                    "Refined Zero-Shot", "Refined Zero-Shot Correct",
-                    "Refined Few-Shot", "Refined Few-Shot Correct"
+                    "Generated Zero-Shot", "Refined Zero-Shot", "Refined Zero-Shot Correct",
+                    "Generated Few-Shot", "Refined Few-Shot", "Refined Few-Shot Correct"
                 ])
 
                 # Predict for each test example
@@ -149,13 +154,32 @@ def run_predictions():
                     refined_few_shot_answer = refine_answer(few_shot_answer, choices)
                     refined_few_shot_correct = refined_few_shot_answer == answer
 
+                    # Update accuracy
+                    total += 1
+                    if refined_zero_shot_correct:
+                        zero_shot_correct += 1
+                    if refined_few_shot_correct:
+                        few_shot_correct += 1
+                    if refined_zero_shot_correct or refined_few_shot_correct:
+                        combined_correct += 1
+
                     # Write results
                     writer.writerow([
                         question_id, question, answer, 
-                        refined_zero_shot_answer, refined_zero_shot_correct,
-                        refined_few_shot_answer, refined_few_shot_correct
+                        zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
+                        few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
                     ])
 
+            # Calculate accuracies
+            zero_shot_accuracy = (zero_shot_correct / total) * 100 if total > 0 else 0
+            few_shot_accuracy = (few_shot_correct / total) * 100 if total > 0 else 0
+            combined_accuracy = (combined_correct / total) * 100 if total > 0 else 0
+
+            # Print results
+            print(f"Results for lr={lr}, wd={wd}:")
+            print(f"  Refined Zero-Shot Accuracy: {zero_shot_accuracy:.2f}%")
+            print(f"  Refined Few-Shot Accuracy: {few_shot_accuracy:.2f}%")
+            print(f"  Combined Accuracy (Zero-Shot or Few-Shot Correct): {combined_accuracy:.2f}%")
             print(f"Results saved to {csv_file}")
             del model
             torch.cuda.empty_cache()
@@ -163,3 +187,4 @@ def run_predictions():
 # Execute
 if __name__ == "__main__":
     run_predictions()
+
