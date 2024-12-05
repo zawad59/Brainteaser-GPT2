@@ -92,7 +92,7 @@ def evaluate_model(model, tokenizer, test_data, output_file, few_shot=False):
 def evaluate_all_combinations(test_data, learning_rates, weight_decays, base_model_dir=CHECKPOINTS_DIR):
     for lr in learning_rates:
         for wd in weight_decays:
-            model_dir = os.path.join(base_model_dir, f"llama_finetuned_lr{lr}_wd{wd}")
+            model_dir = os.path.join(base_model_dir, f"llama_lora_finetuned_lr{lr}_wd{wd}")
             zero_shot_output_file = f"{RESULTS_DIR}/llama_zero_shot_lr{lr}_wd{wd}.csv"
             few_shot_output_file = f"{RESULTS_DIR}/llama_few_shot_lr{lr}_wd{wd}.csv"
 
