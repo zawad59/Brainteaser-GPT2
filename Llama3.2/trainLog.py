@@ -8,7 +8,7 @@ OUTPUT_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/TrainLogs"
 OUTPUT_CSV = os.path.join(OUTPUT_DIR, "training_metrics.csv")
 
 # Tags for TensorBoard metrics
-TRAIN_LOSS_TAG = "loss"  # Update if tag inspection reveals a different name
+TRAIN_LOSS_TAG = "loss"  # Update this after inspecting available tags
 EVAL_LOSS_TAG = "eval_loss"
 MODEL_ID = "llama_lora_finetuned_lr0.0001_wd0.0001"
 
@@ -27,7 +27,7 @@ def inspect_tags(logs_dir):
                 print(f"Inspecting log file: {log_path}")
                 event_acc = EventAccumulator(log_path)
                 event_acc.Reload()
-                print("Available tags:", event_acc.Tags()["scalars"])
+                print(f"Available tags in {file_name}: {event_acc.Tags()['scalars']}")
 
 def extract_metrics_from_events(logs_dir, output_csv):
     """
@@ -58,6 +58,11 @@ def extract_metrics_from_events(logs_dir, output_csv):
                         else []
                     )
 
+                    # Debugging: Check if data is being loaded
+                    if not train_loss_data and not eval_loss_data:
+                        print(f"No data found in {file_name} for tags: {TRAIN_LOSS_TAG}, {EVAL_LOSS_TAG}")
+                        continue
+
                     # Combine steps from both training and evaluation
                     steps = set(
                         [entry.step for entry in train_loss_data]
@@ -75,6 +80,7 @@ def extract_metrics_from_events(logs_dir, output_csv):
                             None,
                         )
                         writer.writerow([MODEL_ID, step, train_loss, eval_loss])
+                        print(f"Step: {step}, Train Loss: {train_loss}, Eval Loss: {eval_loss}")
 
     print(f"Metrics extracted and saved to: {output_csv}")
 
