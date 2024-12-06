@@ -8,8 +8,8 @@ OUTPUT_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/TrainLogs"
 OUTPUT_CSV = os.path.join(OUTPUT_DIR, "training_metrics.csv")
 
 # Tags for TensorBoard metrics
-TRAIN_LOSS_TAG = "loss"  # Update this after inspecting available tags
-EVAL_LOSS_TAG = "eval_loss"
+TRAIN_LOSS_TAG = "train/loss"  # Adjusted based on inspected tags
+EVAL_LOSS_TAG = "eval/loss"
 MODEL_ID = "llama_lora_finetuned_lr0.0001_wd0.0001"
 
 # Ensure output directory exists
