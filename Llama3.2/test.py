@@ -86,22 +86,43 @@ def refine_answer(generated_answer, choices):
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
 
-# Main function to run predictions for all models
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
-            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}")
+            # Define the base directory for the fine-tuned model
+            base_dir = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}")
+            
+            if not os.path.exists(base_dir):
+                print(f"Directory {base_dir} does not exist. Skipping...")
+                continue
+
+            # Find the latest checkpoint directory
+            checkpoints = [d for d in os.listdir(base_dir) if d.startswith("checkpoint-")]
+            if not checkpoints:
+                print(f"No checkpoints found in {base_dir}. Skipping...")
+                continue
+
+            # Sort checkpoints by step number and select the last one
+            checkpoints.sort(key=lambda x: int(x.split("-")[-1]))
+            latest_checkpoint = os.path.join(base_dir, checkpoints[-1])
+
+            print(f"Using checkpoint: {latest_checkpoint}")
+
+            # Define output CSV file
             csv_file = os.path.join(RESULTS_DIR, f"llama_lora_finetuned_results_lr{lr}_wd{wd}.csv")
 
             # Load model
-            print(f"Loading model for lr={lr}, wd={wd}...")
-            model = AutoModelForCausalLM.from_pretrained(
-                checkpoint_path,
-                load_in_4bit=True,
-                torch_dtype=torch.float16,
-                device_map="auto"
-            )
-            model = prepare_model_for_kbit_training(model)
+            try:
+                print(f"Loading model for lr={lr}, wd={wd} from {latest_checkpoint}...")
+                model = AutoModelForCausalLM.from_pretrained(
+                    latest_checkpoint,
+                    load_in_4bit=True,
+                    torch_dtype=torch.float16,
+                    device_map="auto"
+                )
+            except Exception as e:
+                print(f"Error loading model for lr={lr}, wd={wd}: {e}")
+                continue
 
             # Prepare CSV file
             total = 0
@@ -137,8 +158,6 @@ def run_predictions():
                     zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
                     zero_shot_answer = zero_shot_answer.split(".")[0] + "."
 
-                    # Refine zero-shot prediction (ensure it's one of the choices)
-                    #refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
                     refined_zero_shot_correct = zero_shot_answer == answer
 
                     # Few-shot prediction
@@ -152,8 +171,7 @@ def run_predictions():
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                     few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
                     few_shot_answer = few_shot_answer.split(".")[0] + "."
-                    # Refine few-shot prediction (ensure it's one of the choices)
-                    #refined_few_shot_answer = refine_answer(few_shot_answer, choices)
+
                     refined_few_shot_correct = few_shot_answer == answer
 
                     # Update accuracy
@@ -185,6 +203,7 @@ def run_predictions():
             print(f"Results saved to {csv_file}")
             del model
             torch.cuda.empty_cache()
+
 
 # Execute
 if __name__ == "__main__":
