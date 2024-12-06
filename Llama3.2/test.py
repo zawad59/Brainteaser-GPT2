@@ -3,14 +3,13 @@ import torch
 import numpy as np
 import csv
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from peft import prepare_model_for_kbit_training
-from sentence_transformers import SentenceTransformer, util  # Add for cosine similarity calculations
+from sentence_transformers import SentenceTransformer, util
 
 # Constants
 CUTOFF_LEN = 512
 MAX_NEW_TOKENS = 50
 RESULTS_DIR = "llama-brainteasers-results/test"
-CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/LlamaFinetuned"
+CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/"
 LEARNING_RATES = [0.0001]
 WEIGHT_DECAYS = [0.01]
 
@@ -21,8 +20,8 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
 tokenizer.pad_token = tokenizer.eos_token
 
-# Load sentence embedding model for cosine similarity
-embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight and effective model for embeddings
+# Load sentence embedding model for similarity-based fallback
+embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Function to generate zero-shot and few-shot prompts
 def generate_prompt(item, few_shot=True):
@@ -41,7 +40,7 @@ def generate_prompt(item, few_shot=True):
 
     system_message = (
         "You are an assistant answering riddle questions for a test. Choose the correct answer from the choices."
-        " Return only the answer. Don't generate anything which is not in the answer choices or in other words don't generate something random"
+        " Return only the answer. Don't generate anything which is not in the answer choices."
     )
     if few_shot:
         examples = '''
@@ -73,23 +72,30 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
-# Function to refine answer using cosine similarity
+# Function to refine answer using similarity-based fallback
 def refine_answer(generated_answer, choices):
-    generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
-    choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
-    cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
-    best_choice_idx = torch.argmax(cosine_scores).item()
+    """
+    Refine the answer by selecting the most similar choice if the generated answer is invalid.
+    """
+    generated_answer = generated_answer.strip()
+    if generated_answer in choices:
+        return generated_answer
+
+    # Compute similarities
+    choice_embeddings = embedder.encode(choices, convert_to_tensor=True)
+    generated_embedding = embedder.encode(generated_answer, convert_to_tensor=True)
+    cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
+    best_choice_idx = torch.argmax(cosine_similarities).item()
     return choices[best_choice_idx]
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
 
 # Main function to run predictions for all models
-# Updated main function
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
-            checkpoint_path = os.path.join(CHECKPOINTS_DIR)
+            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd})
             csv_file = os.path.join(RESULTS_DIR, f"llama_lora_finetuned_results_lr{lr}_wd{wd}.csv")
 
             # Load model
@@ -100,10 +106,8 @@ def run_predictions():
                 torch_dtype=torch.float16,
                 device_map="auto"
             )
-            model = prepare_model_for_kbit_training(model)
 
             # Prepare CSV file
-            total = 0  # Initialize counters
             total = 0
             zero_shot_correct = 0
             few_shot_correct = 0
@@ -122,7 +126,7 @@ def run_predictions():
                     question_id = item.get('id', 'N/A')
                     question = item['question']
                     answer = item['answer']
-                    choices = item['choice_list']  # Get choices
+                    choices = item['choice_list']
 
                     # Zero-shot prediction
                     zero_shot_prompt = generate_prompt(item, few_shot=False)
@@ -131,13 +135,12 @@ def run_predictions():
                     model.eval()
                     with torch.no_grad():
                         zero_shot_outputs = model.generate(
-                            **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=0.7, top_p=0.9, top_k=50
+                            **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                     zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
 
                     # Refine zero-shot prediction
-                    # Refine zero-shot prediction (ensure it's one of the choices)
                     refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
                     refined_zero_shot_correct = refined_zero_shot_answer == answer
 
@@ -147,13 +150,12 @@ def run_predictions():
                     few_shot_inputs = {key: val.to(model.device) for key, val in few_shot_inputs.items()}
                     with torch.no_grad():
                         few_shot_outputs = model.generate(
-                            **few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=0.7, top_p=0.9, top_k=50
+                            **few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                     few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
 
                     # Refine few-shot prediction
-                    # Refine few-shot prediction (ensure it's one of the choices)
                     refined_few_shot_answer = refine_answer(few_shot_answer, choices)
                     refined_few_shot_correct = refined_few_shot_answer == answer
 
@@ -168,7 +170,6 @@ def run_predictions():
 
                     # Write results
                     writer.writerow([
-                        question_id, question, answer,
                         question_id, question, answer, ", ".join(choices),
                         zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
                         few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
