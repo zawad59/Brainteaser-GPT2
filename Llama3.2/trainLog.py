@@ -4,7 +4,7 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 
 # Base directories and output CSV file
 BASE_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/logs_lr1e-05_wd1e-05/"
-OUTPUT_CSV = os.path.join(/home/jawadkk/Brainteaser-GPT2/Llama3.2/TrainLogs/ "all_training_metrics.csv")
+OUTPUT_CSV = os.path.join("/home/jawadkk/Brainteaser-GPT2/Llama3.2/TrainLogs/", "all_training_metrics.csv")
 
 # Hyperparameters
 LEARNING_RATES = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
