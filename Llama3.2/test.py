@@ -134,10 +134,11 @@ def run_predictions():
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                     zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
+                    zero_shot_answer = zero_shot_answer.split(".")[0] + "."
 
                     # Refine zero-shot prediction (ensure it's one of the choices)
-                    refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
-                    refined_zero_shot_correct = refined_zero_shot_answer == answer
+                    #refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
+                    refined_zero_shot_correct = zero_shot_answer == answer
 
                     # Few-shot prediction
                     few_shot_prompt = generate_prompt(item, few_shot=True)
@@ -149,10 +150,10 @@ def run_predictions():
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                     few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
-
+                    few_shot_answer = few_shot_answer.split(".")[0] + "."
                     # Refine few-shot prediction (ensure it's one of the choices)
-                    refined_few_shot_answer = refine_answer(few_shot_answer, choices)
-                    refined_few_shot_correct = refined_few_shot_answer == answer
+                    #refined_few_shot_answer = refine_answer(few_shot_answer, choices)
+                    refined_few_shot_correct = few_shot_answer == answer
 
                     # Update accuracy
                     total += 1
