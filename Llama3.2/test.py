@@ -95,7 +95,7 @@ test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
-            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd})
+            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}")
             csv_file = os.path.join(RESULTS_DIR, f"llama_lora_finetuned_results_lr{lr}_wd{wd}.csv")
 
             # Load model
