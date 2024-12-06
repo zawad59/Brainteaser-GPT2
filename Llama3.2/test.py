@@ -7,11 +7,11 @@ from peft import prepare_model_for_kbit_training
 from sentence_transformers import SentenceTransformer, util  # Add for cosine similarity calculations
 
 # Constants
-CUTOFF_LEN = 512 
+CUTOFF_LEN = 512
 MAX_NEW_TOKENS = 50
 RESULTS_DIR = "llama-brainteasers-results/test"
-CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/"
-LEARNING_RATES = [0.01]
+CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/LlamaFinetuned"
+LEARNING_RATES = [0.0001]
 WEIGHT_DECAYS = [0.01]
 
 # Ensure results directory exists
@@ -89,7 +89,7 @@ test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
-            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}")
+            checkpoint_path = os.path.join(CHECKPOINTS_DIR)
             csv_file = os.path.join(RESULTS_DIR, f"llama_lora_finetuned_results_lr{lr}_wd{wd}.csv")
 
             # Load model
@@ -111,7 +111,7 @@ def run_predictions():
 
             with open(csv_file, mode="w", newline="") as file:
                 writer = csv.writer(file)
-                writer.writerow([ 
+                writer.writerow([
                     "Question ID", "Question", "Answer", "Choices",
                     "Generated Zero-Shot", "Refined Zero-Shot", "Refined Zero-Shot Correct",
                     "Generated Few-Shot", "Refined Few-Shot", "Refined Few-Shot Correct"
@@ -122,7 +122,6 @@ def run_predictions():
                     question_id = item.get('id', 'N/A')
                     question = item['question']
                     answer = item['answer']
-                    choices = item['choice_list']
                     choices = item['choice_list']  # Get choices
 
                     # Zero-shot prediction
@@ -132,7 +131,7 @@ def run_predictions():
                     model.eval()
                     with torch.no_grad():
                         zero_shot_outputs = model.generate(
-                            **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=2.3, top_p=0.9, top_k=50
+                            **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=0.7, top_p=0.9, top_k=50
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                     zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
@@ -148,7 +147,7 @@ def run_predictions():
                     few_shot_inputs = {key: val.to(model.device) for key, val in few_shot_inputs.items()}
                     with torch.no_grad():
                         few_shot_outputs = model.generate(
-                            **few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=2.0, top_p=0.9, top_k=50
+                            **few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=0.7, top_p=0.9, top_k=50
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                     few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
@@ -168,7 +167,8 @@ def run_predictions():
                         combined_correct += 1
 
                     # Write results
-                    writer.writerow([ 
+                    writer.writerow([
+                        question_id, question, answer,
                         question_id, question, answer, ", ".join(choices),
                         zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
                         few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
