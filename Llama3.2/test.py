@@ -136,7 +136,9 @@ def run_predictions():
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                     refined_zero_shot_answer = refine_answer(zero_shot_prediction.split("Answer:")[-1].strip(), choices)
-                    print("Answer: {answer}\n\n  Generated Answer: {refined_zero_shot_answer}\n")
+                    print(f"Answer: {answer}\nGenerated Zero-Shot Answer: {refined_zero_shot_answer}\n")
+
+
                     zero_shot_correct = refined_zero_shot_answer == answer
 
                     # Few-shot prediction
@@ -154,7 +156,7 @@ def run_predictions():
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                     refined_few_shot_answer = refine_answer(few_shot_prediction.split("Answer:")[-1].strip(), choices)
-                    print("Answer: {answer}\n\n  Generated Answer: {refined_few_shot_answer}\n")
+                    print(f"Answer: {answer}\nGenerated Few-Shot Answer: {refined_few_shot_answer}\n")
                     few_shot_correct = refined_few_shot_answer == answer
 
                     # Write results
