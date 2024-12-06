@@ -143,7 +143,6 @@ def run_predictions():
                         few_shot_raw = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                         few_shot_refined = refine_answer(few_shot_raw, choices)
                         few_shot_correct = few_shot_refined == answer
-                    print(f"Few-shot Raw:\n{few_shot_raw}\nRefined: {few_shot_refined}\n")
 
                     # Write results
                     writer.writerow([
