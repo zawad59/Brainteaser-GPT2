@@ -4,7 +4,7 @@ import numpy as np
 import csv
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import prepare_model_for_kbit_training
-from sentence_transformers import SentenceTransformer, util  # Add for cosine similarity calculations
+from sentence_transformers import SentenceTransformer, util
 
 # Constants
 CUTOFF_LEN = 512
@@ -16,9 +16,9 @@ WEIGHT_DECAYS = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 
 # Best hyperparameters based on evaluation
 BEST_TOP_P = 0.9
-BEST_TOP_K = 50
-BEST_TEMPERATURE = 0.9
-BEST_REPETITION_PENALTY = 1.2
+BEST_TOP_K = 40
+BEST_TEMPERATURE = 0.8
+BEST_REPETITION_PENALTY = 1.1
 
 # Ensure results directory exists
 os.makedirs(RESULTS_DIR, exist_ok=True)
@@ -29,6 +29,13 @@ tokenizer.pad_token = tokenizer.eos_token
 
 # Load sentence embedding model for cosine similarity
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Function to clean text
+def clean_text(text):
+    artifacts = ["istr", "actor", "'", ",", ":", "\n", " by", " to", " the"]
+    for artifact in artifacts:
+        text = text.replace(artifact, "").strip()
+    return text
 
 # Function to generate zero-shot and few-shot prompts
 def generate_prompt(item, few_shot=True):
@@ -66,23 +73,18 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
-# Function to refine answer using post-processing and cosine similarity
+# Function to refine generated answer
 def refine_answer(generated_answer, choices):
-    # Clean up generated answer
-    artifacts = ["istr", "actor", "'", ",", ":", " by", " to", " the", ".", "answer's"]
-    for artifact in artifacts:
-        generated_answer = generated_answer.replace(artifact, "").strip()
-
-    # Validate against choices
+    generated_answer = clean_text(generated_answer)
+    print(f"Refined Raw Answer: {generated_answer}")
     if generated_answer in choices:
-        return generated_answer  # Valid answer
-
+        return generated_answer
     # Use cosine similarity to find the closest valid choice
-    '''generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
+    generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
     choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
     similarity_scores = util.cos_sim(generated_embedding, choice_embeddings)
     best_choice_idx = similarity_scores.argmax().item()
-    return choices[best_choice_idx]'''
+    return choices[best_choice_idx]
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
@@ -116,9 +118,9 @@ def run_predictions():
                 # Predict for each test example
                 for item in test_data:
                     question_id = item.get('id', 'N/A')
-                    question = item['question']
-                    answer = item['answer']
-                    choices = item['choice_list']
+                    question = clean_text(item['question'])
+                    answer = clean_text(item['answer'])
+                    choices = [clean_text(choice) for choice in item['choice_list']]
 
                     # Zero-shot prediction
                     zero_shot_prompt = generate_prompt(item, few_shot=False)
@@ -135,11 +137,7 @@ def run_predictions():
                             repetition_penalty=BEST_REPETITION_PENALTY
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
-                        print(f"Raw 0 Shot Generated Output: {zero_shot_prediction}")
                     refined_zero_shot_answer = refine_answer(zero_shot_prediction.split("Answer:")[-1].strip(), choices)
-                    print(f"Answer: {answer}\nGenerated Zero-Shot Answer: {refined_zero_shot_answer}\n")
-
-
                     zero_shot_correct = refined_zero_shot_answer == answer
 
                     # Few-shot prediction
@@ -156,9 +154,7 @@ def run_predictions():
                             repetition_penalty=BEST_REPETITION_PENALTY
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
-                        print(f"Raw Few Shot Generated Output: {few_shot_prediction}")
                     refined_few_shot_answer = refine_answer(few_shot_prediction.split("Answer:")[-1].strip(), choices)
-                    print(f"Answer: {answer}\nGenerated Few-Shot Answer: {refined_few_shot_answer}\n")
                     few_shot_correct = refined_few_shot_answer == answer
 
                     # Write results
