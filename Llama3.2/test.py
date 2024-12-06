@@ -84,11 +84,6 @@ def run_predictions():
             checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}")
             csv_file = os.path.join(RESULTS_DIR, f"results_lr({lr})_wd({wd}).csv")
 
-            # Skip if results already exist
-            if os.path.exists(csv_file):
-                print(f"Results for lr={lr}, wd={wd} already exist. Skipping.")
-                continue
-
             # Load model
             print(f"Loading model for lr={lr}, wd={wd}...")
             model = AutoModelForCausalLM.from_pretrained(
