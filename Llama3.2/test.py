@@ -9,8 +9,8 @@ from sentence_transformers import SentenceTransformer, util  # Add for cosine si
 # Constants
 CUTOFF_LEN = 512
 MAX_NEW_TOKENS = 50
-RESULTS_DIR = "llama-brainteasers-results/test"
-CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/"
+RESULTS_DIR = "llama-brainteasers-results/FinalLlamaResultsTuned"
+CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/Logs"
 # Hyperparameter combinations
 LEARNING_RATES = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 WEIGHT_DECAYS = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
