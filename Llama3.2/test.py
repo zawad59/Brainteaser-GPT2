@@ -8,10 +8,16 @@ from peft import prepare_model_for_kbit_training
 # Constants
 CUTOFF_LEN = 256
 MAX_NEW_TOKENS = 50
-RESULTS_DIR = "llama-brainteasers-results/FinalLlamaResultsTuned"
-CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/logs_lr1e-05_wd1e-05"
+RESULTS_DIR = "llama-brainteasers-results"
+CHECKPOINTS_DIR = "llama-brainteasers-tuning"
 LEARNING_RATES = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 WEIGHT_DECAYS = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
+
+# Decoding Parameters
+TEMPERATURE = 0.7
+TOP_P = 0.9
+TOP_K = 50
+REPETITION_PENALTY = 1.2
 
 # Ensure results directory exists
 os.makedirs(RESULTS_DIR, exist_ok=True)
@@ -24,21 +30,11 @@ tokenizer.pad_token = tokenizer.eos_token
 def generate_prompt(item, few_shot=False):
     question = item['question']
     answer = item['answer']
-
-    if 'choice_list' in item:
-        ordered_choices = item['choice_list']  # use for preordered test dataset
-    else:
-        distractor1 = str(item['distractor1'])  # order the eval dataset
-        distractor2 = str(item['distractor2'])
-        distractor_unsure = str(item['distractor(unsure)'])
-        # Create choice_list and reorder based on choice_order
-        choice_list = [answer, distractor1, distractor2, distractor_unsure]
-        choice_order = item['choice_order']
-        ordered_choices = [choice_list[i] for i in choice_order]
+    choices = item.get('choice_list', [])
 
     sys_msg = (
-        "You are an assistant answering riddle questions for a test. For each question, "
-        "you must choose an answer from the choice list. Output the chosen answer and nothing else."
+        "You are an assistant answering riddle questions for a test. "
+        "For each question, choose an answer from the given choices and only return the chosen answer."
     )
     if few_shot:
         examples = '''
@@ -52,23 +48,31 @@ def generate_prompt(item, few_shot=False):
         Answer: Footsteps
         '''
         return (
-            f"<s> [INST]{sys_msg}\n{examples}\n{question}\nChoose one of the following answers:\n"
-            + "\n".join(ordered_choices) + "[/INST]</s>"
+            f"<s> [INST]{sys_msg}\n\n{examples}\n"
+            f"Question: {question}\nChoices: {choices}\nAnswer:[/INST]</s>"
         )
     return (
-        f"<s> [INST]{sys_msg}\n{question}\nChoose one of the following answers:\n"
-        + "\n".join(ordered_choices) + "[/INST]</s>"
+        f"<s> [INST]{sys_msg}\n\n"
+        f"Question: {question}\nChoices: {choices}\nAnswer:[/INST]</s>"
     )
 
 # Function to tokenize prompt
 def tokenize(prompt):
     return tokenizer(
-        prompt + tokenizer.eos_token,
+        prompt,
         truncation=True,
         max_length=CUTOFF_LEN,
         padding="max_length",
         return_tensors="pt"
     )
+
+# Post-process the generated answer
+def refine_answer(raw_answer, choices):
+    raw_answer = raw_answer.strip()
+    for choice in choices:
+        if choice in raw_answer:
+            return choice
+    return "None"  # Return "None" if no valid choice matches
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
@@ -98,13 +102,18 @@ def run_predictions():
             # Prepare CSV file
             with open(csv_file, mode="w", newline="") as file:
                 writer = csv.writer(file)
-                writer.writerow(["Question ID", "Question", "Answer", "Zero-Shot Prediction", "Few-Shot Prediction"])
+                writer.writerow([
+                    "Question ID", "Question", "Answer", "Choices",
+                    "Zero-Shot Raw", "Zero-Shot Refined",
+                    "Few-Shot Raw", "Few-Shot Refined"
+                ])
 
                 # Predict for each test example
                 for item in test_data:
-                    question_id = item.get('id', 'N/A')  # Assuming each test item has a unique ID
+                    question_id = item.get('id', 'N/A')
                     question = item['question']
                     answer = item['answer']
+                    choices = item['choice_list']
 
                     # Zero-shot prediction
                     zero_shot_prompt = generate_prompt(item, few_shot=False)
@@ -112,26 +121,41 @@ def run_predictions():
                     zero_shot_inputs = {key: val.to(model.device) for key, val in zero_shot_inputs.items()}
                     model.eval()
                     with torch.no_grad():
-                        zero_shot_outputs = model.generate(**zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS)
-                        zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
-                    # Extract the predicted answer from the output text
-                    print(f"Zero-shot Raw Prediction:\n{zero_shot_prediction}\n")
-                    zero_shot_answer = zero_shot_prediction.split("[/INST]")[-1].strip()
+                        zero_shot_outputs = model.generate(
+                            **zero_shot_inputs,
+                            max_new_tokens=MAX_NEW_TOKENS,
+                            temperature=TEMPERATURE,
+                            top_p=TOP_P,
+                            top_k=TOP_K,
+                            repetition_penalty=REPETITION_PENALTY
+                        )
+                        zero_shot_raw = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
+                        zero_shot_refined = refine_answer(zero_shot_raw, choices)
+                    print(f"Zero-shot Raw:\n{zero_shot_raw}\nRefined: {zero_shot_refined}\n")
 
                     # Few-shot prediction
                     few_shot_prompt = generate_prompt(item, few_shot=True)
                     few_shot_inputs = tokenize(few_shot_prompt)
                     few_shot_inputs = {key: val.to(model.device) for key, val in few_shot_inputs.items()}
                     with torch.no_grad():
-                        few_shot_outputs = model.generate(**few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS)
-                        few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
-                    # Extract the predicted answer from the output text
-                    print(f"Few-shot Raw Prediction:\n{few_shot_prediction}\n")
-                    few_shot_answer = few_shot_prediction.split("[/INST]")[-1].strip()
+                        few_shot_outputs = model.generate(
+                            **few_shot_inputs,
+                            max_new_tokens=MAX_NEW_TOKENS,
+                            temperature=TEMPERATURE,
+                            top_p=TOP_P,
+                            top_k=TOP_K,
+                            repetition_penalty=REPETITION_PENALTY
+                        )
+                        few_shot_raw = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
+                        few_shot_refined = refine_answer(few_shot_raw, choices)
+                    print(f"Few-shot Raw:\n{few_shot_raw}\nRefined: {few_shot_refined}\n")
 
                     # Write results
-                    writer.writerow([question_id, question, answer, zero_shot_answer, few_shot_answer])
-                    print(f"Saved Results: {question_id, question, answer, zero_shot_answer, few_shot_answer}\n")
+                    writer.writerow([
+                        question_id, question, answer, ", ".join(choices),
+                        zero_shot_raw, zero_shot_refined,
+                        few_shot_raw, few_shot_refined
+                    ])
 
             print(f"Results saved to {csv_file}")
             del model
