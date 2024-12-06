@@ -8,8 +8,8 @@ from peft import prepare_model_for_kbit_training
 # Constants
 CUTOFF_LEN = 256
 MAX_NEW_TOKENS = 50
-RESULTS_DIR = "llama-brainteasers-results"
-CHECKPOINTS_DIR = "llama-brainteasers-tuning"
+RESULTS_DIR = "llama-brainteasers-results/FinalLlamaResultsTuned"
+CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/logs_lr1e-05_wd1e-05"
 LEARNING_RATES = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 WEIGHT_DECAYS = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 
@@ -81,7 +81,7 @@ test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
-            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}", "checkpoint-225")
+            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}")
             csv_file = os.path.join(RESULTS_DIR, f"results_lr({lr})_wd({wd}).csv")
 
             # Skip if results already exist
