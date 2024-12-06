@@ -16,9 +16,9 @@ WEIGHT_DECAYS = [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00001]
 
 # Best hyperparameters based on evaluation
 BEST_TOP_P = 0.9
-BEST_TOP_K = 40
-BEST_TEMPERATURE = 0.8
-BEST_REPETITION_PENALTY = 1.1
+BEST_TOP_K = 50
+BEST_TEMPERATURE = 0.9
+BEST_REPETITION_PENALTY = 1.2
 
 # Ensure results directory exists
 os.makedirs(RESULTS_DIR, exist_ok=True)
@@ -32,15 +32,12 @@ embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Function to clean text
 def clean_text(text):
-    artifacts = ["istr", "actor", "'", ",", ":", "\n", " by", " to", " the"]
-    for artifact in artifacts:
-        text = text.replace(artifact, "").strip()
-    return text
+    return text.strip().replace("\n", "").replace("\t", "").strip()
 
 # Function to generate zero-shot and few-shot prompts
 def generate_prompt(item, few_shot=True):
-    question = item['question']
-    choices = item['choice_list']
+    question = clean_text(item['question'])
+    choices = [clean_text(choice) for choice in item['choice_list']]
     system_message = (
         "You are a highly accurate assistant for answering riddles. "
         "Your task is to choose the correct answer from the given choices. "
@@ -73,18 +70,35 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
-# Function to refine generated answer
+# Function to refine answer using post-processing and cosine similarity
 def refine_answer(generated_answer, choices):
-    generated_answer = clean_text(generated_answer)
-    print(f"Refined Raw Answer: {generated_answer}")
+    # Clean up generated answer
+    artifacts = ["istr", "actor", "'", ",", ":", " by", " to", " the", ".", "answer's"]
+    for artifact in artifacts:
+        generated_answer = generated_answer.replace(artifact, "").strip()
+
+    # Validate against choices
     if generated_answer in choices:
-        return generated_answer
+        return generated_answer  # Valid answer
+
     # Use cosine similarity to find the closest valid choice
     generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
     choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
     similarity_scores = util.cos_sim(generated_embedding, choice_embeddings)
     best_choice_idx = similarity_scores.argmax().item()
     return choices[best_choice_idx]
+
+# Debug function to print all details
+def debug_print(question_id, question, answer, choices, prompt, raw_answer, refined_answer):
+    print("\n=== Debug Information ===")
+    print(f"Question ID: {question_id}")
+    print(f"Question: {question}")
+    print(f"Answer: {answer}")
+    print(f"Choices: {choices}")
+    print(f"Prompt:\n{prompt}")
+    print(f"Raw Generated Answer: {raw_answer}")
+    print(f"Refined Answer: {refined_answer}")
+    print("=========================\n")
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
@@ -111,8 +125,8 @@ def run_predictions():
                 writer = csv.writer(file)
                 writer.writerow([
                     "Question ID", "Question", "Answer", "Choices",
-                    "Generated Zero-Shot", "Refined Zero-Shot", "Zero-Shot Correct",
-                    "Generated Few-Shot", "Refined Few-Shot", "Few-Shot Correct"
+                    "Raw Zero-Shot", "Refined Zero-Shot", "Zero-Shot Correct",
+                    "Raw Few-Shot", "Refined Few-Shot", "Few-Shot Correct"
                 ])
 
                 # Predict for each test example
@@ -136,9 +150,12 @@ def run_predictions():
                             temperature=BEST_TEMPERATURE,
                             repetition_penalty=BEST_REPETITION_PENALTY
                         )
-                        zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
-                    refined_zero_shot_answer = refine_answer(zero_shot_prediction.split("Answer:")[-1].strip(), choices)
+                        raw_zero_shot_answer = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
+                        refined_zero_shot_answer = refine_answer(raw_zero_shot_answer.split("Answer:")[-1].strip(), choices)
                     zero_shot_correct = refined_zero_shot_answer == answer
+
+                    # Debugging zero-shot
+                    debug_print(question_id, question, answer, choices, zero_shot_prompt, raw_zero_shot_answer, refined_zero_shot_answer)
 
                     # Few-shot prediction
                     few_shot_prompt = generate_prompt(item, few_shot=True)
@@ -153,15 +170,18 @@ def run_predictions():
                             temperature=BEST_TEMPERATURE,
                             repetition_penalty=BEST_REPETITION_PENALTY
                         )
-                        few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
-                    refined_few_shot_answer = refine_answer(few_shot_prediction.split("Answer:")[-1].strip(), choices)
+                        raw_few_shot_answer = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
+                        refined_few_shot_answer = refine_answer(raw_few_shot_answer.split("Answer:")[-1].strip(), choices)
                     few_shot_correct = refined_few_shot_answer == answer
+
+                    # Debugging few-shot
+                    debug_print(question_id, question, answer, choices, few_shot_prompt, raw_few_shot_answer, refined_few_shot_answer)
 
                     # Write results
                     writer.writerow([
                         question_id, question, answer, ", ".join(choices),
-                        zero_shot_prediction, refined_zero_shot_answer, zero_shot_correct,
-                        few_shot_prediction, refined_few_shot_answer, few_shot_correct
+                        raw_zero_shot_answer, refined_zero_shot_answer, zero_shot_correct,
+                        raw_few_shot_answer, refined_few_shot_answer, few_shot_correct
                     ])
 
             print(f"Results saved to {csv_file}")
