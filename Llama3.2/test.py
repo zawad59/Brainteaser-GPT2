@@ -34,7 +34,7 @@ def generate_prompt(item, few_shot=True):
     system_message = (
         "You are an assistant answering riddle questions for a test. "
         "Choose the correct answer from the choices below. "
-        "Only return the answer as it appears in the choices."
+        "Only return your decision of correct answer from the choices."
     )
     if few_shot:
         examples = '''
@@ -90,8 +90,6 @@ test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
-            if(lr == 0.1 and wd == 0.05):
-               continue
             checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}")
             csv_file = os.path.join(RESULTS_DIR, f"llama_lora_finetuned_results_lr{lr}_wd{wd}.csv")
 
