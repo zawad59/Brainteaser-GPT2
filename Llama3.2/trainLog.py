@@ -4,15 +4,17 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 
 # Define the directories and output CSV path
 LOGS_DIR = "logs_lr1e-05_wd1e-05/llama_lora_finetuned_lr0.0001_wd0.0001/runs"
-OUTPUT_CSV = "training_metrics.csv"
+OUTPUT_CSV = "training_metrics.csv"  # Ensure a full path or leave as filename for the current directory
 TRAIN_LOSS_TAG = "loss"  # Adjust if necessary
 EVAL_LOSS_TAG = "eval/loss"  # Adjust if necessary
 MODEL_ID = "llama_lora_finetuned_lr0.0001_wd0.0001"
 
 # Function to extract metrics from TensorBoard logs
 def extract_metrics_from_events(logs_dir, output_csv):
-    # Ensure the parent directory for the CSV exists
-    os.makedirs(os.path.dirname(output_csv), exist_ok=True)
+    # Ensure the directory for the CSV exists, if specified
+    output_dir = os.path.dirname(output_csv)
+    if output_dir:  # Only create if a directory is specified
+        os.makedirs(output_dir, exist_ok=True)
 
     # Open the CSV file for writing
     with open(output_csv, mode="w", newline="") as file:
@@ -41,10 +43,6 @@ def extract_metrics_from_events(logs_dir, output_csv):
                     eval_loss_data = (
                         event_acc.Scalars(EVAL_LOSS_TAG) if EVAL_LOSS_TAG in available_tags else []
                     )
-
-                    # Debug: Print data
-                    print(f"Train loss data: {train_loss_data}")
-                    print(f"Eval loss data: {eval_loss_data}")
 
                     # Combine steps from both metrics
                     all_steps = set(entry.step for entry in train_loss_data) | set(entry.step for entry in eval_loss_data)
