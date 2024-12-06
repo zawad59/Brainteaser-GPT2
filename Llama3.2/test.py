@@ -112,8 +112,8 @@ def run_predictions():
                 writer = csv.writer(file)
                 writer.writerow([
                     "Question ID", "Question", "Answer", "Choices",
-                    "Generated Zero-Shot", "Refined Zero-Shot", "Refined Zero-Shot Correct",
-                    "Generated Few-Shot", "Refined Few-Shot", "Refined Few-Shot Correct"
+                    "Generated Zero-Shot", "Generated Zero-Shot Correct",
+                    "Generated Few-Shot", "Generated Few-Shot Correct"
                 ])
 
                 # Predict for each test example
@@ -167,8 +167,8 @@ def run_predictions():
                     # Write results
                     writer.writerow([
                         question_id, question, answer, ", ".join(choices),
-                        zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
-                        few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
+                        zero_shot_answer, refined_zero_shot_correct,
+                        few_shot_answer, refined_few_shot_correct
                     ])
 
             # Calculate accuracies
