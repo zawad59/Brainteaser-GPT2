@@ -1,0 +1,11 @@
+Question ID,Question,Answer,Choices,Generated Zero-Shot,Generated Zero-Shot Correct,Generated Few-Shot,Generated Few-Shot Correct
+SP-185,"How could a man go outside in the pouring rain without protection, and not have a hair on his head get wet?",He is bald.,"
+The man was lucky enough to avoid all the rain., He is bald., The man is an athlete that can avoid rain in high speed., None of above.",He is bald.,True,He is bald.,True
+SP-185_SR,How could a guy go outdoors in the torrential rain without getting a single hair on his head wet?,He is bald.,"He is bald., 
+The man was lucky enough to avoid all the rain., The man is an athlete that can avoid rain in high speed., None of above.",He is bald.,True,He is bald.,True
+SP-185_CR,How can you enter a exam session and have the answers sooner than everybody else in the room?,You have to be a teacher.,"You have to be a teacher., You have to prepate for the whole year., You have to ask teacher for the asnwer., None of above.",You have to be a teacher.,True,You have to be a teacher.,True
+SP-188,"If a monkey, a squirrel, and a bird are racing to the top of a coconut tree, who will get the banana first?",None of above.,"The squirrel., The monkey., The bird., None of above.",None of above.,True,None of above.,True
+SP-188_SR,"Who will grab the banana first if a monkey, a squirrel, and a bird race to the top of a coconut tree?",None of above.,"The bird., The squirrel., The monkey., None of above.",None of above.,True,None of above.,True
+SP-188_CR,"A rooster and a bull were expecting their first child, but since they were having a competition, they wanted to precipitate the process. Which one of them gave birth first?",None of above.,"The rooster., The bull., 
+Both, they happen to finish at the same time., None of above.",None of above.,True,None of above.,True
+SP-192,"A group of ten ostriches are in a field. If four of them take off flying, how many are left in the field?",None of above.,"Six., Four., Ten., None of above.",None of above.,True,None of above.,True
