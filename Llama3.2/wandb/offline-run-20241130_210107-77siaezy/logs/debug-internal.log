@@ -1,0 +1,15 @@
+{"time":"2024-11-30T21:01:07.54976063-05:00","level":"INFO","msg":"using version","core version":"0.18.7"}
+{"time":"2024-11-30T21:01:07.54980464-05:00","level":"INFO","msg":"created symlink","path":"/home/jawadkk/Brainteaser-GPT2/Llama3.2/wandb/offline-run-20241130_210107-77siaezy/logs/debug-core.log"}
+{"time":"2024-11-30T21:01:07.77844695-05:00","level":"INFO","msg":"created new stream","id":"77siaezy"}
+{"time":"2024-11-30T21:01:07.77848939-05:00","level":"INFO","msg":"stream: started","id":"77siaezy"}
+{"time":"2024-11-30T21:01:07.778556951-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"77siaezy"}
+{"time":"2024-11-30T21:01:07.778647761-05:00","level":"INFO","msg":"sender: started","stream_id":"77siaezy"}
+{"time":"2024-11-30T21:01:07.778593341-05:00","level":"INFO","msg":"handler: started","stream_id":"77siaezy"}
+{"time":"2024-11-30T21:01:07.790126342-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T09:18:37.309770387-05:00","level":"INFO","msg":"stream: closing","id":"77siaezy"}
+{"time":"2024-12-01T09:18:37.309910817-05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T09:18:37.311697999-05:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T09:18:37.31206155-05:00","level":"INFO","msg":"handler: closed","stream_id":"77siaezy"}
+{"time":"2024-12-01T09:18:37.31211248-05:00","level":"INFO","msg":"writer: Close: closed","stream_id":"77siaezy"}
+{"time":"2024-12-01T09:18:37.31211652-05:00","level":"INFO","msg":"sender: closed","stream_id":"77siaezy"}
+{"time":"2024-12-01T09:18:37.313727843-05:00","level":"INFO","msg":"stream: closed","id":"77siaezy"}

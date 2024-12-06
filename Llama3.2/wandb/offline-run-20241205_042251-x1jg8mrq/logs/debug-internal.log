@@ -1,0 +1,8 @@
+{"time":"2024-12-05T04:22:51.355874543-05:00","level":"INFO","msg":"using version","core version":"0.18.7"}
+{"time":"2024-12-05T04:22:51.355895903-05:00","level":"INFO","msg":"created symlink","path":"/home/jawadkk/Brainteaser-GPT2/Llama3.2/wandb/offline-run-20241205_042251-x1jg8mrq/logs/debug-core.log"}
+{"time":"2024-12-05T04:22:51.574302665-05:00","level":"INFO","msg":"created new stream","id":"x1jg8mrq"}
+{"time":"2024-12-05T04:22:51.574343865-05:00","level":"INFO","msg":"stream: started","id":"x1jg8mrq"}
+{"time":"2024-12-05T04:22:51.574383865-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"x1jg8mrq"}
+{"time":"2024-12-05T04:22:51.574467655-05:00","level":"INFO","msg":"sender: started","stream_id":"x1jg8mrq"}
+{"time":"2024-12-05T04:22:51.574391185-05:00","level":"INFO","msg":"handler: started","stream_id":"x1jg8mrq"}
+{"time":"2024-12-05T04:22:51.583512202-05:00","level":"INFO","msg":"Starting system monitor"}

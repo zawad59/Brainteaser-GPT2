@@ -1,0 +1,15 @@
+{"time":"2024-11-30T20:56:49.944949746-05:00","level":"INFO","msg":"using version","core version":"0.18.7"}
+{"time":"2024-11-30T20:56:49.944994136-05:00","level":"INFO","msg":"created symlink","path":"/home/jawadkk/Brainteaser-GPT2/Llama3.2/wandb/offline-run-20241130_205649-1x6ahk4c/logs/debug-core.log"}
+{"time":"2024-11-30T20:56:50.175608573-05:00","level":"INFO","msg":"created new stream","id":"1x6ahk4c"}
+{"time":"2024-11-30T20:56:50.175729313-05:00","level":"INFO","msg":"stream: started","id":"1x6ahk4c"}
+{"time":"2024-11-30T20:56:50.175708513-05:00","level":"INFO","msg":"handler: started","stream_id":"1x6ahk4c"}
+{"time":"2024-11-30T20:56:50.175776813-05:00","level":"INFO","msg":"sender: started","stream_id":"1x6ahk4c"}
+{"time":"2024-11-30T20:56:50.175794714-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"1x6ahk4c"}
+{"time":"2024-11-30T20:56:50.189288628-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-30T21:00:24.218673292-05:00","level":"INFO","msg":"stream: closing","id":"1x6ahk4c"}
+{"time":"2024-11-30T21:00:24.218829462-05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-30T21:00:24.220102084-05:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-30T21:00:24.220405375-05:00","level":"INFO","msg":"handler: closed","stream_id":"1x6ahk4c"}
+{"time":"2024-11-30T21:00:24.220432135-05:00","level":"INFO","msg":"writer: Close: closed","stream_id":"1x6ahk4c"}
+{"time":"2024-11-30T21:00:24.220458655-05:00","level":"INFO","msg":"sender: closed","stream_id":"1x6ahk4c"}
+{"time":"2024-11-30T21:00:24.222359819-05:00","level":"INFO","msg":"stream: closed","id":"1x6ahk4c"}

@@ -1,0 +1,15 @@
+{"time":"2024-12-05T13:03:06.893593325-05:00","level":"INFO","msg":"using version","core version":"0.18.7"}
+{"time":"2024-12-05T13:03:06.893624914-05:00","level":"INFO","msg":"created symlink","path":"/home/jawadkk/Brainteaser-GPT2/Llama3.2/wandb/offline-run-20241205_130306-kvqrkh81/logs/debug-core.log"}
+{"time":"2024-12-05T13:03:07.114400917-05:00","level":"INFO","msg":"created new stream","id":"kvqrkh81"}
+{"time":"2024-12-05T13:03:07.114423907-05:00","level":"INFO","msg":"stream: started","id":"kvqrkh81"}
+{"time":"2024-12-05T13:03:07.114471127-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"kvqrkh81"}
+{"time":"2024-12-05T13:03:07.114537927-05:00","level":"INFO","msg":"handler: started","stream_id":"kvqrkh81"}
+{"time":"2024-12-05T13:03:07.114483387-05:00","level":"INFO","msg":"sender: started","stream_id":"kvqrkh81"}
+{"time":"2024-12-05T13:03:07.125676084-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-05T23:28:47.995572169-05:00","level":"INFO","msg":"stream: closing","id":"kvqrkh81"}
+{"time":"2024-12-05T23:28:47.995803069-05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-05T23:28:47.997158923-05:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-05T23:28:47.997341433-05:00","level":"INFO","msg":"handler: closed","stream_id":"kvqrkh81"}
+{"time":"2024-12-05T23:28:47.997356793-05:00","level":"INFO","msg":"writer: Close: closed","stream_id":"kvqrkh81"}
+{"time":"2024-12-05T23:28:47.997375084-05:00","level":"INFO","msg":"sender: closed","stream_id":"kvqrkh81"}
+{"time":"2024-12-05T23:28:47.999547709-05:00","level":"INFO","msg":"stream: closed","id":"kvqrkh81"}
