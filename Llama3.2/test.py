@@ -111,8 +111,7 @@ def run_predictions():
 
             with open(csv_file, mode="w", newline="") as file:
                 writer = csv.writer(file)
-                writer.writerow([
-                    "Question ID", "Question", "Answer", 
+                writer.writerow([ 
                     "Question ID", "Question", "Answer", "Choices",
                     "Generated Zero-Shot", "Refined Zero-Shot", "Refined Zero-Shot Correct",
                     "Generated Few-Shot", "Refined Few-Shot", "Refined Few-Shot Correct"
@@ -133,7 +132,7 @@ def run_predictions():
                     model.eval()
                     with torch.no_grad():
                         zero_shot_outputs = model.generate(
-                            **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
+                            **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=2.3, top_p=0.9, top_k=50
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                     zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
@@ -169,8 +168,7 @@ def run_predictions():
                         combined_correct += 1
 
                     # Write results
-                    writer.writerow([
-                        question_id, question, answer, 
+                    writer.writerow([ 
                         question_id, question, answer, ", ".join(choices),
                         zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
                         few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
