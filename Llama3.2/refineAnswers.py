@@ -9,7 +9,7 @@ from peft import prepare_model_for_kbit_training
 CUTOFF_LEN = 512
 MAX_NEW_TOKENS = 50
 RESULTS_DIR = "llama-brainteasers-results/test"
-CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/LlamaFinetuned"
+CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/"
 LEARNING_RATES = [0.0001]
 WEIGHT_DECAYS = [0.01]
 
