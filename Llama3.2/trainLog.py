@@ -3,7 +3,7 @@ import csv
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 
 # Base directories and output CSV file
-BASE_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2"
+BASE_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/logs_lr1e-05_wd1e-05/"
 OUTPUT_CSV = os.path.join(BASE_DIR, "all_training_metrics.csv")
 
 # Hyperparameters
