@@ -3,14 +3,13 @@ import torch
 import numpy as np
 import csv
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from peft import prepare_model_for_kbit_training
-from sentence_transformers import SentenceTransformer, util  # Add for cosine similarity calculations
+from sentence_transformers import SentenceTransformer, util
 
 # Constants
 CUTOFF_LEN = 512
 MAX_NEW_TOKENS = 50
 RESULTS_DIR = "llama-brainteasers-results/test"
-CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/"
+CHECKPOINTS_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/LlamaFinetuned"
 LEARNING_RATES = [0.0001]
 WEIGHT_DECAYS = [0.01]
 
@@ -21,38 +20,46 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
 tokenizer.pad_token = tokenizer.eos_token
 
-# Load sentence embedding model for cosine similarity
-embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight and effective model for embeddings
+# Load sentence embedding model for similarity-based fallback
+embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Function to generate zero-shot and few-shot prompts
 def generate_prompt(item, few_shot=True):
     question = item['question']
     answer = item['answer']
-    ordered_choices = item['choice_list']
+
+    if 'choice_list' in item:
+        ordered_choices = item['choice_list']
+    else:
+        distractor1 = str(item['distractor1'])
+        distractor2 = str(item['distractor2'])
+        distractor_unsure = str(item['distractor(unsure)'])
+        choice_list = [answer, distractor1, distractor2, distractor_unsure]
+        choice_order = item['choice_order']
+        ordered_choices = [choice_list[i] for i in choice_order]
 
     system_message = (
-        "You are an assistant answering riddle questions for a test. "
-        "Choose the correct answer from the choices below. "
-        "Only return the answer as it appears in the choices."
+        "You are an assistant answering riddle questions for a test. Choose the correct answer from the choices."
+        " Return only the answer. Don't generate anything which is not in the answer choices."
     )
     if few_shot:
         examples = '''
         Example 1:
-        Question: What is always coming but never arrives?
-        Choices: ['Tomorrow', 'Yesterday', 'Now', 'Never']
-        Answer: Tomorrow
+        Question: Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible? 
+        Choices: ['Each daughter shares the same brother.', 'Some daughters get married.', 'Some brothers were not loved by family.', 'None of the above.']
+        Answer: Each daughter shares the same brother.
         Example 2:
-        Question: The more of this you take, the more you leave behind. What is it?
-        Choices: ['Footsteps', 'Time', 'Money', 'Water']
-        Answer: Footsteps
+        Question: A chess team has five players, and each player has one coach. But there are only six participants in the team. How is that possible? 
+        Choices: ['Each player shares the same coach.', 'Some players are backups.', 'Some coaches got a raise.', 'None of the above.']
+        Answer: Each player shares the same coach.
         '''
         return (
             f"{system_message}\n\n{examples}\n"
-            f"Question: {question}\nChoices: {ordered_choices}\nAnswer: {answer}"
+            f"Question: {question}\nChoices: {ordered_choices}\nAnswer:"
         )
     return (
         f"{system_message}\n\n"
-        f"Question: {question}\nChoices: {ordered_choices}\nAnswer: {answer}"
+        f"Question: {question}\nChoices: {ordered_choices}\nAnswer:"
     )
 
 # Function to tokenize prompt
@@ -65,22 +72,21 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
-# Function to refine answer using cosine similarity and remove gibberish
-# Function to refine answer using cosine similarity and enforce valid output
+# Function to refine answer using similarity-based fallback
 def refine_answer(generated_answer, choices):
-    # Clean up generated answer
-    generated_answer = generated_answer.strip()  # Remove extra spaces
-    generated_answer = generated_answer.replace("Question:", "").replace("Answer:", "").strip()  # Remove prefixes
-    # Compare with choices
-    # Validate against choices
+    """
+    Refine the answer by selecting the most similar choice if the generated answer is invalid.
+    """
+    generated_answer = generated_answer.strip()
     if generated_answer in choices:
-        return generated_answer  # Valid answer
-    # Otherwise, refine using cosine similarity
-    '''generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
-    choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
-    cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
-    best_choice_idx = torch.argmax(cosine_scores).item()
-    return choices[best_choice_idx]'''
+        return generated_answer
+
+    # Compute similarities
+    choice_embeddings = embedder.encode(choices, convert_to_tensor=True)
+    generated_embedding = embedder.encode(generated_answer, convert_to_tensor=True)
+    cosine_similarities = util.cos_sim(generated_embedding, choice_embeddings)[0]
+    best_choice_idx = torch.argmax(cosine_similarities).item()
+    return choices[best_choice_idx]
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
@@ -89,7 +95,7 @@ test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
-            checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}")
+            checkpoint_path = os.path.join(CHECKPOINTS_DIR)
             csv_file = os.path.join(RESULTS_DIR, f"llama_lora_finetuned_results_lr{lr}_wd{wd}.csv")
 
             # Load model
@@ -100,7 +106,6 @@ def run_predictions():
                 torch_dtype=torch.float16,
                 device_map="auto"
             )
-            model = prepare_model_for_kbit_training(model)
 
             # Prepare CSV file
             total = 0
@@ -121,7 +126,7 @@ def run_predictions():
                     question_id = item.get('id', 'N/A')
                     question = item['question']
                     answer = item['answer']
-                    choices = item['choice_list']  # Get choices
+                    choices = item['choice_list']
 
                     # Zero-shot prediction
                     zero_shot_prompt = generate_prompt(item, few_shot=False)
@@ -134,10 +139,10 @@ def run_predictions():
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                     zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
+                    zero_shot_answer = zero_shot_answer.split(".")[0].strip()
 
-                    # Refine zero-shot prediction (ensure it's one of the choices)
+                    # Refine zero-shot prediction
                     refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
-                    refined_zero_shot_answer = refined_zero_shot_answer.split(".")[0].strip()
                     refined_zero_shot_correct = refined_zero_shot_answer == answer
 
                     # Few-shot prediction
@@ -150,10 +155,10 @@ def run_predictions():
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                     few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
+                    few_shot_answer = few_shot_answer.split(".")[0].strip()
 
-                    # Refine few-shot prediction (ensure it's one of the choices)
+                    # Refine few-shot prediction
                     refined_few_shot_answer = refine_answer(few_shot_answer, choices)
-                    refined_few_shot_answer = refined_few_shot_answer.split(".")[0].strip()
                     refined_few_shot_correct = refined_few_shot_answer == answer
 
                     # Update accuracy
