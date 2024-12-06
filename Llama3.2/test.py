@@ -99,8 +99,7 @@ def run_predictions():
                 writer = csv.writer(file)
                 writer.writerow([
                     "Question ID", "Question", "Answer", "Choices",
-                    "Zero-Shot Raw", "Zero-Shot Refined",
-                    "Few-Shot Raw", "Few-Shot Refined"
+                     "Zero-Shot Answer", "Zero_shot_correct", "Few-Shot Answer", "Fero_shot_correct"
                 ])
 
                 # Predict for each test example
@@ -126,7 +125,7 @@ def run_predictions():
                         )
                         zero_shot_raw = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
                         zero_shot_refined = refine_answer(zero_shot_raw, choices)
-                    print(f"Zero-shot Raw:\n{zero_shot_raw}\nRefined: {zero_shot_refined}\n")
+                        zero_shot_correct = zero_shot_refined == answer
 
                     # Few-shot prediction
                     few_shot_prompt = generate_prompt(item, few_shot=True)
@@ -143,13 +142,14 @@ def run_predictions():
                         )
                         few_shot_raw = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
                         few_shot_refined = refine_answer(few_shot_raw, choices)
+                        few_shot_correct = few_shot_refined == answer
                     print(f"Few-shot Raw:\n{few_shot_raw}\nRefined: {few_shot_refined}\n")
 
                     # Write results
                     writer.writerow([
                         question_id, question, answer, ", ".join(choices),
-                        zero_shot_raw, zero_shot_refined,
-                        few_shot_raw, few_shot_refined
+                        zero_shot_refined, zero_shot_correct,
+                        few_shot_refined, few_shot_correct
                     ])
 
             print(f"Results saved to {csv_file}")
