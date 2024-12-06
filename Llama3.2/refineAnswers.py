@@ -4,7 +4,6 @@ import numpy as np
 import csv
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import prepare_model_for_kbit_training
-from sentence_transformers import SentenceTransformer, util  # For cosine similarity
 
 # Constants
 CUTOFF_LEN = 512
@@ -20,9 +19,6 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 # Load tokenizer
 tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
 tokenizer.pad_token = tokenizer.eos_token
-
-# Load sentence embedding model for cosine similarity
-embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Function to generate prompts
 def generate_prompt(item, few_shot=True):
@@ -57,20 +53,19 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
-# Refine generated answer
+# Function to clean and validate generated answers
 def refine_answer(generated_answer, choices):
+    # Clean up and extract formatted response
     generated_answer = generated_answer.strip()
     if "Answer:" in generated_answer:
         generated_answer = generated_answer.split("Answer:")[-1].strip()
-    if generated_answer.isdigit():
+    if generated_answer in choices:
+        return generated_answer
+    elif generated_answer.isdigit():
         idx = int(generated_answer) - 1
         if 0 <= idx < len(choices):
             return choices[idx]
-    generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
-    choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
-    similarity_scores = util.cos_sim(generated_embedding, choice_embeddings)
-    best_idx = torch.argmax(similarity_scores).item()
-    return choices[best_idx]
+    return generated_answer  # Return as-is if no match
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
