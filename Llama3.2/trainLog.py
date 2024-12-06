@@ -4,7 +4,8 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 
 # Directory containing the TensorBoard logs (adjust this path)
 LOGS_DIR = "logs_lr1e-05_wd1e-05/llama_lora_finetuned_lr0.0001_wd0.0001/runs"
-OUTPUT_CSV = "training_metrics.csv"
+OUTPUT_DIR = "/home/jawadkk/Brainteaser-GPT2/Llama3.2/TrainLogs"
+OUTPUT_CSV = os.path.join(OUTPUT_DIR, "training_metrics.csv")
 
 # Tags to extract (adjust based on your logging setup)
 TRAIN_LOSS_TAG = "loss"
@@ -12,6 +13,9 @@ EVAL_LOSS_TAG = "eval_loss"
 model_id = "llama_lora_finetuned_lr0.0001_wd0.0001"
 
 def extract_metrics_from_events(logs_dir, output_csv):
+    # Ensure the output directory exists
+    os.makedirs(os.path.dirname(output_csv), exist_ok=True)
+
     # Prepare the CSV file
     with open(output_csv, mode="w", newline="") as file:
         writer = csv.writer(file)
