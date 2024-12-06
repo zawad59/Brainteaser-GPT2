@@ -3,10 +3,10 @@ import csv
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 
 # Define the directories and output CSV path
-LOGS_DIR = "logs_lr1e-05_wd1e-05/llama_lora_finetuned_lr0.0001_wd0.0001/runs"  # Update to your TensorBoard log directory
+LOGS_DIR = "logs_lr1e-05_wd1e-05/llama_lora_finetuned_lr0.0001_wd0.0001/runs"
 OUTPUT_CSV = "training_metrics.csv"
-TRAIN_LOSS_TAG = "loss"
-EVAL_LOSS_TAG = "eval/loss"
+TRAIN_LOSS_TAG = "loss"  # Adjust if necessary
+EVAL_LOSS_TAG = "eval/loss"  # Adjust if necessary
 MODEL_ID = "llama_lora_finetuned_lr0.0001_wd0.0001"
 
 # Function to extract metrics from TensorBoard logs
@@ -30,9 +30,21 @@ def extract_metrics_from_events(logs_dir, output_csv):
                     event_acc = EventAccumulator(log_path)
                     event_acc.Reload()
 
+                    # Check available tags
+                    available_tags = event_acc.Tags()["scalars"]
+                    print(f"Available tags in {file_name}: {available_tags}")
+
                     # Extract data for train loss and eval loss
-                    train_loss_data = event_acc.Scalars(TRAIN_LOSS_TAG) if TRAIN_LOSS_TAG in event_acc.Tags()["scalars"] else []
-                    eval_loss_data = event_acc.Scalars(EVAL_LOSS_TAG) if EVAL_LOSS_TAG in event_acc.Tags()["scalars"] else []
+                    train_loss_data = (
+                        event_acc.Scalars(TRAIN_LOSS_TAG) if TRAIN_LOSS_TAG in available_tags else []
+                    )
+                    eval_loss_data = (
+                        event_acc.Scalars(EVAL_LOSS_TAG) if EVAL_LOSS_TAG in available_tags else []
+                    )
+
+                    # Debug: Print data
+                    print(f"Train loss data: {train_loss_data}")
+                    print(f"Eval loss data: {eval_loss_data}")
 
                     # Combine steps from both metrics
                     all_steps = set(entry.step for entry in train_loss_data) | set(entry.step for entry in eval_loss_data)
@@ -42,6 +54,7 @@ def extract_metrics_from_events(logs_dir, output_csv):
                         train_loss = next((entry.value for entry in train_loss_data if entry.step == step), None)
                         eval_loss = next((entry.value for entry in eval_loss_data if entry.step == step), None)
                         writer.writerow([MODEL_ID, step, train_loss, eval_loss])
+                        print(f"Step: {step}, Train Loss: {train_loss}, Eval Loss: {eval_loss}")  # Debug print
 
     print(f"Metrics extracted and saved to: {output_csv}")
 
