@@ -4,7 +4,7 @@ import numpy as np
 import csv
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import prepare_model_for_kbit_training
-from sentence_transformers import SentenceTransformer, util  # Add for cosine similarity calculations
+from sentence_transformers import SentenceTransformer, util  # For cosine similarity
 
 # Constants
 CUTOFF_LEN = 512
@@ -22,26 +22,15 @@ tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B")
 tokenizer.pad_token = tokenizer.eos_token
 
 # Load sentence embedding model for cosine similarity
-embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight and effective model for embeddings
+embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Function to generate zero-shot and few-shot prompts
+# Function to generate prompts
 def generate_prompt(item, few_shot=True):
     question = item['question']
-    answer = item['answer']
-
-    if 'choice_list' in item:
-        ordered_choices = item['choice_list']
-    else:
-        distractor1 = str(item['distractor1'])
-        distractor2 = str(item['distractor2'])
-        distractor_unsure = str(item['distractor(unsure)'])
-        choice_list = [answer, distractor1, distractor2, distractor_unsure]
-        choice_order = item['choice_order']
-        ordered_choices = [choice_list[i] for i in choice_order]
-
+    choices = item['choice_list']
     system_message = (
-        "You are an assistant answering riddle questions for a test. Choose the correct answer from the choices."
-        " Return only the answer. Don't generate anything which is not in the answer choices or in other words don't generate something random"
+        "You are an assistant answering riddle questions for a test. Choose the correct answer from the choices. "
+        "Return only the choice number or the exact answer in the format: Answer: (your choice)."
     )
     if few_shot:
         examples = '''
@@ -49,21 +38,16 @@ def generate_prompt(item, few_shot=True):
         Question: Mr. and Mrs. Mustard have six daughters and each daughter has one brother. But there are only 9 people in the family, how is that possible? 
         Choices: ['Each daughter shares the same brother.', 'Some daughters get married.', 'Some brothers were not loved by family.', 'None of the above.']
         Answer: Each daughter shares the same brother.
+        
         Example 2:
         Question: A chess team has five players, and each player has one coach. But there are only six participants in the team. How is that possible? 
         Choices: ['Each player shares the same coach.', 'Some players are backups.', 'Some coaches got a raise.', 'None of the above.']
         Answer: Each player shares the same coach.
         '''
-        return (
-            f"{system_message}\n\n{examples}\n"
-            f"Question: {question}\nChoices: {ordered_choices}\nAnswer:"
-        )
-    return (
-        f"{system_message}\n\n"
-        f"Question: {question}\nChoices: {ordered_choices}\nAnswer:"
-    )
+        return f"{system_message}\n\n{examples}\nQuestion: {question}\nChoices: {', '.join(choices)}\nAnswer:"
+    return f"{system_message}\nQuestion: {question}\nChoices: {', '.join(choices)}\nAnswer:"
 
-# Function to tokenize prompt
+# Tokenizer wrapper
 def tokenize(prompt):
     return tokenizer(
         prompt + tokenizer.eos_token,
@@ -73,35 +57,25 @@ def tokenize(prompt):
         return_tensors="pt"
     )
 
-# Function to refine answer using cosine similarity
-'''def refine_answer(generated_answer, choices):
+# Refine generated answer
+def refine_answer(generated_answer, choices):
+    generated_answer = generated_answer.strip()
+    if "Answer:" in generated_answer:
+        generated_answer = generated_answer.split("Answer:")[-1].strip()
+    if generated_answer.isdigit():
+        idx = int(generated_answer) - 1
+        if 0 <= idx < len(choices):
+            return choices[idx]
     generated_embedding = embedding_model.encode(generated_answer, convert_to_tensor=True)
     choice_embeddings = embedding_model.encode(choices, convert_to_tensor=True)
-    cosine_scores = util.cos_sim(generated_embedding, choice_embeddings)
-    best_choice_idx = torch.argmax(cosine_scores).item()
-    return choices[best_choice_idx]'''
-
-# Updated function to refine the answer
-def refine_answer(generated_answer, choices):
-    # Clean up and extract formatted response
-    generated_answer = generated_answer.strip()
-    if "[" in generated_answer and "]" in generated_answer:
-        # Extract content inside brackets
-        extracted = generated_answer.split("[")[1].split("]")[0]
-        refined = extracted.split(" - ")[1] if " - " in extracted else extracted
-        if refined in choices:
-            return refined
-    elif generated_answer.isdigit():
-        # Interpret as choice number
-        choice_index = int(generated_answer) - 1
-        if 0 <= choice_index < len(choices):
-            return choices[choice_index]
+    similarity_scores = util.cos_sim(generated_embedding, choice_embeddings)
+    best_idx = torch.argmax(similarity_scores).item()
+    return choices[best_idx]
 
 # Load test data
 test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.npy', allow_pickle=True).tolist()
 
-# Main function to run predictions for all models
-# Updated main function
+# Main function to run predictions
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
@@ -118,27 +92,25 @@ def run_predictions():
             )
             model = prepare_model_for_kbit_training(model)
 
-            # Prepare CSV file
-            total = 0  # Initialize counters
+            # Initialize counters
             total = 0
             zero_shot_correct = 0
             few_shot_correct = 0
-            combined_correct = 0
 
             with open(csv_file, mode="w", newline="") as file:
                 writer = csv.writer(file)
                 writer.writerow([
-                    "Question ID", "Question", "Answer", "Choices",
-                    "Generated Zero-Shot", "Refined Zero-Shot", "Refined Zero-Shot Correct",
-                    "Generated Few-Shot", "Refined Few-Shot", "Refined Few-Shot Correct"
+                    "Question ID", "Question", "Correct Answer", "Choices",
+                    "Generated Zero-Shot", "Refined Zero-Shot", "Zero-Shot Correct",
+                    "Generated Few-Shot", "Refined Few-Shot", "Few-Shot Correct"
                 ])
 
                 # Predict for each test example
                 for item in test_data:
                     question_id = item.get('id', 'N/A')
                     question = item['question']
-                    answer = item['answer']
-                    choices = item['choice_list']  # Get choices
+                    correct_answer = item['answer']
+                    choices = item['choice_list']
 
                     # Zero-shot prediction
                     zero_shot_prompt = generate_prompt(item, few_shot=False)
@@ -149,13 +121,9 @@ def run_predictions():
                         zero_shot_outputs = model.generate(
                             **zero_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
                         )
-                        zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
-                    zero_shot_answer = zero_shot_prediction.split("Answer:")[-1].strip()
-
-                    # Refine zero-shot prediction
-                    # Refine zero-shot prediction (ensure it's one of the choices)
-                    refined_zero_shot_answer = refine_answer(zero_shot_answer, choices)
-                    refined_zero_shot_correct = refined_zero_shot_answer == answer
+                        zero_shot_generated = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
+                    zero_shot_refined = refine_answer(zero_shot_generated, choices)
+                    zero_shot_is_correct = zero_shot_refined == correct_answer
 
                     # Few-shot prediction
                     few_shot_prompt = generate_prompt(item, few_shot=True)
@@ -165,41 +133,30 @@ def run_predictions():
                         few_shot_outputs = model.generate(
                             **few_shot_inputs, max_new_tokens=MAX_NEW_TOKENS, repetition_penalty=1.2, top_p=0.9, top_k=50
                         )
-                        few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
-                    few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
+                        few_shot_generated = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
+                    few_shot_refined = refine_answer(few_shot_generated, choices)
+                    few_shot_is_correct = few_shot_refined == correct_answer
 
-                    # Refine few-shot prediction
-                    # Refine few-shot prediction (ensure it's one of the choices)
-                    refined_few_shot_answer = refine_answer(few_shot_answer, choices)
-                    refined_few_shot_correct = refined_few_shot_answer == answer
-
-                    # Update accuracy
+                    # Update counters
                     total += 1
-                    if refined_zero_shot_correct:
+                    if zero_shot_is_correct:
                         zero_shot_correct += 1
-                    if refined_few_shot_correct:
+                    if few_shot_is_correct:
                         few_shot_correct += 1
-                    if refined_zero_shot_correct or refined_few_shot_correct:
-                        combined_correct += 1
 
                     # Write results
                     writer.writerow([
-                        question_id, question, answer,
-                        question_id, question, answer, ", ".join(choices),
-                        zero_shot_answer, refined_zero_shot_answer, refined_zero_shot_correct,
-                        few_shot_answer, refined_few_shot_answer, refined_few_shot_correct
+                        question_id, question, correct_answer, ", ".join(choices),
+                        zero_shot_generated, zero_shot_refined, zero_shot_is_correct,
+                        few_shot_generated, few_shot_refined, few_shot_is_correct
                     ])
 
-            # Calculate accuracies
+            # Calculate and print accuracies
             zero_shot_accuracy = (zero_shot_correct / total) * 100 if total > 0 else 0
             few_shot_accuracy = (few_shot_correct / total) * 100 if total > 0 else 0
-            combined_accuracy = (combined_correct / total) * 100 if total > 0 else 0
-
-            # Print results
             print(f"Results for lr={lr}, wd={wd}:")
-            print(f"  Refined Zero-Shot Accuracy: {zero_shot_accuracy:.2f}%")
-            print(f"  Refined Few-Shot Accuracy: {few_shot_accuracy:.2f}%")
-            print(f"  Combined Accuracy (Zero-Shot or Few-Shot Correct): {combined_accuracy:.2f}%")
+            print(f"  Zero-Shot Accuracy: {zero_shot_accuracy:.2f}%")
+            print(f"  Few-Shot Accuracy: {few_shot_accuracy:.2f}%")
             print(f"Results saved to {csv_file}")
             del model
             torch.cuda.empty_cache()
