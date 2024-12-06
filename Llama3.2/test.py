@@ -135,6 +135,7 @@ def run_predictions():
                             repetition_penalty=BEST_REPETITION_PENALTY
                         )
                         zero_shot_prediction = tokenizer.decode(zero_shot_outputs[0], skip_special_tokens=True)
+                        print(f"Raw 0 Shot Generated Output: {zero_shot_prediction}")
                     refined_zero_shot_answer = refine_answer(zero_shot_prediction.split("Answer:")[-1].strip(), choices)
                     print(f"Answer: {answer}\nGenerated Zero-Shot Answer: {refined_zero_shot_answer}\n")
 
@@ -155,6 +156,7 @@ def run_predictions():
                             repetition_penalty=BEST_REPETITION_PENALTY
                         )
                         few_shot_prediction = tokenizer.decode(few_shot_outputs[0], skip_special_tokens=True)
+                        print(f"Raw Few Shot Generated Output: {few_shot_prediction}")
                     refined_few_shot_answer = refine_answer(few_shot_prediction.split("Answer:")[-1].strip(), choices)
                     print(f"Answer: {answer}\nGenerated Few-Shot Answer: {refined_few_shot_answer}\n")
                     few_shot_correct = refined_few_shot_answer == answer
