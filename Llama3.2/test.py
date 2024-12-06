@@ -90,6 +90,12 @@ test_data = np.load('/home/jawadkk/Brainteaser-GPT2/CombinedDatasets/All_test 1.
 def run_predictions():
     for lr in LEARNING_RATES:
         for wd in WEIGHT_DECAYS:
+            if (lr==0.1 and wd in [0.05, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0005]):
+               continue
+            elif(lr == 0.05 and wd in [0.05, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0005]):
+               continue
+            elif(lr==0.01) and wd in [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005]:
+               continue
             checkpoint_path = os.path.join(CHECKPOINTS_DIR, f"llama_lora_finetuned_lr{lr}_wd{wd}")
             csv_file = os.path.join(RESULTS_DIR, f"llama_lora_finetuned_results_lr{lr}_wd{wd}.csv")
 
