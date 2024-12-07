@@ -159,7 +159,6 @@ def run_predictions():
                     few_shot_answer = few_shot_prediction.split("Answer:")[-1].strip()
                     few_shot_answer = few_shot_answer.split(".")[0] + "."
                     # Refine few-shot prediction (ensure it's one of the choices)
-                    #refined_few_shot_answer = refine_answer(few_shot_answer, choices)
                     refined_few_shot_correct = few_shot_answer == answer
 
                     # Update accuracy
